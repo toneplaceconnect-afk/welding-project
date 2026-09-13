@@ -1,69 +1,60 @@
 // Serverless-функция Vercel: /api/generate-sketch
 // Two-stage pipeline: understand the client's object first, then render exactly one photo.
 
-const DESIGN_ANALYST_PROMPT = `You are the design-analysis stage of a professional product visualization system.
+const DESIGN_ANALYST_PROMPT = `You are the semantic design-analysis stage of a professional product visualization system.
 
-Analyze the CLIENT BRIEF before any image is generated.
+Convert the CLIENT BRIEF into a compact, unambiguous VISUAL DESIGN SPECIFICATION for an image generator. Do not create marketing copy and do not redesign the requested object.
 
-Your job is NOT to write marketing copy and NOT to invent a new design. Your job is to convert the client's natural-language request into a precise internal VISUAL DESIGN SPECIFICATION for an image generator.
+Return ONLY these fields, in this exact order:
+OBJECT CATEGORY: [the real-world object/product/construction]
+PRIMARY FUNCTION: [what it is used for]
+FORM AND SILHOUETTE: [the characteristic physical form; state what must be visibly recognizable]
+COMPONENTS AND ARRANGEMENT: [major parts and how they connect]
+DIMENSIONS AND PROPORTIONS: [all explicit dimensions; do not invent dimensions]
+MATERIALS: [material assigned to each major part]
+COLORS AND FINISHES: [explicit colors, coatings, surface treatments]
+CONSTRUCTION AND CONNECTIONS: [explicit joints, fasteners, mechanisms and manufacturing details]
+ENVIRONMENT AND USE: [where/how it is used]
+STYLE: [requested visual style]
 
-Determine:
-- the exact object or construction requested;
-- its real-world category and primary function;
-- its characteristic physical form and silhouette;
-- the major components and how they are arranged;
-- dimensions and proportions explicitly stated by the client;
-- materials for each component;
-- colors and surface finishes;
-- construction and connection methods explicitly requested;
-- intended environment and use;
-- requested style;
-- any other explicit visual requirement.
-
-Use real-world design, engineering, furniture, architecture and manufacturing knowledge to understand what the described object should physically look like.
-
-CRITICAL RULES:
+Rules:
 1. The CLIENT BRIEF is the source of truth.
-2. Do not replace the requested object with a familiar object that merely shares some words, materials or shapes.
-3. Do not turn furniture into architecture, architecture into furniture, or one product category into another.
-4. Do not invent features that change the object's identity, function, proportions or specified materials.
-5. If information is missing, make only the minimum neutral assumption needed for a coherent, manufacturable object.
-6. Preserve every explicit dimension, material, finish, component and connection.
-7. Interpret spelling mistakes and informal language by intended meaning.
-8. Check that the resulting concept could physically exist and be manufactured.
-9. Do not add decorative elements merely because they are associated with a style word.
+2. OBJECT CATEGORY is a hard identity constraint. Never replace it with another familiar object.
+3. Preserve every explicit dimension, material, finish, component, connection and functional requirement.
+4. Interpret spelling mistakes, typos and informal wording by intended meaning.
+5. Use real-world engineering, furniture, manufacturing and design knowledge only to understand the brief and make the minimum neutral assumptions needed for a coherent manufacturable object.
+6. Never add a feature merely because it is associated with a style word.
+7. If a detail is not specified, write "not specified" rather than inventing a distinctive feature.
+8. Keep the specification concise. Do not explain your reasoning.`;
 
-Return ONLY a concise VISUAL DESIGN SPECIFICATION that can be handed directly to a photorealistic image generator. Do not discuss your reasoning.`;
+const IMAGE_MASTER_PROMPT = `You are an expert industrial designer, furniture/product designer, engineer and professional commercial photographer.
 
-const IMAGE_MASTER_PROMPT = `You are an expert industrial designer, product designer, architect, engineer and professional commercial photographer.
+TASK
+Create ONE photorealistic commercial photograph of the exact object defined by the VISUAL DESIGN SPECIFICATION.
 
-Create ONE photorealistic commercial photograph of EXACTLY the object described in the VISUAL DESIGN SPECIFICATION.
+HARD IDENTITY RULE
+The value after "OBJECT CATEGORY:" is the identity of the image. It is a hard constraint, not a suggestion. The finished image must be immediately recognizable as that exact real-world object and must not become a different product, device, structure, enclosure, sculpture or generic object.
 
-The specification was produced by a separate design-analysis stage from the client's original request. Treat it as a construction and visualization specification, not as inspiration.
+FIDELITY
+Preserve every explicit requirement in the specification and original brief: object category, function, dimensions, proportions, components, materials, colors, finishes, construction, joints, fasteners, mechanisms, environment and requested style. Do not omit a requirement just because it is visually subtle.
 
-OBJECT IDENTITY
-The requested object must be immediately recognizable from its physical form, silhouette and construction. Preserve its real-world category, function and proportions. Never substitute another object.
-
-CLIENT FIDELITY
-Preserve every explicit requirement represented in the specification: dimensions, proportions, materials, colors, finishes, components, construction details, connections, mechanisms, quantity, environment and style. Never silently omit or replace a requirement.
-
-REAL-WORLD CONSTRUCTION
-Build a physically plausible object. Every structural element must have a purpose. Supports must support. Components must connect logically. Joints and fasteners must be physically possible. Materials must have believable thickness, scale and behavior. Avoid floating parts, impossible intersections, disconnected elements, distorted geometry and unsupported structures.
+PHYSICAL CONSTRUCTION
+Build one coherent, manufacturable object. Structural members must support the load they are meant to carry. Every visible component must have a logical location and connection. Use believable thickness, scale, joinery and fasteners. No floating parts, impossible intersections, disconnected components or physically contradictory geometry.
 
 MATERIAL REALISM
-Render each specified material according to its real physical properties. Respect exact surface treatments. Do not apply generic black metal, generic orange wood, excessive gloss or arbitrary premium styling unless specified.
+Render each specified material according to its real physical properties. Preserve specified wood species, grain direction, metal type/color, coatings and surface treatment. Do not turn unspecified metal black or invent a glossy/plastic finish.
+
+VISUAL PRIORITY
+Prioritize the requested object's recognizable silhouette and component arrangement first, then construction details, then materials and finish. A clear three-quarter product photograph is preferred when it shows the whole object and important construction details without hiding them.
 
 PHOTOGRAPHY
-Create a finished high-end real photograph, not a drawing or concept illustration. Use realistic camera optics, perspective, lighting, reflections, shadows, depth of field and material detail. Choose the clearest professional camera angle and show the complete object and its important construction details. Keep the environment secondary.
+High-end real commercial photograph, realistic camera optics, perspective, natural material texture, believable reflections and shadows, physically plausible lighting, realistic depth of field. The environment is secondary and must never change the object's identity.
 
-STYLE
-Express style through the actual geometry, proportions, materials and construction. Do not use style stereotypes that contradict the specification.
-
-NO GRAPHIC ELEMENTS
+NO GRAPHICS
 No text, labels, captions, dimensions, arrows, logos, UI, diagrams, blueprints, CAD, wireframes, technical drawings, collages, split screens or inset views.
 
-FINAL CHECK
-Before rendering, verify that the image shows the exact requested object, that all specified characteristics are preserved, that its proportions and construction are physically believable, and that a real person could identify the object immediately from the photograph.
+FINAL INTERNAL CHECK
+Before rendering, verify: (1) the object category exactly matches the specification; (2) the silhouette and function match; (3) every explicit material and major component is present; (4) the construction is physically possible; (5) no unrelated object has been substituted.
 
 Generate exactly ONE image.`;
 
@@ -115,14 +106,14 @@ async function parseImageResponse(r) {
 }
 
 async function generate(prompt, refs, apiKey) {
-  const payload = { model: 'flux', prompt, size: '1024x768', n: 1, response_format: 'b64_json' };
+  const payload = { model: 'gpt-image-2', prompt, size: '1024x768', n: 1, response_format: 'b64_json' };
   if (refs.length) payload.image = refs;
   const r = await fetch('https://gen.pollinations.ai/v1/images/generations', { method: 'POST', headers: { Authorization: 'Bearer ' + apiKey, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
   return parseImageResponse(r);
 }
 
 async function fallback(prompt, apiKey) {
-  const u = 'https://gen.pollinations.ai/image/' + encodeURIComponent(prompt) + '?model=flux&width=1024&height=768&nologo=true';
+  const u = 'https://gen.pollinations.ai/image/' + encodeURIComponent(prompt) + '?model=gpt-image-2&width=1024&height=768&nologo=true';
   const r = await fetch(u, { headers: { Authorization: 'Bearer ' + apiKey } });
   if (!r.ok) throw Error('Pollinations ' + r.status + ': ' + (await r.text()).slice(0, 500));
   const type = (r.headers.get('content-type') || 'image/jpeg').split(';')[0];
@@ -150,7 +141,7 @@ export default async function handler(request, response) {
     }
     const prompt = [
       IMAGE_MASTER_PROMPT,
-      'VISUAL DESIGN SPECIFICATION:',
+      'VISUAL DESIGN SPECIFICATION — HARD CONSTRAINTS:',
       visualSpec,
       'ORIGINAL CLIENT BRIEF — FINAL AUTHORITY:',
       clientPrompt
