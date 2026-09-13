@@ -27,8 +27,106 @@ p,li,figcaption{letter-spacing:-.03em !important;word-spacing:-.06em !important}
 .create-zoom .zoom-ui{position:absolute !important;top:14px !important;right:22px !important;display:flex !important;gap:6px !important;z-index:2 !important}
 .create-zoom .zoom-ui button{width:42px !important;height:38px !important;min-width:42px !important;min-height:38px !important;margin:0 !important;padding:0 !important;border:1px solid rgba(255,255,255,.28) !important;border-radius:0 !important;background:rgba(255,255,255,.96) !important;color:#171a21 !important;font:700 10px/1 'Michroma','Unbounded','Inter',sans-serif !important;display:flex !important;align-items:center !important;justify-content:center !important;cursor:pointer !important;box-sizing:border-box !important}
 .create-zoom .zoom-ui button:hover{background:#cf2026 !important;color:#fff !important;border-color:#cf2026 !important}
-@media(max-width:560px){.create-zoom{padding:14px !important}.create-zoom > img{max-width:calc(100vw - 28px) !important;max-height:calc(100vh - 88px) !important}.create-zoom .zoom-title{left:14px !important;top:14px !important;font-size:8px !important}.create-zoom .zoom-ui{right:14px !important;top:10px !important}.create-zoom .zoom-ui button{width:36px !important;height:34px !important;min-width:36px !important;min-height:34px !important;font-size:8px !important}}
 
-@media(max-width:1050px){.layout{grid-template-columns:1fr !important}.summary{position:static !important}}
-@media(max-width:760px){.choices,.materials{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.colors{grid-template-columns:repeat(3,minmax(0,1fr)) !important}.sizes{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.size-field:last-child{grid-column:1/-1 !important}.create-actions{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
-@media(max-width:560px){.layout{padding:14px !important}.card,.summary{padding:17px !important}.choices,.materials{grid-template-columns:1fr 1fr !important}.sizes{grid-template-columns:1fr 1fr !important}.colors{grid-template-columns:repeat(3,1fr) !important}.create-actions{grid-template-columns:1fr !important}}
+/* Dedicated responsive layer for the constructor. */
+@media(max-width:1050px){
+  .layout{grid-template-columns:1fr !important;gap:16px !important;padding:20px !important}
+  .summary{position:static !important;top:auto !important}
+  .choices,.materials{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  .colors{grid-template-columns:repeat(6,minmax(0,1fr)) !important}
+}
+@media(max-width:760px){
+  .header .nav{display:grid !important;grid-template-columns:minmax(0,1fr) auto !important;gap:9px 10px !important;padding:10px 14px !important;width:100% !important}
+  .header .nav .brand{min-width:0 !important;font-size:9px !important;white-space:nowrap !important}
+  .header .nav .brand img{width:36px !important;height:36px !important;flex:0 0 36px !important}
+  .header .nav .navlinks{grid-column:1/-1 !important;width:100% !important;min-width:0 !important;display:flex !important;flex-wrap:nowrap !important;gap:16px !important;overflow-x:auto !important;overflow-y:hidden !important;padding:3px 0 5px !important;scrollbar-width:none !important;-webkit-overflow-scrolling:touch !important}
+  .header .nav .navlinks::-webkit-scrollbar{display:none !important}
+  .header .nav .navlinks a{flex:0 0 auto !important;font-size:8px !important;white-space:nowrap !important}
+  .header .nav .phone{margin-left:0 !important;justify-self:end !important;gap:6px !important}
+  .header .nav .phone small{display:none !important}
+  .header .nav .phone strong{font-size:8.5px !important;white-space:nowrap !important}
+  .header .nav .phone-dot{width:28px !important;height:28px !important}
+
+  .hero-inner{padding:34px 16px 30px !important}
+  .eyebrow{font-size:8px !important}
+  .hero h1{font-size:clamp(25px,8.2vw,34px) !important;line-height:1.12 !important;margin:10px 0 12px !important}
+  .hero p{font-size:12px !important;line-height:1.65 !important;margin:0 !important}
+  .flow{display:grid !important;grid-template-columns:1fr 1fr !important;gap:12px !important;margin-top:22px !important}
+  .flow div{min-width:0 !important;padding-left:9px !important}
+  .flow b{font-size:8px !important;line-height:1.35 !important}
+  .flow span{font-size:8px !important;line-height:1.4 !important}
+
+  .layout{padding:12px !important;gap:12px !important}
+  .card,.summary{padding:16px !important;width:100% !important;min-width:0 !important}
+  .card h2{font-size:14px !important;line-height:1.3 !important}
+  .hint,.size-note{font-size:10px !important;line-height:1.55 !important}
+  .section{padding:18px 0 !important}
+  .label{font-size:9px !important;margin-bottom:9px !important}
+
+  .choices,.materials{grid-template-columns:1fr 1fr !important;gap:8px !important}
+  .choice,.mat{min-height:82px !important;padding:11px !important;touch-action:manipulation !important}
+  .choice .ico{font-size:21px !important;margin-bottom:6px !important}
+  .choice strong,.mat strong{font-size:10px !important;line-height:1.3 !important}
+  .choice small,.mat small{font-size:8px !important;line-height:1.35 !important}
+  .mat-mark{height:28px !important;margin-bottom:8px !important}
+
+  .sizes{grid-template-columns:1fr !important;gap:10px !important}
+  .size-field{grid-column:auto !important;grid-template-rows:auto 48px auto !important}
+  .size-field label{font-size:9px !important;margin-bottom:5px !important}
+  .size-field .input{height:48px !important;font-size:16px !important;padding:12px !important}
+  .size-unit{font-size:8px !important}
+
+  .colors{grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:20px 8px !important;align-items:start !important}
+  .swatch{width:44px !important;height:44px !important;justify-self:center !important;margin:0 auto !important}
+  .swatch span{top:49px !important;font-size:7px !important}
+  .color-space{height:8px !important}
+
+  .purpose{display:grid !important;grid-template-columns:1fr 1fr !important;gap:8px !important}
+  .pill{min-height:48px !important;padding:10px 7px !important;font-size:9px !important;line-height:1.25 !important;touch-action:manipulation !important}
+
+  .textarea{min-height:150px !important;font-size:16px !important;line-height:1.55 !important;padding:13px !important}
+  .drop{padding:15px 10px !important}
+  .drop strong{font-size:10px !important}
+  .drop p{font-size:9px !important;line-height:1.5 !important}
+  .drop input{width:100% !important;font-size:13px !important}
+
+  .summary h3{font-size:11px !important}
+  .summary-box{padding:12px !important}
+  .summary-row{font-size:10px !important;padding:9px 0 !important;gap:10px !important}
+  .summary-row span{max-width:62%;line-height:1.35 !important}
+  .summary-text{font-size:10px !important;line-height:1.55 !important}
+  .node-body{grid-template-columns:1fr !important}
+  .node-body input{font-size:14px !important;min-height:42px !important}
+  .checks{font-size:9px !important;line-height:1.65 !important}
+
+  .generate{min-height:52px !important;padding:15px 12px !important;font-size:10px !important;line-height:1.3 !important;touch-action:manipulation !important}
+  .results{grid-template-columns:1fr !important;gap:10px !important}
+  .result{width:100% !important;aspect-ratio:4/3 !important;min-height:0 !important;font-size:9px !important}
+  .create-actions{grid-template-columns:1fr 1fr !important;gap:8px !important}
+  .create-action{height:48px !important;min-height:48px !important;max-height:48px !important;font-size:8px !important;padding:0 4px !important}
+  .status{font-size:9px !important;line-height:1.45 !important}
+  .confirm{padding:12px !important}
+  .confirm strong{font-size:10px !important}
+  .confirm p{font-size:9px !important;line-height:1.5 !important}
+}
+@media(max-width:380px){
+  .header .nav .brand span{font-size:8px !important}
+  .header .nav .phone strong{font-size:8px !important}
+  .hero-inner{padding-left:14px !important;padding-right:14px !important}
+  .flow{grid-template-columns:1fr !important;gap:9px !important}
+  .layout{padding:9px !important}
+  .card,.summary{padding:13px !important}
+  .choices,.materials{gap:6px !important}
+  .choice,.mat{min-height:78px !important;padding:9px !important}
+  .choice strong,.mat strong{font-size:9px !important}
+  .purpose{grid-template-columns:1fr !important}
+  .colors{gap:20px 4px !important}
+  .create-actions{grid-template-columns:1fr !important}
+}
+@media(max-width:560px){
+  .create-zoom{padding:14px !important}
+  .create-zoom > img{max-width:calc(100vw - 28px) !important;max-height:calc(100vh - 88px) !important}
+  .create-zoom .zoom-title{left:14px !important;top:14px !important;font-size:8px !important}
+  .create-zoom .zoom-ui{right:14px !important;top:10px !important}
+  .create-zoom .zoom-ui button{width:36px !important;height:34px !important;min-width:36px !important;min-height:34px !important;font-size:8px !important}
+}
