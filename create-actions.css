@@ -17,6 +17,18 @@ p,li,figcaption{letter-spacing:-.03em !important;word-spacing:-.06em !important}
 .size-field .input{width:100% !important;height:46px !important;font-size:12px !important;padding:12px 11px !important}
 .size-unit{font-size:8px !important;color:#777d8c !important;margin-top:5px !important}
 .size-note{margin-top:10px !important;background:#fafbfc !important;border-left:2px solid #cf2026 !important;padding:9px 11px !important}
+
+/* IMAGE VIEWER: real fixed lightbox, never inline below the page. */
+.create-zoom{position:fixed !important;inset:0 !important;width:100vw !important;height:100vh !important;z-index:2147483647 !important;display:none !important;align-items:center !important;justify-content:center !important;background:rgba(8,10,14,.94) !important;overflow:hidden !important;padding:28px !important;box-sizing:border-box !important;overscroll-behavior:contain !important}
+.create-zoom.open{display:flex !important}
+.create-zoom > img{display:block !important;max-width:calc(100vw - 56px) !important;max-height:calc(100vh - 112px) !important;width:auto !important;height:auto !important;object-fit:contain !important;transform-origin:center center !important;cursor:grab !important;user-select:none !important;-webkit-user-select:none !important;touch-action:none !important;box-shadow:0 20px 70px rgba(0,0,0,.45) !important}
+.create-zoom > img.dragging{cursor:grabbing !important}
+.create-zoom .zoom-title{position:absolute !important;top:18px !important;left:28px !important;color:#fff !important;font-size:11px !important;line-height:1.2 !important;letter-spacing:.04em !important;text-transform:uppercase !important;pointer-events:none !important}
+.create-zoom .zoom-ui{position:absolute !important;top:14px !important;right:22px !important;display:flex !important;gap:6px !important;z-index:2 !important}
+.create-zoom .zoom-ui button{width:42px !important;height:38px !important;min-width:42px !important;min-height:38px !important;margin:0 !important;padding:0 !important;border:1px solid rgba(255,255,255,.28) !important;border-radius:0 !important;background:rgba(255,255,255,.96) !important;color:#171a21 !important;font:700 10px/1 'Michroma','Unbounded','Inter',sans-serif !important;display:flex !important;align-items:center !important;justify-content:center !important;cursor:pointer !important;box-sizing:border-box !important}
+.create-zoom .zoom-ui button:hover{background:#cf2026 !important;color:#fff !important;border-color:#cf2026 !important}
+@media(max-width:560px){.create-zoom{padding:14px !important}.create-zoom > img{max-width:calc(100vw - 28px) !important;max-height:calc(100vh - 88px) !important}.create-zoom .zoom-title{left:14px !important;top:14px !important;font-size:8px !important}.create-zoom .zoom-ui{right:14px !important;top:10px !important}.create-zoom .zoom-ui button{width:36px !important;height:34px !important;min-width:36px !important;min-height:34px !important;font-size:8px !important}}
+
 @media(max-width:1050px){.layout{grid-template-columns:1fr !important}.summary{position:static !important}}
 @media(max-width:760px){.choices,.materials{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.colors{grid-template-columns:repeat(3,minmax(0,1fr)) !important}.sizes{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.size-field:last-child{grid-column:1/-1 !important}.create-actions{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
 @media(max-width:560px){.layout{padding:14px !important}.card,.summary{padding:17px !important}.choices,.materials{grid-template-columns:1fr 1fr !important}.sizes{grid-template-columns:1fr 1fr !important}.colors{grid-template-columns:repeat(3,1fr) !important}.create-actions{grid-template-columns:1fr !important}}
