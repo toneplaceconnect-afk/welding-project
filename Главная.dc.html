@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/nocturne-651ddb0a-0612-474c-8ab1-e169f277ba98/styles.css">
+  <script src="_ds/nocturne-651ddb0a-0612-474c-8ab1-e169f277ba98/_ds_bundle.js"></script>
+  <script src="./image-slot.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Unbounded:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --color-accent:#cf2026;--color-accent-100:#fdeced;--color-accent-200:#f9c9cb;--color-accent-300:#ef9598;
+      --color-accent-400:#e0585d;--color-accent-500:#cf2026;--color-accent-600:#a8171c;--color-accent-700:#7d1014;
+      --color-accent-800:#4d0a0d;--color-accent-900:#2a0608;
+      --color-bg:#11131a;--color-surface:#1a1d26;--color-text:#e9e9ed;
+      --radius-sm:0px;--radius-md:2px;--radius-lg:2px;
+    }
+    html.js-reveal [data-reveal]{opacity:0;transform:translateY(22px)}
+    html.js-reveal [data-reveal].in{opacity:1;transform:none;transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+    @keyframes spark{0%{opacity:0;transform:translate(0,0) scale(1)}8%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.3)}}
+    @keyframes smoke{0%{opacity:0;transform:translate(0,0) scale(1)}25%{opacity:.55}100%{opacity:0;transform:translate(-90px,-170px) scale(2.2)}}
+    @keyframes arc{0%,92%,100%{opacity:.35}94%{opacity:1}96%{opacity:.5}98%{opacity:1}}
+    @keyframes draw{0%{stroke-dashoffset:1200}45%{stroke-dashoffset:0}92%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:.15}}
+    @keyframes logoflash{0%,88%,100%{opacity:.15;transform:scale(.7)}92%{opacity:1;transform:scale(1.25)}95%{opacity:.45;transform:scale(.95)}97%{opacity:.9;transform:scale(1.1)}}
+    a{color:#cf2026;text-decoration:none}
+    a:hover{color:#a8171c}
+    body,h1,h2,h3,h4,h5,h6,p,span,a,div,label,button,input,select,textarea,figcaption,li,td,th{font-family:'Michroma','Unbounded','Inter',system-ui,sans-serif}
+    h1,h2,h3{letter-spacing:-.02em}
+    p,li,figcaption{letter-spacing:-.03em;word-spacing:-.06em}
+  </style>
+</helmet>
+
+<div style="background:#ffffff;color:#16181f;font-family:'Michroma','Unbounded','Inter',system-ui,sans-serif;min-height:100vh;overflow-x:hidden">
+
+  <header style="position:sticky;top:0;z-index:50;background:#11131a;border-bottom:1px solid rgba(255,255,255,.08)">
+    <nav style="max-width:1240px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+      <a href="Главная.dc.html" style="display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:12px;letter-spacing:-.01em">
+        <span style="position:relative;display:inline-flex;width:46px;height:44px;flex:0 0 auto">
+          <img src="assets/logo-mark.svg" alt="Проект-Сварка" style="width:100%;height:100%;object-fit:contain">
+          <span style="position:absolute;left:31%;top:77%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#ff5a60 35%,rgba(207,32,38,0) 70%);animation:logoflash 5s ease-in-out infinite;pointer-events:none"></span>
+        </span>
+        ПРОЕКТ<span style="color:#cf2026;font-family:Arial,Helvetica,sans-serif;font-weight:900;margin:0 -.22em">-</span>СВАРКА
+      </a>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:9.5px;font-weight:600;letter-spacing:.01em">
+        <a href="Главная.dc.html" style="color:#fff;padding-bottom:5px;border-bottom:2px solid #cf2026">Главная</a>
+        <a href="Создай своё.dc.html" style="color:#c9ccd6;padding-bottom:5px;border-bottom:2px solid transparent;transition:color .2s,border-color .2s" style-hover="color:#fff;border-color:#cf2026">Создай своё</a>
+        <a href="Калькулятор.dc.html" style="color:#c9ccd6;padding-bottom:5px;border-bottom:2px solid transparent;transition:color .2s,border-color .2s" style-hover="color:#fff;border-color:#cf2026">Калькулятор</a>
+        <a href="Лофт-мебель.dc.html" style="color:#c9ccd6;padding-bottom:5px;border-bottom:2px solid transparent;transition:color .2s,border-color .2s" style-hover="color:#fff;border-color:#cf2026">Лофт-мебель</a>
+        <a href="Документация.dc.html" style="color:#c9ccd6;padding-bottom:5px;border-bottom:2px solid transparent;transition:color .2s,border-color .2s" style-hover="color:#fff;border-color:#cf2026">Документация</a>
+        <a href="Прайс.dc.html" style="color:#c9ccd6;padding-bottom:5px;border-bottom:2px solid transparent;transition:color .2s,border-color .2s" style-hover="color:#fff;border-color:#cf2026">Цены</a>
+      </div>
+      <a href="https://t.me/welding_project" target="_blank" rel="noopener" style="margin-left:auto;display:flex;align-items:center;gap:12px;color:#fff">
+        <span style="width:30px;height:30px;border:1px solid #cf2026;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#cf2026;font-size:13px;flex:0 0 auto">☎</span>
+        <span style="display:flex;flex-direction:column;line-height:1.3">
+          <span style="font-size:8px;letter-spacing:.12em;color:#8d92a3">ЗВОНИТЕ СЕЙЧАС</span>
+          <span style="font-size:12px;font-weight:700;white-space:nowrap">+7 983 198 15 88</span>
+        </span>
+      </a>
+    </nav>
+  </header>
+
+  <section style="position:relative;background:#11131a;min-height:min(84vh,660px);display:flex;align-items:center;overflow:hidden">
+    <img id="hero-photo" src="assets/hero-welder.png" alt="Сварочные работы в цеху" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 45%">
+    <div style="position:absolute;inset:0;background:linear-gradient(95deg,#0c0e14 4%,rgba(12,14,20,.88) 38%,rgba(12,14,20,.15) 72%)"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(to top,#11131a 1%,transparent 30%)"></div>
+
+    <div id="arc-layer" style="position:absolute;left:56%;top:52%;width:1px;height:1px;pointer-events:none">
+      <div style="--dx:120px;--dy:90px;position:absolute;width:3px;height:3px;border-radius:50%;background:#fff6e0;box-shadow:0 0 8px 2px #ffb35c;animation:spark 1.6s linear infinite"></div>
+      <div style="--dx:-90px;--dy:70px;position:absolute;width:2px;height:2px;border-radius:50%;background:#ffd9a0;box-shadow:0 0 6px 2px #ff9b3c;animation:spark 1.9s linear .2s infinite"></div>
+      <div style="--dx:160px;--dy:-40px;position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;box-shadow:0 0 7px 2px #ffc06a;animation:spark 2.2s linear .45s infinite"></div>
+      <div style="--dx:-140px;--dy:-30px;position:absolute;width:2px;height:2px;border-radius:50%;background:#ffe9c4;box-shadow:0 0 6px 2px #ff8f2e;animation:spark 1.7s linear .7s infinite"></div>
+      <div style="--dx:60px;--dy:150px;position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;box-shadow:0 0 9px 3px #ffab4d;animation:spark 2.4s linear .9s infinite"></div>
+      <div style="--dx:-40px;--dy:130px;position:absolute;width:2px;height:2px;border-radius:50%;background:#ffdca8;box-shadow:0 0 6px 2px #ff9b3c;animation:spark 2s linear 1.15s infinite"></div>
+      <div style="--dx:200px;--dy:60px;position:absolute;width:2px;height:2px;border-radius:50%;background:#fff3d6;box-shadow:0 0 6px 2px #ffb35c;animation:spark 2.6s linear 1.4s infinite"></div>
+      <div style="--dx:-180px;--dy:110px;position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;box-shadow:0 0 7px 2px #ff9b3c;animation:spark 2.1s linear 1.7s infinite"></div>
+      <div style="--dx:30px;--dy:-120px;position:absolute;width:2px;height:2px;border-radius:50%;background:#ffe0b0;box-shadow:0 0 6px 2px #ffa447;animation:spark 2.8s linear 2s infinite"></div>
+      <div style="--dx:110px;--dy:180px;position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;box-shadow:0 0 10px 3px #ffb35c;animation:spark 3s linear 2.3s infinite"></div>
+      <div style="position:absolute;left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:radial-gradient(circle,#eaf2ff 0%,#9cc4ff 35%,transparent 70%);animation:arc 4.5s infinite"></div>
+    </div>
+
+    <div id="smoke-layer" style="position:absolute;left:56%;top:52%;width:1px;height:1px;pointer-events:none">
+      <div style="position:absolute;width:170px;height:170px;margin:-85px;border-radius:50%;background:radial-gradient(circle,rgba(214,222,240,.55) 0%,rgba(214,222,240,.18) 45%,transparent 72%);filter:blur(16px);animation:smoke 7s linear infinite"></div>
+      <div style="position:absolute;width:230px;height:230px;margin:-115px;border-radius:50%;background:radial-gradient(circle,rgba(198,210,235,.42) 0%,rgba(198,210,235,.14) 48%,transparent 74%);filter:blur(22px);animation:smoke 9s linear 2.2s infinite"></div>
+      <div style="position:absolute;width:130px;height:130px;margin:-65px;border-radius:50%;background:radial-gradient(circle,rgba(232,238,250,.6) 0%,rgba(232,238,250,.2) 42%,transparent 70%);filter:blur(12px);animation:smoke 8s linear 4.4s infinite"></div>
+      <div style="position:absolute;width:200px;height:200px;margin:-100px;border-radius:50%;background:radial-gradient(circle,rgba(206,216,238,.4) 0%,rgba(206,216,238,.12) 46%,transparent 72%);filter:blur(20px);animation:smoke 10s linear 6.5s infinite"></div>
+    </div>
+
+    <div style="position:relative;max-width:1240px;margin:0 auto;padding:96px 28px 120px;width:100%">
+      <div style="max-width:660px">
+        <h1 style="font-size:clamp(32px,4.8vw,54px);line-height:1.12;font-weight:800;color:#fff;margin:0 0 20px;text-wrap:balance">Сварка и инженерные решения в регионе</h1>
+        <p style="font-size:15px;line-height:1.75;color:#b9bdcb;max-width:520px;margin:0 0 30px;text-wrap:pretty">Металлоконструкции, отопление, водоснабжение и предметы из металла с деревом. Считаю по действующим СП и ГОСТ, а не на глаз. Выезд и замер бесплатно, цена фиксируется в договоре и не меняется.</p>
+        <div style="display:flex;gap:14px;flex-wrap:wrap">
+          <a href="#zayavka" style="background:#cf2026;color:#fff;padding:15px 34px;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:background .25s,box-shadow .25s" style-hover="background:#a8171c;box-shadow:0 0 28px rgba(207,32,38,.55)">Оставить заявку</a>
+          <a href="Создай своё.dc.html" style="border:1px solid rgba(255,255,255,.35);color:#fff;padding:15px 30px;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:border-color .25s,background .25s" style-hover="border-color:#cf2026;background:rgba(207,32,38,.12)">Создай своё</a>
+        </div>
+      </div>
+      <div style="position:absolute;right:28px;bottom:118px;display:flex;flex-direction:column;gap:10px">
+        <a href="https://t.me/welding_project" target="_blank" rel="noopener" style="width:34px;height:34px;border:1px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;background:rgba(12,14,20,.55);transition:background .25s,border-color .25s" style-hover="background:#cf2026;border-color:#cf2026">TG</a>
+        <a href="tel:+79831981588" style="width:34px;height:34px;border:1px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;background:rgba(12,14,20,.55);transition:background .25s,border-color .25s" style-hover="background:#cf2026;border-color:#cf2026">☎</a>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:44px">
+        <span style="width:26px;height:3px;background:#cf2026"></span>
+        <span style="width:14px;height:3px;background:rgba(255,255,255,.35)"></span>
+        <span style="width:14px;height:3px;background:rgba(255,255,255,.35)"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="uslugi" style="background:#ffffff">
+    <div style="max-width:1240px;margin:0 auto;padding:0 28px">
+      <div style="display:grid;grid-template-columns:2.2fr repeat(5,minmax(0,1fr));gap:12px;margin-top:-74px;position:relative;z-index:10;align-items:stretch">
+        <div style="min-width:0;padding:26px 24px;background:#fff;border-radius:34px 0 0 0;box-shadow:0 18px 50px rgba(10,12,18,.22)">
+          <h2 style="font-size:12.5px;font-weight:700;margin:0 0 10px;line-height:1.5">Пять направлений,<br>одна ответственность</h2>
+          <p style="font-size:9.5px;color:#6a6f80;margin:0 0 14px;line-height:1.8">Беру объект целиком: расчёт, закупка металла, изготовление и монтаж. Ни один этап не отдаю на сторону.</p>
+          <a href="#napravleniya" style="display:inline-flex;align-items:center;gap:9px;font-size:9.5px;font-weight:700;color:#16181f;letter-spacing:.04em" style-hover="color:#cf2026">
+            <span style="width:24px;height:24px;flex:0 0 auto;background:#cf2026;color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px">›</span>Подробнее
+          </a>
+        </div>
+        <a href="#napravleniya" style="padding:20px 11px;min-width:0;overflow:hidden;background:#cf2026;color:#fff;box-shadow:0 18px 50px rgba(207,32,38,.3);display:flex;flex-direction:column;gap:11px;transition:transform .25s" style-hover="transform:translateY(-4px)">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.4"><rect x="3" y="7" width="12" height="12"></rect><path d="M7 7V3h14v14h-4"></path></svg>
+          <span style="font-size:8px;font-weight:700;line-height:1.7;overflow-wrap:anywhere;letter-spacing:-.06em">Металло-<br>конструкции</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:7.5px;font-weight:700;margin-top:auto;letter-spacing:0;white-space:nowrap;min-width:0"><span style="width:22px;height:22px;flex:0 0 auto;background:#fff;color:#cf2026;border-radius:50%;display:inline-flex;align-items:center;justify-content:center">›</span>Подробнее</span>
+        </a>
+        <a href="#napravleniya" style="padding:20px 11px;min-width:0;overflow:hidden;color:#16181f;background:#fff;box-shadow:0 18px 50px rgba(10,12,18,.18);display:flex;flex-direction:column;gap:11px;transition:background .25s,transform .25s" style-hover="background:#f6f7f9;transform:translateY(-4px)">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#16181f" stroke-width="1.4"><path d="M4 19V8l8-4 8 4v11"></path><path d="M8 19v-6h8v6"></path></svg>
+          <span style="font-size:9px;font-weight:700;line-height:1.6;overflow-wrap:anywhere;hyphens:auto;letter-spacing:-.04em">Отопление</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:7.5px;font-weight:700;margin-top:auto;letter-spacing:0;white-space:nowrap;min-width:0"><span style="width:22px;height:22px;flex:0 0 auto;background:#16181f;color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center">›</span>Подробнее</span>
+        </a>
+        <a href="#napravleniya" style="padding:20px 11px;min-width:0;overflow:hidden;color:#16181f;background:#fff;box-shadow:0 18px 50px rgba(10,12,18,.18);display:flex;flex-direction:column;gap:11px;transition:background .25s,transform .25s" style-hover="background:#f6f7f9;transform:translateY(-4px)">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#16181f" stroke-width="1.4"><path d="M6 3v8a6 6 0 0 0 12 0V3"></path><path d="M12 21v-4"></path></svg>
+          <span style="font-size:9px;font-weight:700;line-height:1.6;overflow-wrap:anywhere;hyphens:auto;letter-spacing:-.04em">Водо-<br>снабжение</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:7.5px;font-weight:700;margin-top:auto;letter-spacing:0;white-space:nowrap;min-width:0"><span style="width:22px;height:22px;flex:0 0 auto;background:#16181f;color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center">›</span>Подробнее</span>
+        </a>
+        <a href="Калькулятор.dc.html" style="padding:20px 11px;min-width:0;overflow:hidden;color:#16181f;background:#fff;box-shadow:0 18px 50px rgba(10,12,18,.18);display:flex;flex-direction:column;gap:11px;transition:background .25s,transform .25s" style-hover="background:#f6f7f9;transform:translateY(-4px)">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#16181f" stroke-width="1.4"><rect x="4" y="3" width="16" height="18"></rect><path d="M8 7h8M8 12h3M8 16h3M14 12v5"></path></svg>
+          <span style="font-size:9px;font-weight:700;line-height:1.6;overflow-wrap:anywhere;hyphens:auto;letter-spacing:-.04em">Проекты<br>и расчёт</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:7.5px;font-weight:700;margin-top:auto;letter-spacing:0;white-space:nowrap;min-width:0"><span style="width:22px;height:22px;flex:0 0 auto;background:#16181f;color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center">›</span>Подробнее</span>
+        </a>
+        <a href="Лофт-мебель.dc.html" style="padding:20px 11px;min-width:0;overflow:hidden;color:#16181f;background:#fff;box-shadow:0 18px 50px rgba(10,12,18,.18);display:flex;flex-direction:column;gap:11px;transition:background .25s,transform .25s" style-hover="background:#f6f7f9;transform:translateY(-4px)">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#16181f" stroke-width="1.4"><path d="M3 10h18"></path><path d="M5 10v9M19 10v9"></path><path d="M3 7h18l-2-3H5z"></path></svg>
+          <span style="font-size:9px;font-weight:700;line-height:1.6;overflow-wrap:anywhere;hyphens:auto;letter-spacing:-.04em">Лофт-мебель<br>металл + дерево</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:7.5px;font-weight:700;margin-top:auto;letter-spacing:0;white-space:nowrap;min-width:0"><span style="width:22px;height:22px;flex:0 0 auto;background:#16181f;color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center">›</span>Подробнее</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="napravleniya" style="background:#ffffff">
+    <div style="max-width:1240px;margin:0 auto;padding:76px 28px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:26px">
+        <div data-reveal style="display:flex;flex-direction:column;justify-content:center;padding-right:20px">
+          <span style="font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6a6f80;margin-bottom:12px">Направления работ</span>
+          <h2 style="font-size:clamp(26px,3.4vw,38px);font-weight:800;line-height:1.15;text-transform:uppercase;color:#cf2026;margin:0 0 16px;text-wrap:balance">Делаю то, что должно стоять десятки лет</h2>
+          <p style="font-size:14.5px;line-height:1.7;color:#5c6070;margin:0 0 24px;text-wrap:pretty">Сечение трубы и шаг столбов считаю под снеговой и ветровой район вашего участка — те нагрузки, что реально стоят в регионе. Мощность котла и секции радиаторов — покомнатно, а не «в среднем по дому».</p>
+          <a href="#zayavka" style="align-self:flex-start;background:#cf2026;color:#fff;padding:14px 30px;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:background .25s,box-shadow .25s" style-hover="background:#a8171c;box-shadow:0 0 26px rgba(207,32,38,.45)">Обсудить задачу</a>
+        </div>
+
+        <div data-reveal style="display:grid;grid-template-columns:1fr;gap:0">
+          <div style="position:relative;min-height:230px;background:#1a1d26">
+            <image-slot id="dir-1" src="assets/photo/glavnaya/zabory-vorota-navesy.webp" shape="rect" placeholder="Фото: заборы, ворота, навесы"></image-slot>
+            <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,14,20,.86) 0%,rgba(12,14,20,.25) 70%);pointer-events:none"></div>
+            <div style="position:absolute;left:24px;bottom:22px;right:70px;pointer-events:none">
+              <h3 style="font-size:17px;font-weight:800;text-transform:uppercase;color:#fff;margin:0 0 6px">Заборы, ворота, навесы</h3>
+              <p style="font-size:12.5px;color:#c2c6d2;margin:0;line-height:1.6">Каркас под снеговую нагрузку района, профлист или евроштакетник, автоматика на ворота.</p>
+            </div>
+            <span style="position:absolute;right:20px;bottom:20px;width:34px;height:34px;background:#cf2026;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;pointer-events:none">›</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:26px;margin-top:26px">
+        <div data-reveal style="position:relative;min-height:210px;background:#cf2026">
+          <image-slot id="dir-2" src="assets/photo/glavnaya/otoplenie.webp" shape="rect" placeholder="Фото: монтаж отопления"></image-slot>
+          <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(150,20,25,.9) 0%,rgba(150,20,25,.3) 75%);pointer-events:none"></div>
+          <div style="position:absolute;left:22px;bottom:20px;right:64px;pointer-events:none">
+            <h3 style="font-size:16px;font-weight:800;text-transform:uppercase;color:#fff;margin:0 0 6px">Отопление и тёплый пол</h3>
+            <p style="font-size:12.5px;color:#ffe3e4;margin:0;line-height:1.6">Котёл, разводка, радиаторы, контур ГВС. Расчёт под −40 °C.</p>
+          </div>
+          <span style="position:absolute;right:18px;bottom:18px;width:32px;height:32px;background:#fff;color:#cf2026;display:flex;align-items:center;justify-content:center;font-size:15px;pointer-events:none">›</span>
+        </div>
+        <div data-reveal style="position:relative;min-height:210px;background:#1a1d26">
+          <image-slot id="dir-3" src="assets/photo/glavnaya/vodosnabzhenie.webp" shape="rect" placeholder="Фото: водоснабжение, разводка"></image-slot>
+          <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,14,20,.86) 0%,rgba(12,14,20,.25) 75%);pointer-events:none"></div>
+          <div style="position:absolute;left:22px;bottom:20px;right:64px;pointer-events:none">
+            <h3 style="font-size:16px;font-weight:800;text-transform:uppercase;color:#fff;margin:0 0 6px">Водоснабжение</h3>
+            <p style="font-size:12.5px;color:#c2c6d2;margin:0;line-height:1.6">Скважина или центральный ввод, разводка по точкам, фильтрация.</p>
+          </div>
+          <span style="position:absolute;right:18px;bottom:18px;width:32px;height:32px;background:#cf2026;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;pointer-events:none">›</span>
+        </div>
+        <div data-reveal style="position:relative;min-height:210px;background:#1a1d26">
+          <image-slot id="dir-4" src="assets/photo/glavnaya/lestnicy-perila.webp" shape="rect" placeholder="Фото: лестница, перила, слесарные работы"></image-slot>
+          <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,14,20,.86) 0%,rgba(12,14,20,.25) 75%);pointer-events:none"></div>
+          <div style="position:absolute;left:22px;bottom:20px;right:64px;pointer-events:none">
+            <h3 style="font-size:16px;font-weight:800;text-transform:uppercase;color:#fff;margin:0 0 6px">Лестницы и перила</h3>
+            <p style="font-size:12.5px;color:#c2c6d2;margin:0;line-height:1.6">Металлокосоур с деревянными ступенями, ограждения, ремонт металла.</p>
+          </div>
+          <span style="position:absolute;right:18px;bottom:18px;width:32px;height:32px;background:#cf2026;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;pointer-events:none">›</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#11131a">
+    <div style="max-width:1240px;margin:0 auto;padding:72px 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:center">
+      <div data-reveal>
+        <span style="font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#8d92a3">Расчёт до выезда</span>
+        <h2 style="font-size:clamp(24px,3.2vw,34px);font-weight:800;text-transform:uppercase;color:#fff;margin:12px 0 16px;line-height:1.18">Калькулятор считает материал, а не цену</h2>
+        <p style="font-size:14.5px;line-height:1.7;color:#b9bdcb;margin:0 0 26px;text-wrap:pretty">Введите длину и высоту забора, марку профнастила и тип грунта — получите число столбов, метраж трубы на лаги, количество листов, саморезов и расходников. Формулы взяты из СП 22.13330 и СП 20.13330.</p>
+        <div style="display:flex;gap:14px;flex-wrap:wrap">
+          <a href="Калькулятор.dc.html" style="background:#cf2026;color:#fff;padding:14px 30px;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:background .25s,box-shadow .25s" style-hover="background:#a8171c;box-shadow:0 0 26px rgba(207,32,38,.5)">Открыть калькулятор</a>
+          <a href="Документация.dc.html" style="border:1px solid rgba(255,255,255,.3);color:#fff;padding:14px 26px;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:border-color .25s,background .25s" style-hover="border-color:#cf2026;background:rgba(207,32,38,.12)">Нормативы</a>
+        </div>
+      </div>
+      <div data-reveal>
+        <svg viewBox="0 0 360 240" style="display:block;width:100%;height:auto;overflow:visible">
+          <g stroke="rgba(255,255,255,.08)" stroke-width="1">
+            <path d="M0 40H360M0 80H360M0 120H360M0 160H360M0 200H360M40 0V240M80 0V240M120 0V240M160 0V240M200 0V240M240 0V240M280 0V240M320 0V240"></path>
+          </g>
+          <g fill="none" stroke="#cf2026" stroke-width="2" stroke-linecap="square" stroke-dasharray="1200" style="stroke-dashoffset:1200">
+            <path d="M30 200V60" style="animation:draw 9s ease-in-out infinite"></path>
+            <path d="M120 200V60" style="animation:draw 9s ease-in-out .35s infinite"></path>
+            <path d="M210 200V60" style="animation:draw 9s ease-in-out .7s infinite"></path>
+            <path d="M300 200V60" style="animation:draw 9s ease-in-out 1.05s infinite"></path>
+            <path d="M30 90H300" style="animation:draw 9s ease-in-out 1.4s infinite"></path>
+            <path d="M30 170H300" style="animation:draw 9s ease-in-out 1.7s infinite"></path>
+            <path d="M30 200H320" stroke="#8d92a3" style="animation:draw 9s ease-in-out 2s infinite"></path>
+          </g>
+          <g fill="none" stroke="#ef9598" stroke-width="1" stroke-dasharray="1200" style="stroke-dashoffset:1200">
+            <path d="M30 222H120M30 216V228M120 216V228" style="animation:draw 9s ease-in-out 2.4s infinite"></path>
+            <path d="M318 60V200M312 60H324M312 200H324" style="animation:draw 9s ease-in-out 2.7s infinite"></path>
+          </g>
+          <text x="60" y="236" fill="#8d92a3" font-size="11">шаг 2,5 м</text>
+          <text x="330" y="134" fill="#8d92a3" font-size="11">H</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#cf2026">
+    <div style="max-width:1240px;margin:0 auto;padding:44px 28px;display:flex;gap:26px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+      <div data-reveal style="max-width:720px">
+        <span style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#ffd7d9">Создай своё</span>
+        <h2 style="font-size:clamp(20px,2.8vw,30px);font-weight:700;text-transform:uppercase;color:#fff;margin:12px 0 12px;line-height:1.3">Не знаете, как это должно выглядеть — нейронка покажет эскиз</h2>
+        <p style="font-size:11.5px;color:#ffe3e4;margin:0;line-height:1.9">Отмечаете готовые пункты — из них складывается описание изделия, по нему рисуются два эскиза. Объяснение на каждом шаге, можно приложить фото места и свой набросок.</p>
+      </div>
+      <a href="Создай своё.dc.html" data-reveal style="background:#fff;color:#cf2026;padding:16px 30px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:background .25s" style-hover="background:#ffe3e4">Собрать свою идею</a>
+    </div>
+  </section>
+
+  <section style="background:#f4f5f7">
+    <div style="max-width:1240px;margin:0 auto;padding:72px 28px">
+      <div data-reveal style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:28px">
+        <div style="max-width:620px">
+          <span style="font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6a6f80">Металл + дерево</span>
+          <h2 style="font-size:clamp(26px,3.4vw,38px);font-weight:800;text-transform:uppercase;color:#cf2026;margin:12px 0 14px;line-height:1.15">Лофт-предметы под ваш проект</h2>
+          <p style="font-size:14.5px;color:#5c6070;margin:0;line-height:1.7">Металлокаркас держит нагрузку, дерево задаёт вид. Породу подбираем по наличию — кедр, лиственница, сосна; свой материал тоже принимаю. Беседки и навесы считаю на снеговую нагрузку региона.</p>
+        </div>
+        <a href="Лофт-мебель.dc.html" style="border:1px solid #16181f;color:#16181f;padding:14px 28px;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:background .25s,color .25s,border-color .25s" style-hover="background:#cf2026;border-color:#cf2026;color:#fff">Все изделия</a>
+      </div>
+      <div data-reveal style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px">
+        <figure style="margin:0;background:#fff;box-shadow:0 8px 26px rgba(10,12,18,.08)">
+          <div style="height:190px"><image-slot id="home-loft-1" src="assets/photo/glavnaya/loft-stoly.webp" shape="rect" placeholder="Фото: стол на металлокаркасе"></image-slot></div>
+          <figcaption style="padding:14px 16px;font-size:13px;font-weight:700;color:#16181f">Столы и столешницы</figcaption>
+        </figure>
+        <figure style="margin:0;background:#fff;box-shadow:0 8px 26px rgba(10,12,18,.08)">
+          <div style="height:190px"><image-slot id="home-loft-2" src="assets/photo/glavnaya/loft-stellazhi.webp" shape="rect" placeholder="Фото: стеллаж металл + дерево"></image-slot></div>
+          <figcaption style="padding:14px 16px;font-size:13px;font-weight:700;color:#16181f">Стеллажи и хранение</figcaption>
+        </figure>
+        <figure style="margin:0;background:#fff;box-shadow:0 8px 26px rgba(10,12,18,.08)">
+          <div style="height:190px"><image-slot id="home-loft-3" src="assets/photo/glavnaya/loft-besedki.webp" shape="rect" placeholder="Фото: беседка или навес"></image-slot></div>
+          <figcaption style="padding:14px 16px;font-size:13px;font-weight:700;color:#16181f">Беседки и мангальные зоны</figcaption>
+        </figure>
+        <figure style="margin:0;background:#fff;box-shadow:0 8px 26px rgba(10,12,18,.08)">
+          <div style="height:190px"><image-slot id="home-loft-4" src="assets/photo/glavnaya/loft-kafe.webp" shape="rect" placeholder="Фото: барная стойка для кафе"></image-slot></div>
+          <figcaption style="padding:14px 16px;font-size:13px;font-weight:700;color:#16181f">Мебель для кафе и баров</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="zayavka" style="background:#ffffff">
+    <div style="max-width:1240px;margin:0 auto;padding:72px 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px">
+      <div data-reveal>
+        <span style="font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6a6f80">Заявка</span>
+        <h2 style="font-size:clamp(26px,3.4vw,38px);font-weight:800;text-transform:uppercase;color:#cf2026;margin:12px 0 14px;line-height:1.15">Опишите задачу — назову решение и сроки</h2>
+        <p style="font-size:14.5px;color:#5c6070;margin:0 0 26px;line-height:1.7;text-wrap:pretty">Стоимость называю после уточнения деталей или бесплатного замера: без этого любая цифра будет обманом. Заявка уходит в Telegram одним сообщением.</p>
+        <div style="display:flex;flex-direction:column;gap:14px;font-size:14px">
+          <a href="https://t.me/welding_project" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:14px;color:#16181f">
+            <span style="width:38px;height:38px;background:#cf2026;color:#fff;display:flex;align-items:center;justify-content:center">↗</span>
+            <span><span style="display:block;font-size:10px;letter-spacing:.14em;color:#8d92a3">TELEGRAM</span><span style="font-weight:700">@welding_project</span></span>
+          </a>
+          <a href="tel:+79831981588" style="display:flex;align-items:center;gap:14px;color:#16181f">
+            <span style="width:38px;height:38px;background:#16181f;color:#fff;display:flex;align-items:center;justify-content:center">☎</span>
+            <span><span style="display:block;font-size:10px;letter-spacing:.14em;color:#8d92a3">ЗВОНОК</span><span style="font-weight:700">+7 983 198 15 88</span></span>
+          </a>
+          <a href="mailto:ProektSvarka@yandex.ru" style="display:flex;align-items:center;gap:14px;color:#16181f">
+            <span style="width:38px;height:38px;background:#16181f;color:#fff;display:flex;align-items:center;justify-content:center">@</span>
+            <span><span style="display:block;font-size:10px;letter-spacing:.14em;color:#8d92a3">ПОЧТА</span><span style="font-weight:700">ProektSvarka@yandex.ru</span></span>
+          </a>
+          <span style="color:#6a6f80">Выезд по региону, замер бесплатно</span>
+        </div>
+      </div>
+
+      <div data-reveal style="background:#11131a;padding:30px;display:flex;flex-direction:column;gap:14px">
+        <label style="display:flex;flex-direction:column;gap:7px;font-size:12px;font-weight:600;letter-spacing:.04em;color:#b9bdcb;text-transform:uppercase">Что нужно сделать
+          <select value="{{ zType }}" onChange="{{ onType }}" style="background:#1a1d26;color:#fff;border:1px solid #2c3040;padding:12px 13px;font-size:14px;font-family:inherit;text-transform:none;font-weight:400;letter-spacing:0">
+            <option>Забор, ворота, калитка</option>
+            <option>Навес или козырёк</option>
+            <option>Лестница, перила</option>
+            <option>Отопление</option>
+            <option>Водоснабжение</option>
+            <option>Лофт-мебель (металл + дерево)</option>
+            <option>Другое</option>
+          </select>
+        </label>
+        <label style="display:flex;flex-direction:column;gap:7px;font-size:12px;font-weight:600;letter-spacing:.04em;color:#b9bdcb;text-transform:uppercase">Имя
+          <input value="{{ zName }}" onChange="{{ onName }}" placeholder="Как к вам обращаться" style="background:#1a1d26;color:#fff;border:1px solid #2c3040;padding:12px 13px;font-size:14px;font-family:inherit;text-transform:none;font-weight:400;letter-spacing:0">
+        </label>
+        <label style="display:flex;flex-direction:column;gap:7px;font-size:12px;font-weight:600;letter-spacing:.04em;color:#b9bdcb;text-transform:uppercase">Телефон или ник в Telegram
+          <input value="{{ zContact }}" onChange="{{ onContact }}" placeholder="+7 ... или @nick" style="background:#1a1d26;color:#fff;border:1px solid #2c3040;padding:12px 13px;font-size:14px;font-family:inherit;text-transform:none;font-weight:400;letter-spacing:0">
+        </label>
+        <label style="display:flex;flex-direction:column;gap:7px;font-size:12px;font-weight:600;letter-spacing:.04em;color:#b9bdcb;text-transform:uppercase">Детали: размеры, адрес, сроки
+          <textarea value="{{ zText }}" onChange="{{ onText }}" rows="4" placeholder="Например: забор 42 м, высота 2 м, профнастил С20, грунт — суглинок" style="background:#1a1d26;color:#fff;border:1px solid #2c3040;padding:12px 13px;font-size:14px;font-family:inherit;resize:vertical;text-transform:none;font-weight:400;letter-spacing:0"></textarea>
+        </label>
+        <button onClick="{{ send }}" style="background:#cf2026;color:#fff;border:0;padding:15px 24px;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-family:inherit;transition:background .25s,box-shadow .25s" style-hover="background:#a8171c;box-shadow:0 0 26px rgba(207,32,38,.5)">Отправить в Telegram</button>
+        <p style="font-size:11.5px;color:#8d92a3;margin:0">{{ sendHint }}</p>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background:#0d0f15;color:#b9bdcb">
+    <div style="max-width:1240px;margin:0 auto;padding:46px 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px">
+      <div>
+        <a href="Главная.dc.html" style="display:flex;align-items:center;gap:12px;color:#fff;font-weight:700;font-size:14px;margin-bottom:14px">
+          <span style="position:relative;display:inline-flex;width:44px;height:42px;flex:0 0 auto">
+            <img src="assets/logo-mark.svg" alt="Проект-Сварка" style="width:100%;height:100%;object-fit:contain">
+            <span style="position:absolute;left:31%;top:77%;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#ff5a60 35%,rgba(207,32,38,0) 70%);animation:logoflash 5s ease-in-out .8s infinite;pointer-events:none"></span>
+          </span>
+          ПРОЕКТ<span style="color:#cf2026;font-family:Arial,Helvetica,sans-serif;font-weight:900;margin:0 -.22em">-</span>СВАРКА
+        </a>
+        <p style="font-size:13px;margin:0;line-height:1.7">Сварочные и инженерные работы в регионе. Расчёт по СП и ГОСТ, цена в договоре.</p>
+      </div>
+      <div>
+        <h3 style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;margin:0 0 14px">Разделы</h3>
+        <div style="display:flex;flex-direction:column;gap:9px;font-size:13px">
+          <a href="Калькулятор.dc.html" style="color:#b9bdcb" style-hover="color:#cf2026">Калькулятор материалов</a>
+          <a href="Лофт-мебель.dc.html" style="color:#b9bdcb" style-hover="color:#cf2026">Лофт-мебель</a>
+          <a href="Документация.dc.html" style="color:#b9bdcb" style-hover="color:#cf2026">Документация</a>
+          <a href="Прайс.dc.html" style="color:#b9bdcb" style-hover="color:#cf2026">Цены</a>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;margin:0 0 14px">Контакты</h3>
+        <div style="display:flex;flex-direction:column;gap:9px;font-size:13px">
+          <a href="tel:+79831981588" style="color:#b9bdcb" style-hover="color:#cf2026">+7 983 198 15 88</a>
+          <a href="https://t.me/welding_project" target="_blank" rel="noopener" style="color:#b9bdcb" style-hover="color:#cf2026">@welding_project</a>
+          <a href="mailto:ProektSvarka@yandex.ru" style="color:#b9bdcb" style-hover="color:#cf2026">ProektSvarka@yandex.ru</a>
+          <span>Работаю по региону</span>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,.08)">
+      <div style="max-width:1240px;margin:0 auto;padding:18px 28px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:space-between;font-size:10.5px;color:#6a6f80">
+        <span>Проект-Сварка. Выезд и замер бесплатно.</span>
+        <a href="https://t.me/CompilePoint" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;color:#b9bdcb" style-hover="color:#fff">
+          <img src="assets/logo-compilepoint-mark.png" alt="CompilePoint" style="height:30px;width:auto;object-fit:contain;filter:brightness(0) invert(1) opacity(.85)">
+          <span>Разработано в «Точка Сборки»</span>
+        </a>
+        <div id="totop" style="position:fixed;right:22px;bottom:22px;z-index:60;opacity:0;pointer-events:none;transition:opacity .3s">
+          <button onClick="{{ toTop }}" title="Наверх" style="width:46px;height:46px;background:#cf2026;color:#fff;border:0;cursor:pointer;font-size:17px;font-family:inherit;box-shadow:0 10px 26px rgba(10,12,18,.3);transition:background .25s" style-hover="background:#a8171c">↑</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { zType: 'Забор, ворота, калитка', zName: '', zContact: '', zText: '', hint: 'Текст заявки скопируется в буфер — вставьте его в чат.' };
+
+  placeArc = () => {
+    const img = document.getElementById('hero-photo');
+    const arc = document.getElementById('arc-layer');
+    const smoke = document.getElementById('smoke-layer');
+    if (!img || !arc || !img.naturalWidth) return;
+    const cw = img.clientWidth, ch = img.clientHeight;
+    const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+    const dw = img.naturalWidth * scale, dh = img.naturalHeight * scale;
+    const px = (cw - dw) * 0.62 + 0.741 * dw, py = (ch - dh) * 0.45 + 0.687 * dh;
+    arc.style.left = px + 'px'; arc.style.top = py + 'px';
+    if (smoke) { smoke.style.left = (px + 0.012 * dw) + 'px'; smoke.style.top = (py - 0.05 * dh) + 'px'; }
+  };
+
+  componentDidMount() {
+    document.documentElement.classList.add('js-reveal');
+    const img = document.getElementById('hero-photo');
+    if (img) { if (img.complete) this.placeArc(); img.addEventListener('load', this.placeArc); }
+    this._timers = [0, 120, 400, 1000].map((d) => setTimeout(this.placeArc, d));
+    window.addEventListener('resize', this.placeArc);
+    this._onScroll = () => {
+      const b = document.getElementById('totop');
+      if (!b) return;
+      const on = window.scrollY > 500;
+      b.style.opacity = on ? '1' : '0';
+      b.style.pointerEvents = on ? 'auto' : 'none';
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting || e.boundingClientRect.top < 0) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    this._io = io;
+    const scan = () => document.querySelectorAll('[data-reveal]:not(.in)').forEach((el) => {
+      if (el.getBoundingClientRect().top < window.innerHeight * 0.92) el.classList.add('in');
+      else io.observe(el);
+    });
+    scan();
+    this._scan = scan;
+    window.addEventListener('scroll', scan, { passive: true });
+    window.addEventListener('resize', scan);
+  }
+  componentWillUnmount() {
+    if (this._scan) { window.removeEventListener('scroll', this._scan); window.removeEventListener('resize', this._scan); }
+    if (this._io) this._io.disconnect();
+    window.removeEventListener('resize', this.placeArc);
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    (this._timers || []).forEach(clearTimeout);
+  }
+
+  renderVals() {
+    const set = (k) => (e) => this.setState({ [k]: e.target.value });
+    return {
+      zType: this.state.zType, zName: this.state.zName, zContact: this.state.zContact, zText: this.state.zText,
+      sendHint: this.state.hint,
+      toTop: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+      onType: set('zType'), onName: set('zName'), onContact: set('zContact'), onText: set('zText'),
+      send: () => {
+        const s = this.state;
+        const msg = ['Заявка с сайта «Проект-Сварка»', 'Задача: ' + s.zType, 'Имя: ' + (s.zName || '—'), 'Контакт: ' + (s.zContact || '—'), 'Детали: ' + (s.zText || '—')].join('\n');
+        const open = () => window.open('https://t.me/welding_project', '_blank', 'noopener');
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(msg).then(() => { this.setState({ hint: 'Заявка скопирована — вставьте её в открывшийся чат Telegram.' }); open(); })
+            .catch(() => { this.setState({ hint: 'Скопировать не удалось — напишите в Telegram напрямую.' }); open(); });
+        } else { this.setState({ hint: 'Напишите детали в открывшемся чате Telegram.' }); open(); }
+      }
+    };
+  }
+}
+
+</script>
+</body>
+</html>
