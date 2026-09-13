@@ -1,98 +1,91 @@
 // Serverless-функция Vercel: /api/generate-sketch
-// Generates exactly one visualization from the client's brief.
+// Two-stage pipeline: understand the client's object first, then render exactly one photo.
 
-const MASTER_PROMPT = `You are an expert industrial designer, product designer, architect, engineer and professional commercial photographer.
+const DESIGN_ANALYST_PROMPT = `You are the design-analysis stage of a professional product visualization system.
 
-Your task is to create ONE highly realistic photograph of the object requested by the client.
+Analyze the CLIENT BRIEF before any image is generated.
 
-THE CLIENT BRIEF IS THE ONLY SOURCE OF TRUTH.
+Your job is NOT to write marketing copy and NOT to invent a new design. Your job is to convert the client's natural-language request into a precise internal VISUAL DESIGN SPECIFICATION for an image generator.
 
-1. UNDERSTAND THE CLIENT REQUEST
-Read the entire client brief before generating anything. Determine from the client's own words what object or construction is requested, its primary function, real-world category, form, proportions, components, materials, dimensions, units, colors, finishes, construction method, connections, intended environment and style.
+Determine:
+- the exact object or construction requested;
+- its real-world category and primary function;
+- its characteristic physical form and silhouette;
+- the major components and how they are arranged;
+- dimensions and proportions explicitly stated by the client;
+- materials for each component;
+- colors and surface finishes;
+- construction and connection methods explicitly requested;
+- intended environment and use;
+- requested style;
+- any other explicit visual requirement.
 
-The client may use informal language, spelling mistakes, colloquial terms or non-standard technical wording. Interpret the intended meaning, not the grammar.
+Use real-world design, engineering, furniture, architecture and manufacturing knowledge to understand what the described object should physically look like.
 
-2. IDENTIFY THE OBJECT BEFORE GENERATING IT
-First determine what the requested object would physically look like if it existed and had been manufactured in the real world. Use your knowledge of real-world objects, industrial design, furniture, architecture, engineering, materials and manufacturing.
+CRITICAL RULES:
+1. The CLIENT BRIEF is the source of truth.
+2. Do not replace the requested object with a familiar object that merely shares some words, materials or shapes.
+3. Do not turn furniture into architecture, architecture into furniture, or one product category into another.
+4. Do not invent features that change the object's identity, function, proportions or specified materials.
+5. If information is missing, make only the minimum neutral assumption needed for a coherent, manufacturable object.
+6. Preserve every explicit dimension, material, finish, component and connection.
+7. Interpret spelling mistakes and informal language by intended meaning.
+8. Check that the resulting concept could physically exist and be manufactured.
+9. Do not add decorative elements merely because they are associated with a style word.
 
-Determine its characteristic silhouette, geometry, proportions, components and relationships between components before rendering it.
+Return ONLY a concise VISUAL DESIGN SPECIFICATION that can be handed directly to a photorealistic image generator. Do not discuss your reasoning.`;
 
-Never substitute the requested object with something merely visually similar or with a generic familiar template.
+const IMAGE_MASTER_PROMPT = `You are an expert industrial designer, product designer, architect, engineer and professional commercial photographer.
 
-3. PRESERVE THE CLIENT'S SPECIFICATIONS
-Every explicit requirement has priority. Preserve object type, purpose, quantity, dimensions, proportions, materials, colors, finishes, structural elements, components, connections, mechanisms, installation method, environment and style.
+Create ONE photorealistic commercial photograph of EXACTLY the object described in the VISUAL DESIGN SPECIFICATION.
 
-Never silently remove an explicit requirement. Never replace an explicitly requested material, color, finish, dimension or component with another. Explicit dimensions are authoritative and their proportions must remain physically consistent.
+The specification was produced by a separate design-analysis stage from the client's original request. Treat it as a construction and visualization specification, not as inspiration.
 
-4. RESOLVE MISSING INFORMATION INTELLIGENTLY
-Clients often omit technical details. Make only the smallest reasonable professional assumptions needed to create a coherent real-world object.
+OBJECT IDENTITY
+The requested object must be immediately recognizable from its physical form, silhouette and construction. Preserve its real-world category, function and proportions. Never substitute another object.
 
-Choose solutions that are structurally plausible, manufacturable, functional, appropriate for the intended environment and consistent with the client's description. An assumption must never change the object's category, purpose, proportions, specified materials or style.
+CLIENT FIDELITY
+Preserve every explicit requirement represented in the specification: dimensions, proportions, materials, colors, finishes, components, construction details, connections, mechanisms, quantity, environment and style. Never silently omit or replace a requirement.
 
-5. THINK LIKE A DESIGNER AND ENGINEER
-Every structural element must have a purpose. Components must connect logically. Supports must actually support the object. Loads must have plausible paths. Joints and fasteners must be physically possible. Profiles, boards, tubes, plates, legs, supports and frames must have believable thicknesses and dimensions.
+REAL-WORLD CONSTRUCTION
+Build a physically plausible object. Every structural element must have a purpose. Supports must support. Components must connect logically. Joints and fasteners must be physically possible. Materials must have believable thickness, scale and behavior. Avoid floating parts, impossible intersections, disconnected elements, distorted geometry and unsupported structures.
 
-Avoid floating parts, impossible intersections, disconnected components, unsupported structures, physically impossible joints, distorted geometry and arbitrary decorative elements.
+MATERIAL REALISM
+Render each specified material according to its real physical properties. Respect exact surface treatments. Do not apply generic black metal, generic orange wood, excessive gloss or arbitrary premium styling unless specified.
 
-The result is not an engineering drawing. It must simply look like a real object that could actually be manufactured and used.
+PHOTOGRAPHY
+Create a finished high-end real photograph, not a drawing or concept illustration. Use realistic camera optics, perspective, lighting, reflections, shadows, depth of field and material detail. Choose the clearest professional camera angle and show the complete object and its important construction details. Keep the environment secondary.
 
-6. MATERIAL BEHAVIOR
-Render every material according to its real physical properties.
+STYLE
+Express style through the actual geometry, proportions, materials and construction. Do not use style stereotypes that contradict the specification.
 
-Metal must have believable thickness, edges, reflections, surface imperfections, joints, welds, machining or fasteners where appropriate. Wood must have natural grain direction, believable grain scale, texture, edges, joins and the specified surface treatment. Glass, stone, fabric, leather, plastic, concrete and other materials must behave realistically under light.
+NO GRAPHIC ELEMENTS
+No text, labels, captions, dimensions, arrows, logos, UI, diagrams, blueprints, CAD, wireframes, technical drawings, collages, split screens or inset views.
 
-Respect treatments such as oil, lacquer, paint, powder coating, brushed steel, polished steel, galvanized metal, raw steel or any other finish explicitly requested by the client.
+FINAL CHECK
+Before rendering, verify that the image shows the exact requested object, that all specified characteristics are preserved, that its proportions and construction are physically believable, and that a real person could identify the object immediately from the photograph.
 
-Do not automatically make metal black or wood orange. Do not apply generic premium styling when the client specified something else.
+Generate exactly ONE image.`;
 
-7. CONSTRUCTION DETAILS
-If the client specifies bolts, screws, welds, brackets, hinges, profiles, plates, forged elements, reinforcement, joints, anchors, seams or mounting hardware, place them where they would logically exist on the real object.
-
-Do not add technical details merely to make the object look complicated.
-
-8. SCALE AND PROPORTION
-Maintain realistic human and environmental scale. Use client dimensions whenever available. If dimensions are absent, infer realistic proportions from the object's function and category.
-
-Do not exaggerate proportions for visual effect unless explicitly requested.
-
-9. REFERENCE IMAGES
-If reference images are supplied, analyze them for shape, proportions, construction, materials, finish, style and details. The written CLIENT BRIEF has priority if a reference conflicts with it.
-
-10. PHOTOREALISTIC VISUALIZATION
-Create ONE finished photorealistic commercial photograph that looks like a real professional photograph of the requested object after manufacture.
-
-Use physically plausible lighting, realistic shadows, accurate perspective, natural reflections, believable depth of field, detailed surfaces and natural camera optics. Choose the camera angle that communicates the object most clearly and shows its important requested components. The object is the primary subject and the environment is secondary.
-
-11. ENVIRONMENT
-Respect the client's stated environment and use. If none is specified, choose a simple neutral environment appropriate to the object. Environmental objects may appear only when they help establish realistic scale or context and must remain clearly secondary.
-
-12. STYLE
-Interpret requested styles through actual geometry, materials, proportions and details rather than arbitrary decoration. Do not convert style words into automatic stereotypes. For example, loft does not automatically mean black metal, premium does not automatically mean glossy surfaces, and minimalist does not mean removing required structural elements.
-
-13. DO NOT DESIGN A DIFFERENT OBJECT
-NEVER replace the client's requested object with another object because it is more familiar, easier to generate or visually similar. The object's function, category, silhouette and construction must correspond to the CLIENT BRIEF.
-
-14. FINAL INTERNAL VALIDATION
-Before rendering, verify internally:
-- the object category matches the client's words;
-- its physical form corresponds to its real-world function;
-- every explicit requirement is present;
-- dimensions and proportions are respected;
-- materials, colors and finishes are correct;
-- construction and connections are physically plausible;
-- the object is realistically manufacturable;
-- the photograph clearly communicates the complete object;
-- a real person could immediately identify the requested object from the image.
-
-If any answer is NO, correct the design concept before rendering.
-
-15. OUTPUT RESTRICTIONS
-Generate exactly ONE image.
-Do not create a sketch, blueprint, CAD visualization, technical drawing, diagram, collage, split-screen presentation or concept sheet.
-Do not place text, captions, labels, measurements, arrows, logos, UI elements or annotations in the image.
-Do not add unrelated designed objects or alternative versions.
-
-The final image must represent the client's requested object as accurately as possible.`;
+async function analyzeBrief(clientBrief, apiKey) {
+  const r = await fetch('https://gen.pollinations.ai/v1/chat/completions', {
+    method: 'POST',
+    headers: { Authorization: 'Bearer ' + apiKey, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'gpt-5.6-luna',
+      temperature: 0.1,
+      messages: [
+        { role: 'system', content: DESIGN_ANALYST_PROMPT },
+        { role: 'user', content: 'CLIENT BRIEF:\n' + clientBrief }
+      ]
+    })
+  });
+  if (!r.ok) throw Error('Design analysis ' + r.status + ': ' + (await r.text()).slice(0, 600));
+  const d = await r.json();
+  const text = d?.choices?.[0]?.message?.content;
+  if (!text) throw Error('Design analysis did not return a specification.');
+  return String(text).trim();
+}
 
 function dataUrlToBlob(dataUrl, index) {
   const m = String(dataUrl || '').match(/^data:([^;,]+);base64,(.+)$/);
@@ -148,11 +141,24 @@ export default async function handler(request, response) {
   if (!clientPrompt) return response.status(400).json({ error: 'Пустой запрос (prompt).' });
   try {
     const refs = inputs.length ? await Promise.all(inputs.map((x, i) => uploadImage(x, i, apiKey))) : [];
-    const prompt = [MASTER_PROMPT, 'CLIENT BRIEF — SOURCE OF TRUTH:', clientPrompt].join('\n\n');
+    let visualSpec;
+    try {
+      visualSpec = await analyzeBrief(clientPrompt, apiKey);
+    } catch (analysisError) {
+      console.warn('Design analysis unavailable, using original brief:', analysisError?.message || analysisError);
+      visualSpec = clientPrompt;
+    }
+    const prompt = [
+      IMAGE_MASTER_PROMPT,
+      'VISUAL DESIGN SPECIFICATION:',
+      visualSpec,
+      'ORIGINAL CLIENT BRIEF — FINAL AUTHORITY:',
+      clientPrompt
+    ].join('\n\n');
     let image;
     try { image = await generate(prompt, refs, apiKey); }
     catch (e) { if (refs.length) image = await fallback(prompt, apiKey); else throw e; }
-    return response.status(200).json({ images: [image], referenceCount: refs.length, count: 1 });
+    return response.status(200).json({ images: [image], referenceCount: refs.length, count: 1, analyzed: visualSpec !== clientPrompt });
   } catch (err) {
     console.error('Pollinations error', err);
     return response.status(500).json({ error: 'Ошибка генерации: ' + (err?.message || String(err)) });
