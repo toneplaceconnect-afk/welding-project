@@ -1,20 +1,144 @@
 (() => {
   const style = document.createElement('style');
   style.textContent = `
-    .create-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-    .create-action{border:1px solid #3b404b;background:#1b1e27;color:#fff;padding:11px 8px;cursor:pointer;font-size:8px;font-weight:800;letter-spacing:.04em}
-    .create-action:hover{border-color:#cf2026;background:#20242e}
-    .create-action:disabled{opacity:.45;cursor:not-allowed}
-    .create-zoom{position:fixed;inset:0;background:rgba(5,7,10,.92);z-index:99999;display:none;align-items:center;justify-content:center;padding:30px;backdrop-filter:blur(8px)}
-    .create-zoom.open{display:flex}
-    .create-zoom img{max-width:92vw;max-height:88vh;object-fit:contain;box-shadow:0 20px 80px #000;transform-origin:center;cursor:grab;user-select:none}
-    .create-zoom img.dragging{cursor:grabbing}
-    .zoom-ui{position:fixed;top:18px;right:18px;display:flex;gap:7px;z-index:2}
-    .zoom-ui button{border:1px solid #ffffff35;background:#151820;color:#fff;width:40px;height:40px;cursor:pointer;font-size:18px}
-    .zoom-title{position:fixed;left:20px;top:22px;color:#fff;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-    @media(max-width:560px){.create-actions{grid-template-columns:1fr 1fr}.create-zoom{padding:10px}.create-zoom img{max-width:98vw;max-height:82vh}}
+    /* Readability / layout layer for the guided Create page. */
+    body,
+    button,input,textarea,
+    .navlinks,.phone,.hero p,.flow,.card,.hint,.size-note,
+    .choice,.choice strong,.choice small,.mat,.mat strong,.mat small,
+    .label,.pill,.drop,.drop strong,.drop p,.summary,.summary-row,
+    .summary-text,.checks,.status,.confirm,.confirm p {
+      font-family: Inter, Arial, Helvetica, sans-serif !important;
+    }
+
+    .hero h1,.brand,.eyebrow,.card h2,.summary h3,.generate {
+      font-family: Inter, Arial, Helvetica, sans-serif !important;
+    }
+    .hero h1{font-weight:800!important;letter-spacing:-.035em!important;line-height:1.08!important;max-width:920px!important}
+    .hero p{font-size:14px!important;line-height:1.65!important;max-width:820px!important}
+    .eyebrow{font-size:10px!important;letter-spacing:.14em!important}
+    .flow{gap:34px!important}
+    .flow b{font-size:10px!important}
+    .flow span{font-size:9px!important}
+
+    .layout{grid-template-columns:minmax(0,1.55fr) minmax(330px,.85fr)!important;gap:24px!important;max-width:1280px!important;padding:32px 24px!important}
+    .card{padding:30px!important;border-radius:2px!important}
+    .card h2{font-size:20px!important;letter-spacing:-.02em!important}
+    .hint,.size-note{font-size:12px!important;line-height:1.55!important}
+    .section{padding:26px 0!important}
+    .label{font-size:11px!important;letter-spacing:.055em!important;margin-bottom:13px!important;color:#3f4653!important}
+
+    .choices{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}
+    .choice{min-height:96px!important;padding:15px!important;border-radius:2px!important}
+    .choice .ico{font-size:22px!important;margin-bottom:10px!important}
+    .choice strong{font-size:12px!important;line-height:1.25!important}
+    .choice small{font-size:10px!important;line-height:1.35!important;margin-top:5px!important}
+
+    .sizes{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
+    .size-field{display:flex!important;flex-direction:column!important;gap:7px!important;min-width:0!important}
+    .size-field label{font-size:11px!important;font-weight:700!important;color:#454c58!important}
+    .size-field .input{font-size:14px!important;padding:13px 12px!important;height:48px!important}
+    .size-unit{font-size:10px!important;color:#8a909b!important;margin-top:-2px!important}
+    .size-note{margin-top:12px!important;background:#f6f7f9!important;border-left:3px solid #cf2026!important;padding:10px 12px!important}
+
+    .materials{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+    .mat{min-height:86px!important;padding:14px!important;border-radius:2px!important}
+    .mat-mark{height:34px!important;margin-bottom:10px!important}
+    .mat strong{font-size:11px!important}
+    .mat small{font-size:10px!important}
+
+    .colors{display:grid!important;grid-template-columns:repeat(6,minmax(56px,1fr))!important;gap:14px!important;align-items:start!important}
+    .swatch{width:44px!important;height:44px!important;justify-self:center!important}
+    .swatch span{top:51px!important;font-size:8px!important}
+    .color-space{height:22px!important}
+
+    .purpose{gap:8px!important}
+    .pill{font-size:11px!important;padding:10px 13px!important;border-radius:2px!important}
+
+    .textarea{min-height:170px!important;font-size:13px!important;padding:14px!important}
+    .drop{padding:22px!important}
+    .drop strong{font-size:12px!important}
+    .drop p{font-size:11px!important;line-height:1.5!important}
+    .drop input{font-size:11px!important}
+
+    .summary{padding:24px!important;top:24px!important;border-radius:2px!important}
+    .summary h3{font-size:14px!important;letter-spacing:.04em!important}
+    .summary-box{padding:17px!important}
+    .summary-row{font-size:11px!important;padding:11px 0!important;align-items:flex-start!important}
+    .summary-row b{font-weight:700!important;white-space:nowrap!important}
+    .summary-row span{font-size:11px!important;line-height:1.35!important;max-width:58%!important}
+    .summary-text{font-size:11px!important;line-height:1.65!important}
+    .advanced{margin-top:18px!important;padding-top:16px!important}
+    .advanced summary{font-size:11px!important}
+    .node-head{font-size:11px!important;padding:12px!important}
+    .node-body label{font-size:9px!important}
+    .node-body input{font-size:10px!important}
+    .checks{font-size:10px!important;line-height:1.8!important}
+    .generate{font-size:11px!important;letter-spacing:.02em!important;padding:17px!important}
+    .status{font-size:10px!important}
+    .confirm{padding:16px!important}
+    .confirm strong{font-size:11px!important}
+    .confirm p{font-size:10px!important;line-height:1.55!important}
+
+    .create-actions{grid-template-columns:repeat(2,1fr)!important;gap:9px!important;margin-top:12px!important}
+    .create-action{font-family:Inter,Arial,sans-serif!important;font-size:10px!important;padding:12px 8px!important}
+
+    @media(max-width:1050px){
+      .layout{grid-template-columns:1fr!important}
+      .summary{position:static!important}
+    }
+    @media(max-width:760px){
+      .choices{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+      .colors{grid-template-columns:repeat(3,minmax(56px,1fr))!important}
+      .sizes{grid-template-columns:1fr 1fr!important}
+      .size-field:last-child{grid-column:1/-1}
+    }
+    @media(max-width:560px){
+      .hero h1{font-size:30px!important}
+      .hero p{font-size:13px!important}
+      .flow{display:grid!important;grid-template-columns:1fr 1fr!important;gap:14px!important}
+      .layout{padding:16px 12px!important}
+      .card,.summary{padding:18px!important}
+      .choices,.materials{grid-template-columns:1fr 1fr!important}
+      .choice{min-height:86px!important;padding:12px!important}
+      .choice strong{font-size:11px!important}
+      .choice small{font-size:9px!important}
+      .sizes{grid-template-columns:1fr 1fr!important}
+      .colors{grid-template-columns:repeat(3,1fr)!important}
+      .pill{font-size:10px!important}
+      .textarea{min-height:145px!important}
+    }
   `;
   document.head.appendChild(style);
+
+  function improveSizeFields() {
+    const sizes = document.querySelector('.sizes');
+    if (!sizes || sizes.dataset.enhanced) return;
+    const fields = [
+      ['Длина', 'Например, 1800', 'мм'],
+      ['Ширина', 'Например, 900', 'мм'],
+      ['Высота', 'Например, 750', 'мм']
+    ];
+    const inputs = [...sizes.querySelectorAll('input')];
+    inputs.forEach((input, i) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'size-field';
+      const label = document.createElement('label');
+      label.textContent = fields[i]?.[0] || 'Размер';
+      const unit = document.createElement('div');
+      unit.className = 'size-unit';
+      unit.textContent = fields[i]?.[2] || 'мм';
+      input.placeholder = fields[i]?.[1] || 'Введите размер';
+      input.setAttribute('aria-label', fields[i]?.[0] || 'Размер');
+      input.parentNode.insertBefore(wrap, input);
+      wrap.appendChild(label);
+      wrap.appendChild(input);
+      wrap.appendChild(unit);
+    });
+    sizes.dataset.enhanced = '1';
+  }
+
+  improveSizeFields();
 
   const resultBoxes = () => [document.getElementById('r1'), document.getElementById('r2')];
   let zoom = null;
