@@ -29,7 +29,7 @@ ABSOLUTE NEGATIVES: No abstract art, concept-art look, CGI plastic, collage, spl
 
 function productGuard(brief){
  const s=String(brief||'').toLowerCase();
- if(/\\bстол\\b|обеденн.*стол|dining table/.test(s)) return `PRODUCT-SPECIFIC LOCK — DINING TABLE: This is a normal functional dining table for a home. It MUST have a clear horizontal tabletop supported by a separate base/legs. Keep the entire area under the tabletop open and usable for chairs and a seated person's legs. The tabletop must NOT be pierced by, wrapped around, supported by or connected to a central wooden column. NO central column, tower, wall, partition, vertical post rising through the tabletop, canopy or architectural frame. The metal base must be a lightweight table support, not a building structure. Do not invent shelves or additional surfaces unless explicitly requested.`;
+ if(/\bстол\b|обеденн.*стол|dining table/.test(s)) return `PRODUCT-SPECIFIC LOCK — DINING TABLE: This is a normal functional dining table for a home. It MUST have a clear horizontal tabletop supported by a separate base/legs. Keep the entire area under the tabletop open and usable for chairs and a seated person's legs. The tabletop must NOT be pierced by, wrapped around, supported by or connected to a central wooden column. NO central column, tower, wall, partition, vertical post rising through the tabletop, canopy or architectural frame. The metal base must be a lightweight table support, not a building structure. Do not invent shelves or additional surfaces unless explicitly requested.`;
  if(/скамь|табурет|bench|stool/.test(s)) return `PRODUCT-SPECIFIC LOCK — SEATING: Create functional seating with a clear seat surface and a realistic supporting base/legs. Do not turn it into a wall, platform, pavilion or architectural structure.`;
  if(/стеллаж|полк|shelf|rack/.test(s)) return `PRODUCT-SPECIFIC LOCK — SHELVING: Create a functional shelving/rack unit with clearly separated shelves and a realistic supporting frame. Do not turn it into a building frame or room partition.`;
  if(/стойк|counter|барн|ресепш/.test(s)) return `PRODUCT-SPECIFIC LOCK — COUNTER: Create a functional counter/stand with a clear working surface and realistic support structure. Do not turn it into a kiosk, pavilion or building.`;
@@ -50,8 +50,6 @@ async function parseImageResponse(r){if(!r.ok)throw Error('Pollinations '+r.stat
 
 async function generate(prompt,refs,apiKey){const payload={model:'flux',prompt,size:'1024x768',n:1,response_format:'b64_json'};if(refs.length)payload.image=refs;const r=await fetch('https://gen.pollinations.ai/v1/images/generations',{method:'POST',headers:{Authorization:'Bearer '+apiKey,'Content-Type':'application/json'},body:JSON.stringify(payload)});return parseImageResponse(r)}
 
-// Use the canonical image as an actual image-edit source for subsequent views.
-// This is stronger than asking the generator to recreate the object from text again.
 async function editCanonical(dataUrl,prompt,apiKey){
  const blob=dataUrlToBlob(dataUrl,0);
  const form=new FormData();
@@ -78,16 +76,10 @@ export default async function handler(request,response){
   const refs=inputs.length?await Promise.all(inputs.map((x,i)=>uploadImage(x,i,apiKey))):[];
   const guard=productGuard(clientPrompt);
   const makePrompt=i=>MASTER_PROMPT+'\n\n'+guard+'\n\nCLIENT BRIEF / STRUCTURED PRODUCT:\n'+clientPrompt+'\n\n'+VIEWS[i]+'\n\nIDENTITY LOCK: This is one exact physical product. Preserve every component, dimension, material, color, proportion, silhouette and construction detail. Only camera position, crop, lighting and photographic composition may change.';
-
-  // First image establishes the canonical physical design.
   const firstPrompt=makePrompt(0);
   let first;
-  try{first=await generate(firstPrompt,refs,apiKey)}
-  catch(e){if(refs.length)first=await fallback(firstPrompt,apiKey);else throw e}
+  try{first=await generate(firstPrompt,refs,apiKey)}catch(e){if(refs.length)first=await fallback(firstPrompt,apiKey);else throw e}
   const images=[first];
-
-  // The first generated image is now the single source of truth.
-  // It is used as an actual image-edit input for the second view.
   for(let i=1;i<count;i++){
    const viewPrompt=makePrompt(i);
    let image;
@@ -100,7 +92,6 @@ export default async function handler(request,response){
     if(canonicalUrl){
       image=await generate(viewPrompt+'\n\nThe attached canonical image is the authoritative design. Reproduce that exact object and change only the camera.',[canonicalUrl],apiKey);
     }else{
-      // Last-resort fallback. It is intentionally not used unless both identity-preserving paths fail.
       image=await fallback(viewPrompt+'\n\nIMPORTANT: reproduce the exact canonical physical object; do not redesign it.',apiKey);
     }
    }
