@@ -21,8 +21,10 @@ function injectAssets(html, file) {
     result = result.replace('</head>', '  <link rel="stylesheet" href="/mobile.css">\n</head>');
   }
 
-  if (file === 'create.html' && !result.includes('/create-tools.js')) {
-    result = result.replace('</body>', '  <script src="/create-tools.js"></script>\n</body>');
+  // One canonical header/back-to-top module for every page. The module replaces
+  // any legacy per-page header markup after the page is mounted.
+  if (!result.includes('/site-ui.js')) {
+    result = result.replace('</body>', '  <script src="/site-ui.js" defer></script>\n</body>');
   }
 
   return result;
