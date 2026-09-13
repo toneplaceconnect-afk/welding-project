@@ -3,8 +3,8 @@
   html,body{max-width:100%;overflow-x:hidden}
   body{font-size:14px}
 
-  /* Header: logo + contact on first row, navigation on second row */
-  header nav{
+  /* Legacy headers only. The shared .site-header is controlled exclusively by site-ui.js. */
+  header:not(.site-header) nav{
     display:grid !important;
     grid-template-columns:minmax(0,1fr) auto !important;
     align-items:center !important;
@@ -14,9 +14,9 @@
     width:100% !important;
     box-sizing:border-box !important;
   }
-  header nav > a:first-child{min-width:0 !important;font-size:10px !important;gap:7px !important;white-space:nowrap}
-  header nav > a:first-child > span:first-child{width:38px !important;height:38px !important}
-  header nav > div{
+  header:not(.site-header) nav > a:first-child{min-width:0 !important;font-size:10px !important;gap:7px !important;white-space:nowrap}
+  header:not(.site-header) nav > a:first-child > span:first-child{width:38px !important;height:38px !important}
+  header:not(.site-header) nav > div{
     grid-column:1 / -1 !important;
     min-width:0 !important;
     width:100% !important;
@@ -29,12 +29,12 @@
     scrollbar-width:none !important;
     -webkit-overflow-scrolling:touch;
   }
-  header nav > div::-webkit-scrollbar{display:none}
-  header nav > div a{flex:0 0 auto !important;font-size:8.5px !important;white-space:nowrap !important}
-  header nav > a:last-child{margin-left:0 !important;justify-self:end !important;gap:7px !important}
-  header nav > a:last-child > span:first-child{width:28px !important;height:28px !important;font-size:12px !important}
-  header nav > a:last-child > span:last-child span:first-child{display:none !important}
-  header nav > a:last-child > span:last-child span:last-child{font-size:9.5px !important}
+  header:not(.site-header) nav > div::-webkit-scrollbar{display:none}
+  header:not(.site-header) nav > div a{flex:0 0 auto !important;font-size:8.5px !important;white-space:nowrap !important}
+  header:not(.site-header) nav > a:last-child{margin-left:0 !important;justify-self:end !important;gap:7px !important}
+  header:not(.site-header) nav > a:last-child > span:first-child{width:28px !important;height:28px !important;font-size:12px !important}
+  header:not(.site-header) nav > a:last-child > span:last-child span:first-child{display:none !important}
+  header:not(.site-header) nav > a:last-child > span:last-child span:last-child{font-size:9.5px !important}
 
   /* Generic content containers */
   [style*="max-width:1240px"]{
@@ -95,9 +95,9 @@
 }
 
 @media (max-width: 560px){
-  header nav > a:first-child{font-size:9px !important}
-  header nav > a:first-child > span:first-child{width:34px !important;height:34px !important}
-  header nav > a:last-child > span:last-child span:last-child{font-size:8.5px !important}
+  header:not(.site-header) nav > a:first-child{font-size:9px !important}
+  header:not(.site-header) nav > a:first-child > span:first-child{width:34px !important;height:34px !important}
+  header:not(.site-header) nav > a:last-child > span:last-child span:last-child{font-size:8.5px !important}
   section[style*="min-height:min(84vh,660px)"]{min-height:72vh !important}
   section[style*="min-height:min(84vh,660px)"] > div:last-child{display:none !important}
   section[style*="min-height:min(84vh,660px)"] a{width:100% !important;text-align:center !important}
