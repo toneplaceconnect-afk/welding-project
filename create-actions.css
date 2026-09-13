@@ -1,1 +1,22 @@
-/* Action controls are styled by create-actions.js so the feature stays isolated from the page layout. */
+/* Shared site typography and grid for «Создай своё». */
+html,body,body *{font-family:'Michroma','Unbounded','Inter',system-ui,sans-serif !important}
+h1,h2,h3,h4,h5,h6{letter-spacing:-.02em !important}
+p,li,figcaption{letter-spacing:-.03em !important;word-spacing:-.06em !important}
+.layout{max-width:1240px !important;padding:28px !important;grid-template-columns:minmax(0,1.1fr) minmax(320px,.68fr) !important;gap:22px !important}
+.card,.summary{border-radius:0 !important}
+.choices,.materials{grid-template-columns:repeat(4,minmax(0,1fr)) !important;gap:9px !important}
+.sizes{display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:12px !important}
+.colors{display:grid !important;grid-template-columns:repeat(6,minmax(0,1fr)) !important;gap:15px !important}
+.results{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:9px !important}
+.create-actions{width:100% !important;display:grid !important;grid-template-columns:repeat(4,minmax(0,1fr)) !important;gap:9px !important;margin-top:12px !important;align-items:stretch !important}
+.create-action{width:100% !important;min-width:0 !important;height:42px !important;min-height:42px !important;max-height:42px !important;margin:0 !important;padding:0 6px !important;border:1px solid #dfe2e8 !important;border-radius:0 !important;background:#fff !important;color:#171a21 !important;display:flex !important;align-items:center !important;justify-content:center !important;box-sizing:border-box !important;text-align:center !important;white-space:nowrap !important;overflow:hidden !important;font-family:'Michroma','Unbounded','Inter',system-ui,sans-serif !important;font-size:7px !important;font-weight:700 !important;line-height:1 !important;letter-spacing:-.02em !important;cursor:pointer !important;appearance:none !important;-webkit-appearance:none !important}
+.create-action:hover{border-color:#cf2026 !important;color:#cf2026 !important;background:#fff !important}
+.create-action:focus-visible{outline:2px solid #cf2026 !important;outline-offset:2px !important}
+.size-field{display:grid !important;grid-template-columns:1fr !important;grid-template-rows:auto 46px auto !important;gap:0 !important;min-width:0 !important}
+.size-field label{font-size:9px !important;font-weight:700 !important;color:#626876 !important;text-transform:uppercase !important;letter-spacing:.08em !important;margin:0 0 6px !important}
+.size-field .input{width:100% !important;height:46px !important;font-size:12px !important;padding:12px 11px !important}
+.size-unit{font-size:8px !important;color:#777d8c !important;margin-top:5px !important}
+.size-note{margin-top:10px !important;background:#fafbfc !important;border-left:2px solid #cf2026 !important;padding:9px 11px !important}
+@media(max-width:1050px){.layout{grid-template-columns:1fr !important}.summary{position:static !important}}
+@media(max-width:760px){.choices,.materials{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.colors{grid-template-columns:repeat(3,minmax(0,1fr)) !important}.sizes{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.size-field:last-child{grid-column:1/-1 !important}.create-actions{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
+@media(max-width:560px){.layout{padding:14px !important}.card,.summary{padding:17px !important}.choices,.materials{grid-template-columns:1fr 1fr !important}.sizes{grid-template-columns:1fr 1fr !important}.colors{grid-template-columns:repeat(3,1fr) !important}.create-actions{grid-template-columns:1fr !important}}
