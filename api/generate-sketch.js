@@ -58,6 +58,7 @@ export default async function handler(request, response) {
 
     if (!aiResponse.ok) {
       const message = (data && data.error && data.error.message) || 'Запрос к OpenAI не удался.';
+      console.error('OpenAI error', aiResponse.status, JSON.stringify(data && data.error ? data.error : data));
       response.status(aiResponse.status).json({ error: message });
       return;
     }
