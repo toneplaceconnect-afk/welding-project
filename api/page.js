@@ -7,11 +7,10 @@ const PAGES = new Set([
   'Лофт-мебель.dc.html',
   'Документация.dc.html',
   'Прайс.dc.html',
-  'Создай своё.dc.html',
   'create.html'
 ]);
 
-function injectMobileAssets(html) {
+function injectAssets(html, file) {
   let result = html;
 
   if (!result.includes('assets/favicon.svg')) {
@@ -21,10 +20,17 @@ function injectMobileAssets(html) {
     );
   }
 
-  if (!result.includes('href="/mobile.css"')) {
+  if (!result.includes('href="/mobile.css"') && !result.includes('href="mobile.css"')) {
     result = result.replace(
       '</head>',
       '  <link rel="stylesheet" href="/mobile.css">\n</head>'
+    );
+  }
+
+  if (file === 'create.html' && !result.includes('/create-actions.js')) {
+    result = result.replace(
+      '</body>',
+      '  <script src="/create-actions.js"></script>\n</body>'
     );
   }
 
@@ -42,7 +48,7 @@ module.exports = (req, res) => {
 
     const fullPath = path.join(process.cwd(), file);
     const html = fs.readFileSync(fullPath, 'utf8');
-    const output = injectMobileAssets(html);
+    const output = injectAssets(html, file);
 
     res.status(200);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
