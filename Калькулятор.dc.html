@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#11131a">
 <script src="./support.js"></script>
   <link rel="stylesheet" href="mobile.css">
-  <link rel="stylesheet" href="site-header.css">
+  <link rel="stylesheet" href="site-header.css?v=20260914-1">
 </head>
 <body>
 <x-dc>
@@ -34,18 +34,7 @@
   <header class="site-header">
     <nav class="site-header__nav">
       <a class="site-header__brand" href="Главная.dc.html" aria-label="Проект-Сварка">
-        <span class="site-header__brand-mark"><svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">
-            <path d="M32 97A50 50 0 0 1 60 8" stroke="#9aa1ad" stroke-width="8" stroke-linecap="round" fill="none"/>
-            <path d="M60 8a50 50 0 0 1 28 90" stroke="#cf2026" stroke-width="8" stroke-linecap="round" fill="none"/>
-            <path d="M26 62 60 32l34 30" stroke="#cf2026" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <path d="M38 54v38h38" stroke="#9aa1ad" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <path d="M80 56v36" stroke="#cf2026" stroke-width="12" stroke-linecap="round" fill="none"/>
-            <g stroke="#cf2026" stroke-width="4" stroke-linecap="round" fill="none"><path d="M38 92 26 104M38 92 22 94M38 92 30 108M38 92 46 106M38 92 24 82"/></g>
-            <circle cx="38" cy="92" r="5.5" fill="#fff3d6"/>
-            <circle class="site-logo-flash" cx="38" cy="92" r="11" fill="url(#siteLogoGlow)"/>
-            <defs><radialGradient id="siteLogoGlow"><stop offset="0" stop-color="#fff"/><stop offset=".32" stop-color="#ff5a60"/><stop offset="1" stop-color="#cf2026" stop-opacity="0"/></radialGradient></defs>
-          </svg></span>
-        <span>ПРОЕКТ<em>-</em>СВАРКА</span>
+        <span class="site-header__brand-mark"><img src="assets/logo-mark.svg" alt="Проект-Сварка"><span class="site-header__flash"></span></span><span>ПРОЕКТ<em>-</em>СВАРКА</span>
       </a>
       <button type="button" class="site-header__burger" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button>
       <div class="site-header__links"><a href="Главная.dc.html">Главная</a><a href="create.html">Создай своё</a><a href="Калькулятор.dc.html" class="active">Калькулятор</a><a href="Лофт-мебель.dc.html">Лофт-мебель</a><a href="Документация.dc.html">Документация</a><a href="Прайс.dc.html">Цены</a></div>
@@ -722,6 +711,6 @@ class Component extends DCLogic {
 
 </script>
   <button type="button" class="site-top" aria-label="Наверх" title="Наверх">↑</button>
-  <script src="/site-header.js" defer></script>
+  <script src="/site-header.js?v=20260914-1" defer></script>
 </body>
 </html>
