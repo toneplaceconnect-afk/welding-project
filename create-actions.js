@@ -79,6 +79,41 @@
     sizes.dataset.enhanced = '1';
   }
 
+  // If the user describes the изделие in plain language but leaves the default
+  // "Стол" selected, synchronize the structured product with the clear intent.
+  // A manual product choice always wins; inference is only used while the default remains active.
+  function setupIntentInference() {
+    const description = document.getElementById('description');
+    if (!description || description.dataset.intentBound) return;
+    description.dataset.intentBound = '1';
+
+    const productRules = [
+      { value: 'Беседка или пергола', re: /(?:хочу|заказать|нужна|нужен|сделать|изготовить|построить)[^.!?\n]{0,90}(пергол|беседк)/i },
+      { value: 'Навес или козырёк', re: /(?:хочу|заказать|нужен|нужна|сделать|изготовить)[^.!?\n]{0,90}(навес|козыр[её]к)/i },
+      { value: 'Забор, ворота, калитка', re: /(?:хочу|заказать|нужен|нужна|сделать|изготовить)[^.!?\n]{0,90}(забор|ворот|калитк)/i },
+      { value: 'Лестница или перила', re: /(?:хочу|заказать|нужна|нужен|сделать|изготовить)[^.!?\n]{0,90}(лестниц|перил)/i },
+      { value: 'Мангальная зона', re: /(?:хочу|заказать|нужна|нужен|сделать|изготовить)[^.!?\n]{0,90}(мангал|барбекю|bbq)/i },
+      { value: 'Стойка для бизнеса', re: /(?:хочу|заказать|нужна|нужен|сделать|изготовить)[^.!?\n]{0,90}(стойк|ресепш|барн[а-я]* сто)/i },
+      { value: 'Стеллаж', re: /(?:хочу|заказать|нужен|нужна|сделать|изготовить)[^.!?\n]{0,90}(стеллаж|стеллажн|полк)/i },
+      { value: 'Скамья или табурет', re: /(?:хочу|заказать|нужна|нужен|сделать|изготовить)[^.!?\n]{0,90}(скамь|табурет)/i }
+    ];
+
+    function syncIntent() {
+      const text = description.value.trim();
+      if (!text || typeof state === 'undefined' || state.product !== 'Стол') return;
+      const rule = productRules.find(x => x.re.test(text));
+      if (!rule) return;
+      const button = [...document.querySelectorAll('#products .choice')].find(x => x.dataset.value === rule.value);
+      if (!button) return;
+      document.querySelectorAll('#products .choice').forEach(x => x.classList.remove('active'));
+      button.classList.add('active');
+      state.product = rule.value;
+      if (typeof update === 'function') update();
+    }
+
+    description.addEventListener('input', syncIntent);
+  }
+
   let zoom = null, zoomImg = null, zoomScale = 1, zoomX = 0, zoomY = 0;
   function applyZoom() {
     if (zoomImg) zoomImg.style.transform = `translate(${zoomX}px,${zoomY}px) scale(${zoomScale})`;
@@ -169,6 +204,7 @@
   observer.observe(document.body, { childList: true, subtree: true });
 
   improveSizeFields();
+  setupIntentInference();
   mount();
   restoreImages();
 })();
