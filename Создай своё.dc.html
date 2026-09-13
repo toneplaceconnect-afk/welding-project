@@ -149,6 +149,7 @@
         <div style="background:#fff;box-shadow:0 10px 34px rgba(10,12,18,.1);padding:24px">
           <h2 style="font-size:11px;font-weight:700;margin:0 0 6px;text-transform:uppercase;letter-spacing:.06em">Эскизы</h2>
           <p style="font-size:9.5px;color:#8d92a3;margin:0 0 16px;line-height:1.8">{{ aiStatus }}</p>
+          <button onClick="{{ generate }}" style="background:#cf2026;color:#fff;border:0;padding:15px 24px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-bottom:16px;transition:background .25s,box-shadow .25s;opacity:{{ genOpacity }}" style-hover="background:#a8171c;box-shadow:0 0 26px rgba(207,32,38,.45)">{{ generateLabel }}</button>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <div style="aspect-ratio:4/3;background:#f4f5f7;border:1px dashed #c9ccd6;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px;overflow:hidden">
               <sc-if value="{{ hasImg1 }}">
@@ -176,11 +177,13 @@
         </div>
 
         <div style="background:#fff;box-shadow:0 10px 34px rgba(10,12,18,.1);padding:24px;display:flex;flex-direction:column;gap:14px">
-          <button onClick="{{ send }}" style="background:#cf2026;color:#fff;border:0;padding:17px 26px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-family:inherit;transition:background .25s,box-shadow .25s" style-hover="background:#a8171c;box-shadow:0 0 28px rgba(207,32,38,.5)">Получить 2 эскиза</button>
+          <h2 style="font-size:13px;font-weight:700;margin:0">Обсудить и узнать цену</h2>
+          <p style="font-size:9.5px;color:#8d92a3;margin:0;line-height:1.8">Эскиз показывает вид изделия, а точную цену и сроки называю на коротком созвоне. Нажмите ниже — описание и (если готовы) эскизы уйдут мне в Telegram одним сообщением, контакты оставлять не нужно.</p>
+          <button onClick="{{ sendRequest }}" style="background:#cf2026;color:#fff;border:0;padding:17px 26px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-family:inherit;transition:background .25s,box-shadow .25s" style-hover="background:#a8171c;box-shadow:0 0 28px rgba(207,32,38,.5)">Отправить заявку в Telegram</button>
           <sc-if value="{{ sent }}">
             <div style="border:1px solid #cf2026;padding:18px;display:flex;flex-direction:column;gap:12px">
-              <p style="font-size:11px;font-weight:700;margin:0;line-height:1.7">Описание готово. Остался один шаг — созвон.</p>
-              <p style="font-size:10px;color:#6a6f80;margin:0;line-height:1.8">Напишите, когда вам удобно поговорить: уточню задачу и после разговора пришлю два эскиза. Контактные данные не нужны — всё уйдёт одним сообщением в Telegram.</p>
+              <p style="font-size:11px;font-weight:700;margin:0;line-height:1.7">Заявка скопирована. Остался один шаг — созвон.</p>
+              <p style="font-size:10px;color:#6a6f80;margin:0;line-height:1.8">Напишите, когда вам удобно поговорить: уточню задачу и назову цену. Вставьте скопированный текст в открывшийся чат Telegram.</p>
               <label style="display:flex;flex-direction:column;gap:7px;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6a6f80">Удобное время для звонка
                 <input value="{{ callTime }}" onChange="{{ onCallTime }}" placeholder="Например: сегодня после 18:00 или завтра утром" style="background:#fff;color:#16181f;border:1px solid #d7dae2;padding:12px 13px;font-size:12px;font-family:inherit;text-transform:none;letter-spacing:0;font-weight:400">
               </label>
@@ -294,9 +297,9 @@ const PRESETS = [
 class Component extends DCLogic {
   state = {
     vals: {}, own: '', prompt: '', promptEdited: false,
-    files: [], images: [],
+    files: [], images: [], genStatus: 'idle',
     sent: false, callTime: '', hint: 'Описание соберётся в одно сообщение: параметры изделия, ваши пометки и список файлов.',
-    aiStatus: 'Генерация подключается: сейчас описание уходит мне, эскизы присылаю после короткого созвона. Готовые изображения можно будет скачать прямо здесь.'
+    aiStatus: 'Заполните форму слева и нажмите «Получить 2 эскиза» — здесь появится результат.'
   };
 
   componentDidMount() {
@@ -310,7 +313,6 @@ class Component extends DCLogic {
     scan();
     this._scan = scan;
     window.addEventListener('resize', scan);
-    if (AI.endpoint) this.setState({ aiStatus: 'Эскизы генерируются автоматически по вашему описанию — займёт около минуты.' });
     this._onScroll = () => {
       const b = document.getElementById('totop');
       if (!b) return;
@@ -356,6 +358,7 @@ class Component extends DCLogic {
     const s = this.state;
     const lines = ['Заявка на эскиз с сайта «Проект-Сварка» — раздел «Создай своё»', '', this.promptValue()];
     if (s.files.length) lines.push('', 'Файлы: ' + s.files.join(', ') + ' (пришлю в чат)');
+    if (s.images.length) lines.push('', 'Эскизы сгенерированы на сайте (' + s.images.length + ' шт.) — приложу отдельным сообщением.');
     if (s.callTime) lines.push('', 'Удобное время созвона: ' + s.callTime);
     return lines.join('\n');
   }
@@ -371,10 +374,19 @@ class Component extends DCLogic {
     } else { this.setState({ hint: 'Опишите задачу в открывшемся чате.' }); open(); }
   }
 
+  generate() {
+    if (this.state.genStatus === 'loading') return;
+    if (!AI.endpoint) {
+      this.setState({ aiStatus: 'Генератор ещё не подключён — опишите задачу и отправьте заявку, пришлю эскизы вручную после созвона.' });
+      return;
+    }
+    this.setState({ genStatus: 'loading', images: [], aiStatus: 'Генерирую эскизы по вашему описанию — обычно 10–30 секунд...' });
+    this.requestSketches();
+  }
+
   requestSketches() {
-    /* Готовый вызов ИИ: заполните AI.endpoint и AI.apiKey выше.
-       Ответ ожидается как { images: [url, url] } — вставьте их в плашки эскизов. */
-    if (!AI.endpoint) return;
+    /* Вызов ИИ: AI.endpoint указывает на серверную функцию /api/generate-sketch.
+       Ответ ожидается как { images: [url, url] } или { error: '...' }. */
     fetch(AI.endpoint, {
       method: 'POST',
       headers: Object.assign({ 'Content-Type': 'application/json' }, AI.apiKey ? { Authorization: 'Bearer ' + AI.apiKey } : {}),
@@ -382,12 +394,15 @@ class Component extends DCLogic {
     }).then((r) => r.json()).then((data) => {
       const imgs = (data && data.images) || [];
       const errText = data && data.error;
-      let status;
-      if (imgs.length) status = 'Эскизы готовы — скачайте их кнопкой ниже или отправьте мне.';
-      else if (errText) status = 'Не удалось сгенерировать: ' + errText;
-      else status = 'Эскизы генерируются — обновите страницу через минуту.';
-      this.setState({ images: imgs, aiStatus: status });
-    }).catch((err) => this.setState({ aiStatus: 'Генератор не ответил (' + (err && err.message ? err.message : 'сетевая ошибка') + ') — эскизы пришлю вручную после созвона.' }));
+      let status, genStatus;
+      if (imgs.length) { status = 'Эскизы готовы — скачайте их кнопкой ниже или отправьте мне вместе с заявкой.'; genStatus = 'done'; }
+      else if (errText) { status = 'Не удалось сгенерировать: ' + errText; genStatus = 'error'; }
+      else { status = 'Генератор не вернул изображения — попробуйте ещё раз или отправьте заявку, пришлю эскизы вручную.'; genStatus = 'error'; }
+      this.setState({ images: imgs, aiStatus: status, genStatus });
+    }).catch((err) => this.setState({
+      genStatus: 'error',
+      aiStatus: 'Генератор не ответил (' + (err && err.message ? err.message : 'сетевая ошибка') + ') — попробуйте ещё раз или отправьте заявку, пришлю эскизы вручную.'
+    }));
   }
 
   renderVals() {
@@ -446,10 +461,15 @@ class Component extends DCLogic {
       aiStatus: this.state.aiStatus,
       hint: this.state.hint,
       toTop: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
-      send: () => {
+      isLoading: this.state.genStatus === 'loading',
+      genOpacity: this.state.genStatus === 'loading' ? '0.7' : '1',
+      generateLabel: this.state.genStatus === 'loading'
+        ? 'Генерирую...'
+        : (this.state.images.length ? 'Сгенерировать ещё раз' : 'Получить 2 эскиза'),
+      generate: () => this.generate(),
+      sendRequest: () => {
         this.setState({ sent: true });
-        this.requestSketches();
-        this.deliver(this.message(), 'Описание скопировано — вставьте его в открывшийся чат. Ниже напишите удобное время созвона.');
+        this.deliver(this.message(), 'Заявка скопирована — вставьте её в открывшийся чат. Ниже можно указать удобное время созвона.');
       },
       sendTime: () => {
         this.deliver(this.message(), 'Время созвона добавлено в сообщение — вставьте его в чат.');
