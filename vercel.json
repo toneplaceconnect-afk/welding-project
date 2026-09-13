@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "node vercel-build.js",
   "redirects": [
     { "source": "/Создай своё.dc.html", "destination": "/create.html", "permanent": true }
   ],
