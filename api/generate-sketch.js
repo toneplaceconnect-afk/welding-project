@@ -21,13 +21,13 @@ REFERENCE IMAGES: Use supplied references for geometry, materials, proportions, 
 
 MATERIAL REALISM: Realistic powder-coated/painted steel, believable reflections, welded seams, cut edges and joints; natural wood grain, pores, edges and end grain; physically correct light response.
 
-COMPOSITION: Show the complete requested product in a useful real environment. For furniture, the furniture should dominate the frame. For architectural products, show enough surrounding context to communicate scale, installation and function without hiding the product.
+COMPOSITION: Show the complete requested product in a useful real environment. For furniture, the furniture should dominate the frame and remain the single primary object. For architectural products, show enough surrounding context to communicate scale, installation and function without hiding the product.
 
 PHOTOGRAPHY: Professional full-frame commercial product/interior/architectural photography, natural realistic light, balanced exposure, soft directional shadows, accurate reflections, HDR, realistic ambient occlusion, natural white balance, believable 24mm/35mm/50mm/85mm perspective appropriate to the subject.
 
 PHOTOREALISM: Genuine photograph of a real manufactured object, not illustration or generic 3D render. Prioritize geometry, construction, materials, scale, perspective and photographic micro-detail.
 
-GLOBAL NEGATIVES: No abstract art, concept-art look, CGI plastic, collage, split screen, inset images, exploded view, blueprint overlay, labels, captions, text, logos, watermark, UI, fantasy elements, impossible joints, floating parts, warped geometry or unexplained extra components. Never add an architectural element that is not supported by the requested product or brief.`;
+GLOBAL NEGATIVES: No abstract art, concept-art look, CGI plastic, collage, split screen, inset images, exploded view, blueprint overlay, CAD drawing, technical drawing, dimension lines, measurement arrows, grids, annotations, labels, captions, text, logos, watermark, UI, fantasy elements, impossible joints, floating parts, warped geometry or unexplained extra components. Never add an architectural element that is not supported by the requested product or brief.`;
 
 function productGuard(brief){
  const s=String(brief||'').toLowerCase();
@@ -37,7 +37,15 @@ function productGuard(brief){
  if(/забор|ворот|калит/.test(s)) return `PRODUCT-SPECIFIC LOCK — FENCE/GATE: Create the requested fence, gate or wicket as a real installable boundary/entry element with posts, panels, hinges and supports only where appropriate. Do not turn it into a room or furniture.`;
  if(/лестниц|перил/.test(s)) return `PRODUCT-SPECIFIC LOCK — STAIR/RAILING: Create a real functional staircase or railing with correct human scale, rise/run or guardrail geometry, supports and safe circulation. Do not turn it into decorative sculpture.`;
  if(/мангал|барбекю|\bbbq\b/.test(s)) return `PRODUCT-SPECIFIC LOCK — BBQ: Create a real manufacturable barbecue/grill zone or brazier with heat-safe construction and the requested materials. Keep it recognizable as a cooking product.`;
- if(/\bстол\b|обеден.*стол|dining table/.test(s)) return `PRODUCT-SPECIFIC LOCK — DINING TABLE: This is a normal functional dining table for a home. It MUST have a clear horizontal tabletop supported by a separate base/legs. Keep the entire area under the tabletop open and usable for chairs and a seated person's legs. The tabletop must NOT be pierced by, wrapped around, supported by or connected to a central wooden column. NO central column, tower, wall, partition, vertical post rising through the tabletop, canopy or architectural frame. The metal base must be a lightweight table support, not a building structure. Do not invent shelves or additional surfaces unless explicitly requested.`;
+ if(/\bстол\b|обеден.*стол|dining table/.test(s)) return `PRODUCT-SPECIFIC LOCK — TABLE. ABSOLUTE OUTPUT CONTRACT: Create exactly ONE normal functional dining/loft table as the primary and essentially only designed object. It MUST be unmistakably a table: one horizontal tabletop on top, one separate supporting base/legs underneath, normal human dining height, with clear open legroom beneath the tabletop. The tabletop is a single continuous horizontal surface. The support must be a table base, not a building frame.
+
+STRICTLY FORBIDDEN FOR THIS TABLE: pergola, canopy, awning, gazebo, pavilion, roof, beams overhead, posts rising above the tabletop, walls, partitions, fences, benches, sofas, chairs as designed focal objects, shelves, counters, towers, platforms, playground-like structures, architectural frames, hanging structures, or any second product. Do not add a roof or shelter over the table. Do not turn the table into a shelter with seats underneath. Do not surround it with structural members.
+
+NO TECHNICAL GRAPHICS: The final image must be a normal finished photograph. Absolutely no blueprint, CAD, sketch, wireframe, construction drawing, dimension lines, measurement arrows, callouts, grid, annotation, labels or markup anywhere in the image.
+
+ENVIRONMENT: Use a simple believable interior, dining area, workshop showroom or terrace only as a photographic setting. The environment must stay visually secondary. If chairs are present as ordinary context, they must not merge with or structurally connect to the table. Never let the environment change the identity of the requested table.
+
+GEOMETRY CHECK BEFORE RENDERING: tabletop above; support below; open space between floor and tabletop; no structural element crosses through the tabletop; no overhead structure; no unexplained extra components. If a candidate composition violates any of these conditions, discard it and generate a conventional table instead.`;
  if(/скамь|табурет|bench|stool/.test(s)) return `PRODUCT-SPECIFIC LOCK — SEATING: Create functional seating with a clear seat surface and a realistic supporting base/legs. Do not turn it into a wall, platform, pavilion or architectural structure.`;
  if(/стеллаж|полк|shelf|rack/.test(s)) return `PRODUCT-SPECIFIC LOCK — SHELVING: Create a functional shelving/rack unit with clearly separated shelves and a realistic supporting frame. Do not turn it into a building frame or room partition.`;
  if(/стойк|counter|барн|ресепш/.test(s)) return `PRODUCT-SPECIFIC LOCK — COUNTER: Create a functional counter/stand with a clear working surface and realistic support structure. Do not turn it into a kiosk, pavilion or building.`;
