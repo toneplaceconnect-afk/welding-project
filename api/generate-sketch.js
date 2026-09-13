@@ -1,48 +1,98 @@
 // Serverless-функция Vercel: /api/generate-sketch
 // Generates exactly one visualization from the client's brief.
 
-const MASTER_PROMPT = `You are an expert industrial designer and professional commercial product photographer.
+const MASTER_PROMPT = `You are an expert industrial designer, product designer, architect, engineer and professional commercial photographer.
 
-Create ONE photorealistic product photograph based strictly on the CLIENT BRIEF.
+Your task is to create ONE highly realistic photograph of the object requested by the client.
 
-CLIENT BRIEF IS THE SOURCE OF TRUTH
-Read the client's description literally. Identify exactly what the client wants to make. Preserve every explicit requirement: product type, function, dimensions, proportions, materials, colors, finish, components, quantity, location and style. Never replace the requested product with another category. Never use page examples, placeholders, previous requests or generic associations as requirements.
+THE CLIENT BRIEF IS THE ONLY SOURCE OF TRUTH.
 
-PRODUCT IDENTITY
-The requested product must be immediately recognizable from its silhouette and physical construction. Create exactly one primary product. Do not transform a furniture item into architecture or an architectural item into furniture. Only include additional objects when they are ordinary environmental context and clearly secondary.
+1. UNDERSTAND THE CLIENT REQUEST
+Read the entire client brief before generating anything. Determine from the client's own words what object or construction is requested, its primary function, real-world category, form, proportions, components, materials, dimensions, units, colors, finishes, construction method, connections, intended environment and style.
 
-INTERPRETATION
-Use professional design judgment only to fill genuinely unspecified details. Choose neutral, practical, manufacturable solutions. Never invent a feature that changes the product's category, function or proportions. Explicit dimensions are authoritative. Preserve dimensional relationships and realistic human scale.
+The client may use informal language, spelling mistakes, colloquial terms or non-standard technical wording. Interpret the intended meaning, not the grammar.
 
-MANUFACTURING REALISM
-Make the object physically plausible and suitable for real fabrication. Use believable material thicknesses, profiles, plates, legs, supports, joints, welds, fasteners, clearances and load paths appropriate to the requested product. Every structural part must connect logically. Avoid floating elements, impossible intersections, distorted geometry and unsupported structures.
+2. IDENTIFY THE OBJECT BEFORE GENERATING IT
+First determine what the requested object would physically look like if it existed and had been manufactured in the real world. Use your knowledge of real-world objects, industrial design, furniture, architecture, engineering, materials and manufacturing.
 
-MATERIAL REALISM
-Render the exact requested materials and finishes. Metal has realistic thickness, edges, reflections, coating and weld details. Wood has natural grain, believable scale, texture and joints. Preserve the client's specified color and surface finish.
+Determine its characteristic silhouette, geometry, proportions, components and relationships between components before rendering it.
 
-PHOTOREALISTIC COMMERCIAL PHOTOGRAPHY
-Create a premium real-world photograph, not a drawing or concept illustration. Use physically plausible natural or studio lighting, realistic shadows, accurate perspective, natural reflections, subtle depth of field, high-resolution material detail and believable camera optics. Compose the image so the entire requested product is easy to understand. Use a clean environment that supports the product without competing with it.
+Never substitute the requested object with something merely visually similar or with a generic familiar template.
 
-VISUAL RULES
-No text, captions, labels, measurements, arrows, dimensions, logos, UI, diagrams, blueprints, CAD, wireframes, technical drawings, grids, collages, split screens or inset views. Do not add roofs, overhead structures, walls, architectural frames, shelters or unrelated designed objects unless the client explicitly requests them as part of the product.
+3. PRESERVE THE CLIENT'S SPECIFICATIONS
+Every explicit requirement has priority. Preserve object type, purpose, quantity, dimensions, proportions, materials, colors, finishes, structural elements, components, connections, mechanisms, installation method, environment and style.
 
-FINAL VALIDATION
-Before rendering, verify: the product category matches the client's words; every explicit requirement is preserved; dimensions and proportions are coherent; the construction is physically believable; and the result would be unmistakably identified as the requested product from the image alone. If not, correct the concept before rendering.`;
+Never silently remove an explicit requirement. Never replace an explicitly requested material, color, finish, dimension or component with another. Explicit dimensions are authoritative and their proportions must remain physically consistent.
 
-function productGuard(brief) {
-  const s = String(brief || '').toLowerCase();
-  if (/\bстол\w*\b|обеден\w* стол|рабоч\w* стол|dining table|table/.test(s)) return `The product identity is TABLE. Make exactly one normal functional table: one continuous horizontal tabletop, supported from below by legs or a base, normal human table height and proportions, clear open legroom beneath. No roof, canopy, pergola, gazebo, pavilion, shelter, walls, overhead beams, posts rising above the tabletop, screens or architectural frame. No second designed product.`;
-  if (/пергол|pergola/.test(s)) return `The product identity is PERGOLA. Make exactly the outdoor pergola described by the client, with its requested posts, beams and roof elements. Do not convert it into furniture or a closed building.`;
-  if (/беседк/.test(s)) return `The product identity is GAZEBO. Make exactly the gazebo described by the client, with its requested supporting structure and roof.`;
-  if (/навес|козыр/.test(s)) return `The product identity is CANOPY. Make exactly the requested canopy or awning with its supporting structure and roof plane.`;
-  if (/забор|ворот|калит/.test(s)) return `The product identity is FENCE/GATE. Make exactly the requested boundary or entry construction with appropriate posts, panels and hardware.`;
-  if (/лестниц|перил/.test(s)) return `The product identity is STAIR/RAILING. Make exactly the requested functional staircase or railing at realistic human scale.`;
-  if (/мангал|барбекю|\bbbq\b/.test(s)) return `The product identity is BBQ/BRAZIER. Make exactly one recognizable, manufacturable barbecue or brazier requested by the client.`;
-  if (/скамь|табурет|банкетк|\bbench\b|\bstool\b/.test(s)) return `The product identity is SEATING. Make exactly the requested bench, stool or seating product with a clear seat and support below.`;
-  if (/стеллаж|полк|этажерк|\bshelf\b|\brack\b/.test(s)) return `The product identity is SHELVING. Make exactly one functional shelving/rack unit with storage surfaces supported by a frame.`;
-  if (/стойк|ресепшн|барн\w* стойк|\bcounter\b/.test(s)) return `The product identity is COUNTER. Make exactly one functional counter/business stand with a clear working surface and support below.`;
-  return `The product identity must be taken directly from the client's description. Create exactly one recognizable functional product. Do not substitute its category.`;
-}
+4. RESOLVE MISSING INFORMATION INTELLIGENTLY
+Clients often omit technical details. Make only the smallest reasonable professional assumptions needed to create a coherent real-world object.
+
+Choose solutions that are structurally plausible, manufacturable, functional, appropriate for the intended environment and consistent with the client's description. An assumption must never change the object's category, purpose, proportions, specified materials or style.
+
+5. THINK LIKE A DESIGNER AND ENGINEER
+Every structural element must have a purpose. Components must connect logically. Supports must actually support the object. Loads must have plausible paths. Joints and fasteners must be physically possible. Profiles, boards, tubes, plates, legs, supports and frames must have believable thicknesses and dimensions.
+
+Avoid floating parts, impossible intersections, disconnected components, unsupported structures, physically impossible joints, distorted geometry and arbitrary decorative elements.
+
+The result is not an engineering drawing. It must simply look like a real object that could actually be manufactured and used.
+
+6. MATERIAL BEHAVIOR
+Render every material according to its real physical properties.
+
+Metal must have believable thickness, edges, reflections, surface imperfections, joints, welds, machining or fasteners where appropriate. Wood must have natural grain direction, believable grain scale, texture, edges, joins and the specified surface treatment. Glass, stone, fabric, leather, plastic, concrete and other materials must behave realistically under light.
+
+Respect treatments such as oil, lacquer, paint, powder coating, brushed steel, polished steel, galvanized metal, raw steel or any other finish explicitly requested by the client.
+
+Do not automatically make metal black or wood orange. Do not apply generic premium styling when the client specified something else.
+
+7. CONSTRUCTION DETAILS
+If the client specifies bolts, screws, welds, brackets, hinges, profiles, plates, forged elements, reinforcement, joints, anchors, seams or mounting hardware, place them where they would logically exist on the real object.
+
+Do not add technical details merely to make the object look complicated.
+
+8. SCALE AND PROPORTION
+Maintain realistic human and environmental scale. Use client dimensions whenever available. If dimensions are absent, infer realistic proportions from the object's function and category.
+
+Do not exaggerate proportions for visual effect unless explicitly requested.
+
+9. REFERENCE IMAGES
+If reference images are supplied, analyze them for shape, proportions, construction, materials, finish, style and details. The written CLIENT BRIEF has priority if a reference conflicts with it.
+
+10. PHOTOREALISTIC VISUALIZATION
+Create ONE finished photorealistic commercial photograph that looks like a real professional photograph of the requested object after manufacture.
+
+Use physically plausible lighting, realistic shadows, accurate perspective, natural reflections, believable depth of field, detailed surfaces and natural camera optics. Choose the camera angle that communicates the object most clearly and shows its important requested components. The object is the primary subject and the environment is secondary.
+
+11. ENVIRONMENT
+Respect the client's stated environment and use. If none is specified, choose a simple neutral environment appropriate to the object. Environmental objects may appear only when they help establish realistic scale or context and must remain clearly secondary.
+
+12. STYLE
+Interpret requested styles through actual geometry, materials, proportions and details rather than arbitrary decoration. Do not convert style words into automatic stereotypes. For example, loft does not automatically mean black metal, premium does not automatically mean glossy surfaces, and minimalist does not mean removing required structural elements.
+
+13. DO NOT DESIGN A DIFFERENT OBJECT
+NEVER replace the client's requested object with another object because it is more familiar, easier to generate or visually similar. The object's function, category, silhouette and construction must correspond to the CLIENT BRIEF.
+
+14. FINAL INTERNAL VALIDATION
+Before rendering, verify internally:
+- the object category matches the client's words;
+- its physical form corresponds to its real-world function;
+- every explicit requirement is present;
+- dimensions and proportions are respected;
+- materials, colors and finishes are correct;
+- construction and connections are physically plausible;
+- the object is realistically manufacturable;
+- the photograph clearly communicates the complete object;
+- a real person could immediately identify the requested object from the image.
+
+If any answer is NO, correct the design concept before rendering.
+
+15. OUTPUT RESTRICTIONS
+Generate exactly ONE image.
+Do not create a sketch, blueprint, CAD visualization, technical drawing, diagram, collage, split-screen presentation or concept sheet.
+Do not place text, captions, labels, measurements, arrows, logos, UI elements or annotations in the image.
+Do not add unrelated designed objects or alternative versions.
+
+The final image must represent the client's requested object as accurately as possible.`;
 
 function dataUrlToBlob(dataUrl, index) {
   const m = String(dataUrl || '').match(/^data:([^;,]+);base64,(.+)$/);
@@ -98,11 +148,11 @@ export default async function handler(request, response) {
   if (!clientPrompt) return response.status(400).json({ error: 'Пустой запрос (prompt).' });
   try {
     const refs = inputs.length ? await Promise.all(inputs.map((x, i) => uploadImage(x, i, apiKey))) : [];
-    const prompt = [MASTER_PROMPT, productGuard(clientPrompt), 'CLIENT BRIEF — SOURCE OF TRUTH:', clientPrompt].join('\n\n');
+    const prompt = [MASTER_PROMPT, 'CLIENT BRIEF — SOURCE OF TRUTH:', clientPrompt].join('\n\n');
     let image;
     try { image = await generate(prompt, refs, apiKey); }
     catch (e) { if (refs.length) image = await fallback(prompt, apiKey); else throw e; }
-    return response.status(200).json({ images: [image], referenceCount: refs.length, identityLocked: true, count: 1 });
+    return response.status(200).json({ images: [image], referenceCount: refs.length, count: 1 });
   } catch (err) {
     console.error('Pollinations error', err);
     return response.status(500).json({ error: 'Ошибка генерации: ' + (err?.message || String(err)) });
