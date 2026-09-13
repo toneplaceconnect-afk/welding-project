@@ -40,14 +40,13 @@ export default async function handler(request, response) {
     prompt;
 
   try {
-    // Pollinations image endpoint возвращает готовый файл изображения.
-    // Делаем отдельный запрос для каждой картинки, чтобы сохранить
-    // прежний параметр count и формат ответа для существующего фронтенда.
+    // В актуальном Pollinations API для FLUX.2 Klein используется alias "klein".
+    // Делаем отдельный запрос для каждой картинки, сохраняя прежний count.
     const requests = Array.from({ length: count }, async () => {
       const url =
         'https://gen.pollinations.ai/image/' +
         encodeURIComponent(fullPrompt) +
-        '?model=flux.2-klein-4b&width=1024&height=1024&nologo=true';
+        '?model=klein&width=1024&height=1024&nologo=true';
 
       const aiResponse = await fetch(url, {
         method: 'GET',
