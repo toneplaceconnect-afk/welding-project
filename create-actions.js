@@ -2,6 +2,7 @@
   const DB_NAME = 'proekt-svarka-create';
   const STORE = 'visualizations';
   const KEY = 'latest';
+  let applyingIntent = false;
 
   function dbOpen() {
     return new Promise((resolve, reject) => {
@@ -75,9 +76,6 @@
     sizes.dataset.enhanced = '1';
   }
 
-  // ---------- NATURAL-LANGUAGE INTENT ----------
-  // The form starts with useful defaults. A plain-language description can override
-  // untouched defaults, while an explicit user click always has priority.
   const PRODUCT_RULES = [
     { value: 'Беседка или пергола', re: /пергол\w*|pergola/i },
     { value: 'Беседка или пергола', re: /беседк\w*/i },
@@ -115,31 +113,38 @@
     document.querySelectorAll('#products .choice, #materials .mat, #colors .swatch, #purpose .pill').forEach(btn => {
       if (btn.dataset.intentBound) return;
       btn.dataset.intentBound = '1';
-      btn.addEventListener('click', () => { btn.dataset.userSelected = '1'; }, { capture: true });
+      btn.addEventListener('click', () => {
+        if (!applyingIntent) btn.dataset.userSelected = '1';
+      }, { capture: true });
     });
   }
   function hasManual(container) {
     return [...document.querySelectorAll(`${container} [data-user-selected="1"]`)].length > 0;
   }
+  function autoClick(btn) {
+    if (!btn) return;
+    applyingIntent = true;
+    try { btn.click(); } finally { applyingIntent = false; }
+  }
   function chooseProduct(value) {
     if (hasManual('#products')) return;
     const btn = [...document.querySelectorAll('#products .choice')].find(x => x.dataset.value === value);
-    if (btn) btn.click();
+    autoClick(btn);
   }
   function chooseMaterial(value) {
     if (hasManual('#materials')) return;
     const btn = [...document.querySelectorAll('#materials .mat')].find(x => x.dataset.value === value);
-    if (btn) btn.click();
+    autoClick(btn);
   }
   function chooseColor(value) {
     if (hasManual('#colors')) return;
     const btn = [...document.querySelectorAll('#colors .swatch')].find(x => x.dataset.name === value);
-    if (btn) btn.click();
+    autoClick(btn);
   }
   function choosePlace(value) {
     if (hasManual('#purpose')) return;
     const btn = [...document.querySelectorAll('#purpose .pill')].find(x => x.textContent.trim() === value);
-    if (btn) btn.click();
+    autoClick(btn);
   }
   function parseDimensions(text) {
     const m = String(text || '').match(/\b(\d{3,5})\s*[xх×*]\s*(\d{3,5})\s*[xх×*]\s*(\d{3,5})\s*(?:мм|mm)?\b/i);
@@ -252,8 +257,6 @@
     });
   }
 
-  // Correct the structured state immediately before the page's inline generate handler runs.
-  // Capture phase runs first, so the handler sends the corrected product/material/place to the API.
   document.addEventListener('click', e => {
     if (e.target?.closest?.('#generate')) applyNaturalLanguageIntent();
   }, true);
