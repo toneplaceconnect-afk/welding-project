@@ -1,22 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "functions": {
-    "api/page.js": {
-      "includeFiles": "*.html"
-    }
-  },
   "redirects": [
     { "source": "/Создай своё.dc.html", "destination": "/create.html", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/", "destination": "/api/page?file=%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F.dc.html" },
+    { "source": "/", "destination": "/Главная.dc.html" },
     { "source": "/favicon.ico", "destination": "/assets/favicon.svg" },
-    { "source": "/favicon.svg", "destination": "/assets/favicon.svg" },
-    { "source": "/Главная.dc.html", "destination": "/api/page?file=%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F.dc.html" },
-    { "source": "/Калькулятор.dc.html", "destination": "/api/page?file=%D0%9A%D0%B0%D0%BB%D1%8C%D0%BA%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80.dc.html" },
-    { "source": "/Лофт-мебель.dc.html", "destination": "/api/page?file=%D0%9B%D0%BE%D1%84%D1%82-%D0%BC%D0%B5%D0%B1%D0%B5%D0%BB%D1%8C.dc.html" },
-    { "source": "/Документация.dc.html", "destination": "/api/page?file=%D0%94%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F.dc.html" },
-    { "source": "/Прайс.dc.html", "destination": "/api/page?file=%D0%9F%D1%80%D0%B0%D0%B9%D1%81.dc.html" },
-    { "source": "/create.html", "destination": "/api/page?file=create.html" }
+    { "source": "/favicon.svg", "destination": "/assets/favicon.svg" }
   ]
 }
