@@ -52,14 +52,15 @@
   [style*="padding:28px 28px"],
   [style*="padding:24px 28px"]{padding-left:16px !important;padding-right:16px !important}
 
-  /* Hero */
+  /* Hero: keep the photo crop identical to the desktop source point so the JS weld point stays physically attached to the image. */
   section[style*="min-height:min(84vh,660px)"]{min-height:76vh !important;align-items:flex-end !important}
-  section[style*="min-height:min(84vh,660px)"] #hero-photo{object-position:64% 42% !important}
+  section[style*="min-height:min(84vh,660px)"] #hero-photo{object-position:62% 45% !important}
   section[style*="min-height:min(84vh,660px)"] h1{font-size:clamp(27px,8.5vw,38px) !important;line-height:1.14 !important;margin-bottom:15px !important}
   section[style*="min-height:min(84vh,660px)"] p{font-size:12px !important;line-height:1.65 !important;margin-bottom:22px !important}
   section[style*="min-height:min(84vh,660px)"] a{box-sizing:border-box !important;padding:13px 17px !important;font-size:10px !important}
   section[style*="min-height:min(84vh,660px)"] > div:last-child{right:16px !important;bottom:25px !important}
-  #arc-layer,#smoke-layer{left:65% !important;top:43% !important;transform:scale(.65);transform-origin:center}
+  /* Do not override the animation's JS-calculated pixel position. Only scale the effect on small screens. */
+  #arc-layer,#smoke-layer{transform:scale(.65);transform-origin:center}
 
   /* Responsive grids and cards */
   [style*="grid-template-columns"]{grid-template-columns:minmax(0,1fr) !important}
