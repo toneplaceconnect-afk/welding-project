@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/page.js": {
-      "includeFiles": ["*.dc.html", "create.html"]
+      "includeFiles": "*.html"
     }
   },
   "rewrites": [
