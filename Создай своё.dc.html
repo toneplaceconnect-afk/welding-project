@@ -381,8 +381,13 @@ class Component extends DCLogic {
       body: JSON.stringify({ prompt: this.promptValue(), count: AI.count, files: this.state.files })
     }).then((r) => r.json()).then((data) => {
       const imgs = (data && data.images) || [];
-      this.setState({ images: imgs, aiStatus: imgs.length ? 'Эскизы готовы — скачайте их кнопкой ниже или отправьте мне.' : 'Эскизы генерируются — обновите страницу через минуту.' });
-    }).catch(() => this.setState({ aiStatus: 'Генератор не ответил — эскизы пришлю вручную после созвона.' }));
+      const errText = data && data.error;
+      let status;
+      if (imgs.length) status = 'Эскизы готовы — скачайте их кнопкой ниже или отправьте мне.';
+      else if (errText) status = 'Не удалось сгенерировать: ' + errText;
+      else status = 'Эскизы генерируются — обновите страницу через минуту.';
+      this.setState({ images: imgs, aiStatus: status });
+    }).catch((err) => this.setState({ aiStatus: 'Генератор не ответил (' + (err && err.message ? err.message : 'сетевая ошибка') + ') — эскизы пришлю вручную после созвона.' }));
   }
 
   renderVals() {
