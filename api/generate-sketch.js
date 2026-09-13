@@ -1,6 +1,6 @@
 // Serverless-функция Vercel: /api/generate-sketch
-// Принимает POST { prompt, count } с фронтенда, дергает OpenAI Images API
-// с ключом из переменной окружения (ключ никогда не попадает в браузер).
+// Принимает POST { prompt, count } с фронтенда и генерирует изображения
+// через Pollinations. Ключ хранится только в переменных окружения Vercel.
 // Возвращает { images: ["data:image/png;base64,...", ...] }.
 
 export default async function handler(request, response) {
@@ -9,10 +9,10 @@ export default async function handler(request, response) {
     return;
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.POLLINATIONS_API_KEY;
   if (!apiKey) {
     response.status(500).json({
-      error: 'OPENAI_API_KEY не настроен в переменных окружения Vercel.'
+      error: 'POLLINATIONS_API_KEY не настроен в переменных окружения Vercel.'
     });
     return;
   }
@@ -40,35 +40,48 @@ export default async function handler(request, response) {
     prompt;
 
   try {
-    const aiResponse = await fetch('https://api.openai.com/v1/images/generations', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + apiKey
-      },
-      body: JSON.stringify({
-        model: 'gpt-image-1',
-        prompt: fullPrompt,
-        n: count,
-        size: '1024x1024'
-      })
+    // Pollinations image endpoint возвращает готовый файл изображения.
+    // Делаем отдельный запрос для каждой картинки, чтобы сохранить
+    // прежний параметр count и формат ответа для существующего фронтенда.
+    const requests = Array.from({ length: count }, async () => {
+      const url =
+        'https://gen.pollinations.ai/image/' +
+        encodeURIComponent(fullPrompt) +
+        '?model=flux.2-klein-4b&width=1024&height=1024&nologo=true';
+
+      const aiResponse = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + apiKey
+        }
+      });
+
+      if (!aiResponse.ok) {
+        const errorText = await aiResponse.text();
+        let message = 'Pollinations не смог сгенерировать изображение.';
+        try {
+          const errorData = JSON.parse(errorText);
+          message =
+            (errorData && errorData.error && errorData.error.message) ||
+            errorData.message ||
+            message;
+        } catch (e) {
+          if (errorText) message = errorText.slice(0, 500);
+        }
+        throw new Error('Pollinations ' + aiResponse.status + ': ' + message);
+      }
+
+      const buffer = Buffer.from(await aiResponse.arrayBuffer());
+      return 'data:image/png;base64,' + buffer.toString('base64');
     });
 
-    const data = await aiResponse.json();
-
-    if (!aiResponse.ok) {
-      const message = (data && data.error && data.error.message) || 'Запрос к OpenAI не удался.';
-      console.error('OpenAI error', aiResponse.status, JSON.stringify(data && data.error ? data.error : data));
-      response.status(aiResponse.status).json({ error: message });
-      return;
-    }
-
-    const images = (data.data || [])
-      .map((item) => (item.b64_json ? 'data:image/png;base64,' + item.b64_json : item.url))
-      .filter(Boolean);
-
+    const images = await Promise.all(requests);
     response.status(200).json({ images });
   } catch (err) {
-    response.status(500).json({ error: 'Ошибка генерации: ' + (err && err.message ? err.message : String(err)) });
+    console.error('Pollinations error', err);
+    response.status(500).json({
+      error: 'Ошибка генерации: ' +
+        (err && err.message ? err.message : String(err))
+    });
   }
 }
