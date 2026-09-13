@@ -1,45 +1,47 @@
 // Serverless-функция Vercel: /api/generate-sketch
-// POST { prompt, count, referenceImages }
+// Generates exactly one visualization from the client's brief.
 
-const MASTER_PROMPT = `You create one photorealistic commercial photograph from a client's product brief.
+const MASTER_PROMPT = `You are an expert industrial designer and professional commercial product photographer.
 
-SOURCE OF TRUTH
-The CLIENT BRIEF is the only source of truth for the product. Understand the client's words literally and preserve the requested product, purpose, proportions, dimensions, materials, colors, finish, components and setting. Never replace the requested product with a visually similar object. Never borrow the identity of another object from examples, page templates or generic associations.
+Create ONE photorealistic product photograph based strictly on the CLIENT BRIEF.
 
-PRODUCT
-Generate exactly ONE primary product: the product the client asked to make. Its silhouette must immediately communicate what it is. If the client asks for a table, it must visibly and unmistakably be a table: a tabletop supported from below by legs or a base, with realistic human scale and usable legroom. If the client asks for another product, use the same principle: make that exact product unmistakable and functionally coherent.
+CLIENT BRIEF IS THE SOURCE OF TRUTH
+Read the client's description literally. Identify exactly what the client wants to make. Preserve every explicit requirement: product type, function, dimensions, proportions, materials, colors, finish, components, quantity, location and style. Never replace the requested product with another category. Never use page examples, placeholders, previous requests or generic associations as requirements.
+
+PRODUCT IDENTITY
+The requested product must be immediately recognizable from its silhouette and physical construction. Create exactly one primary product. Do not transform a furniture item into architecture or an architectural item into furniture. Only include additional objects when they are ordinary environmental context and clearly secondary.
 
 INTERPRETATION
-Use sensible professional design judgment only where the client has left details unspecified. Do not invent requirements that change the product identity. Explicit client dimensions are authoritative; preserve their proportions and units. The image is a visualization of the client's requested object, not an opportunity to redesign the brief into another category.
+Use professional design judgment only to fill genuinely unspecified details. Choose neutral, practical, manufacturable solutions. Never invent a feature that changes the product's category, function or proportions. Explicit dimensions are authoritative. Preserve dimensional relationships and realistic human scale.
 
-REAL-WORLD CONSTRUCTION
-The product must look physically manufacturable and structurally plausible. Use believable profiles, thicknesses, joints, welds, fasteners, supports, clearances and material behavior appropriate to the described construction. Every visible structural element must have a clear physical purpose. Avoid impossible intersections, floating parts, unsupported weight, distorted geometry and decorative structures that change the product category.
+MANUFACTURING REALISM
+Make the object physically plausible and suitable for real fabrication. Use believable material thicknesses, profiles, plates, legs, supports, joints, welds, fasteners, clearances and load paths appropriate to the requested product. Every structural part must connect logically. Avoid floating elements, impossible intersections, distorted geometry and unsupported structures.
 
-MATERIALS AND FINISH
-Render the exact materials and finishes stated by the client. Metal should have physically believable thickness, edges, reflections, paint or powder coating and weld details. Wood should have natural grain, realistic texture, joints and scale. Keep the requested color and surface finish accurate.
+MATERIAL REALISM
+Render the exact requested materials and finishes. Metal has realistic thickness, edges, reflections, coating and weld details. Wood has natural grain, believable scale, texture and joints. Preserve the client's specified color and surface finish.
 
-PHOTOGRAPH
-Produce a premium, realistic product photograph, not an illustration or technical presentation. Use natural physically plausible lighting, realistic shadows, accurate perspective, believable reflections, high material detail and a clean professional composition. Choose a three-quarter view when it best communicates the product. Show the complete product whenever practical. The requested product is the visual focus; the environment is secondary and exists only to establish context and scale.
+PHOTOREALISTIC COMMERCIAL PHOTOGRAPHY
+Create a premium real-world photograph, not a drawing or concept illustration. Use physically plausible natural or studio lighting, realistic shadows, accurate perspective, natural reflections, subtle depth of field, high-resolution material detail and believable camera optics. Compose the image so the entire requested product is easy to understand. Use a clean environment that supports the product without competing with it.
 
-VISUAL CLEANLINESS
-No text, captions, labels, measurements, arrows, dimensions, logos, UI, diagrams, blueprints, CAD, wireframes, technical drawings, grids, collages, split screens, inset views or fantasy elements. Do not add a roof, overhead frame, walls, architectural enclosure or second designed product unless the client explicitly requests those elements as part of the product.
+VISUAL RULES
+No text, captions, labels, measurements, arrows, dimensions, logos, UI, diagrams, blueprints, CAD, wireframes, technical drawings, grids, collages, split screens or inset views. Do not add roofs, overhead structures, walls, architectural frames, shelters or unrelated designed objects unless the client explicitly requests them as part of the product.
 
-FINAL QUALITY CHECK
-Before producing the image, verify internally: (1) Is this exactly the product the client requested? (2) Are all explicit requirements preserved? (3) Is the object physically believable and manufacturable? (4) Would a person identify the product correctly from its silhouette alone? If any answer is no, correct the concept before rendering.`;
+FINAL VALIDATION
+Before rendering, verify: the product category matches the client's words; every explicit requirement is preserved; dimensions and proportions are coherent; the construction is physically believable; and the result would be unmistakably identified as the requested product from the image alone. If not, correct the concept before rendering.`;
 
 function productGuard(brief) {
   const s = String(brief || '').toLowerCase();
-  if (/\bстол\w*\b|обеден\w* стол|рабоч\w* стол|dining table|table/.test(s)) return `PRODUCT IDENTITY: TABLE. Create exactly one normal functional table. One continuous horizontal tabletop on top, supported only from below by a realistic base or legs. Normal human table height and proportions. Clear open space beneath for legs. Nothing rises above the tabletop as part of the table. No roof, canopy, pergola, gazebo, pavilion, shelter, walls, overhead beams, posts, screens or architectural frame. No second designed object.`;
-  if (/пергол|pergola/.test(s)) return `PRODUCT IDENTITY: PERGOLA. Create exactly the outdoor pergola described by the client, with its requested posts, beams and roof elements. Do not turn it into furniture or a closed building.`;
-  if (/беседк/.test(s)) return `PRODUCT IDENTITY: GAZEBO. Create exactly the gazebo described by the client, with a coherent supporting structure and roof.`;
-  if (/навес|козыр/.test(s)) return `PRODUCT IDENTITY: CANOPY. Create exactly the requested canopy or awning with a clear supporting structure and roof plane.`;
-  if (/забор|ворот|калит/.test(s)) return `PRODUCT IDENTITY: FENCE/GATE. Create exactly the requested boundary or entry construction with appropriate posts, panels and hardware.`;
-  if (/лестниц|перил/.test(s)) return `PRODUCT IDENTITY: STAIR/RAILING. Create exactly the requested functional staircase or railing at realistic human scale.`;
-  if (/мангал|барбекю|\bbbq\b/.test(s)) return `PRODUCT IDENTITY: BBQ/BRAZIER. Create exactly one recognizable, manufacturable barbecue or brazier requested by the client.`;
-  if (/скамь|табурет|банкетк|\bbench\b|\bstool\b/.test(s)) return `PRODUCT IDENTITY: SEATING. Create exactly the requested bench, stool or seating product with a clear seat and support below.`;
-  if (/стеллаж|полк|этажерк|\bshelf\b|\brack\b/.test(s)) return `PRODUCT IDENTITY: SHELVING. Create exactly one functional shelving/rack unit with storage surfaces supported by a frame.`;
-  if (/стойк|ресепшн|барн\w* стойк|\bcounter\b/.test(s)) return `PRODUCT IDENTITY: COUNTER. Create exactly one functional counter/business stand with a clear working surface and support below.`;
-  return `PRODUCT IDENTITY: Follow the client's exact product description. Create one recognizable functional product and do not substitute its category.`;
+  if (/\bстол\w*\b|обеден\w* стол|рабоч\w* стол|dining table|table/.test(s)) return `The product identity is TABLE. Make exactly one normal functional table: one continuous horizontal tabletop, supported from below by legs or a base, normal human table height and proportions, clear open legroom beneath. No roof, canopy, pergola, gazebo, pavilion, shelter, walls, overhead beams, posts rising above the tabletop, screens or architectural frame. No second designed product.`;
+  if (/пергол|pergola/.test(s)) return `The product identity is PERGOLA. Make exactly the outdoor pergola described by the client, with its requested posts, beams and roof elements. Do not convert it into furniture or a closed building.`;
+  if (/беседк/.test(s)) return `The product identity is GAZEBO. Make exactly the gazebo described by the client, with its requested supporting structure and roof.`;
+  if (/навес|козыр/.test(s)) return `The product identity is CANOPY. Make exactly the requested canopy or awning with its supporting structure and roof plane.`;
+  if (/забор|ворот|калит/.test(s)) return `The product identity is FENCE/GATE. Make exactly the requested boundary or entry construction with appropriate posts, panels and hardware.`;
+  if (/лестниц|перил/.test(s)) return `The product identity is STAIR/RAILING. Make exactly the requested functional staircase or railing at realistic human scale.`;
+  if (/мангал|барбекю|\bbbq\b/.test(s)) return `The product identity is BBQ/BRAZIER. Make exactly one recognizable, manufacturable barbecue or brazier requested by the client.`;
+  if (/скамь|табурет|банкетк|\bbench\b|\bstool\b/.test(s)) return `The product identity is SEATING. Make exactly the requested bench, stool or seating product with a clear seat and support below.`;
+  if (/стеллаж|полк|этажерк|\bshelf\b|\brack\b/.test(s)) return `The product identity is SHELVING. Make exactly one functional shelving/rack unit with storage surfaces supported by a frame.`;
+  if (/стойк|ресепшн|барн\w* стойк|\bcounter\b/.test(s)) return `The product identity is COUNTER. Make exactly one functional counter/business stand with a clear working surface and support below.`;
+  return `The product identity must be taken directly from the client's description. Create exactly one recognizable functional product. Do not substitute its category.`;
 }
 
 function dataUrlToBlob(dataUrl, index) {
