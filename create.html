@@ -2,7 +2,8 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg"><link rel="stylesheet" href="mobile.css"><link rel="stylesheet" href="create-actions.css">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg"><link rel="stylesheet" href="mobile.css">
+  <link rel="stylesheet" href="site-header.css"><link rel="stylesheet" href="create-actions.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>Создай своё — Проект-Сварка</title>
 <style>
@@ -10,7 +11,30 @@
 </style>
 </head>
 <body>
-<div id="site-header-slot"></div>
+<header class="site-header">
+    <nav class="site-header__nav">
+      <a class="site-header__brand" href="Главная.dc.html" aria-label="Проект-Сварка">
+        <span class="site-header__brand-mark"><svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+            <path d="M32 97A50 50 0 0 1 60 8" stroke="#9aa1ad" stroke-width="8" stroke-linecap="round" fill="none"/>
+            <path d="M60 8a50 50 0 0 1 28 90" stroke="#cf2026" stroke-width="8" stroke-linecap="round" fill="none"/>
+            <path d="M26 62 60 32l34 30" stroke="#cf2026" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M38 54v38h38" stroke="#9aa1ad" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M80 56v36" stroke="#cf2026" stroke-width="12" stroke-linecap="round" fill="none"/>
+            <g stroke="#cf2026" stroke-width="4" stroke-linecap="round" fill="none"><path d="M38 92 26 104M38 92 22 94M38 92 30 108M38 92 46 106M38 92 24 82"/></g>
+            <circle cx="38" cy="92" r="5.5" fill="#fff3d6"/>
+            <circle class="site-logo-flash" cx="38" cy="92" r="11" fill="url(#siteLogoGlow)"/>
+            <defs><radialGradient id="siteLogoGlow"><stop offset="0" stop-color="#fff"/><stop offset=".32" stop-color="#ff5a60"/><stop offset="1" stop-color="#cf2026" stop-opacity="0"/></radialGradient></defs>
+          </svg></span>
+        <span>ПРОЕКТ<em>-</em>СВАРКА</span>
+      </a>
+      <button type="button" class="site-header__burger" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button>
+      <div class="site-header__links"><a href="Главная.dc.html">Главная</a><a href="create.html" class="active">Создай своё</a><a href="Калькулятор.dc.html">Калькулятор</a><a href="Лофт-мебель.dc.html">Лофт-мебель</a><a href="Документация.dc.html">Документация</a><a href="Прайс.dc.html">Цены</a></div>
+      <a class="site-header__phone" href="https://t.me/welding_project" target="_blank" rel="noopener" aria-label="Связаться в Telegram">
+        <span class="site-header__phone-dot">☎</span>
+        <span class="site-header__phone-copy"><small>ЗВОНИТЕ СЕЙЧАС</small><strong>+7 983 198 15 88</strong></span>
+      </a>
+    </nav>
+  </header>
 <section class="hero"><div class="hero-inner"><div class="eyebrow">Создай своё</div><h1>Расскажите, что хотите изготовить</h1><p>Опишите изделие своими словами. Не нужно знать размеры профиля, ГОСТы или специальные термины.</p></div></section>
 <main class="layout"><section class="card"><h2>Ваша идея</h2><p class="hint">Опишите изделие так, как объяснили бы мастеру. Укажите всё, что для вас важно: назначение, размеры, материалы, стиль и место использования.</p><div class="section"><div class="label">Опишите изделие</div><textarea class="textarea" id="description" placeholder="Например: хочу сделать стол для террасы 180×80 см. Чёрный металлический каркас, деревянная столешница из дуба. Современный стиль..."></textarea></div><div class="drop"><strong>Добавить фото / эскиз</strong><p>Необязательно. Фото, рисунок или пример понравившегося изделия помогут точнее понять идею.</p><input id="files" type="file" accept="image/*" multiple></div><button class="generate" id="generate">СОЗДАТЬ ВИЗУАЛИЗАЦИЮ</button><div class="status" id="status"></div><div class="results"><div class="result" id="r1">ВИЗУАЛИЗАЦИЯ</div></div><div class="confirm" id="confirm"><strong>Задание сформировано</strong><p id="confirmText"></p></div></section></main>
 <script>
@@ -18,5 +42,7 @@ const $=id=>document.getElementById(id);
 function fileToData(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{const max=512;const scale=Math.min(1,max/img.width,max/img.height);const w=Math.max(1,Math.round(img.width*scale));const h=Math.max(1,Math.round(img.height*scale));const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);resolve(canvas.toDataURL('image/jpeg',0.82))};img.onerror=reject;img.src=reader.result};reader.onerror=reject;reader.readAsDataURL(file)})}
 function buildPrompt(){return $('description').value.trim()}
 $('generate').onclick=async()=>{const btn=$('generate'),text=$('description').value.trim();if(!text){$('status').textContent='Сначала опишите, что хотите изготовить.';$('description').focus();return}btn.disabled=true;$('status').textContent='Создаём визуализацию…';$('r1').className='result loading';$('r1').textContent='';$('confirm').classList.remove('show');try{const refs=await Promise.all([...$('files').files].slice(0,2).map(fileToData));const res=await fetch('/api/generate-sketch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:buildPrompt(),count:1,referenceImages:refs})});const data=await res.json();if(!res.ok)throw Error(data.error||'Не удалось создать визуализацию');const image=data.images?.[0];if(!image)throw Error('Визуализация не получена');$('r1').className='result';$('r1').innerHTML=`<img src="${image}" alt="Визуализация изделия">`;$('status').textContent='Готово.';$('confirm').classList.add('show');$('confirmText').textContent='Визуализация создана по вашему описанию.'}catch(e){$('status').textContent='Ошибка: '+e.message;$('r1').className='result';$('r1').textContent='Не удалось создать'}finally{btn.disabled=false}};
-</script><script src="/create-actions.js"></script><script src="/site-ui.js?v=20260913-5" defer></script>
+</script><script src="/create-actions.js"></script>
+  <button type="button" class="site-top" aria-label="Наверх" title="Наверх">↑</button>
+  <script src="/site-header.js" defer></script>
 </body></html>
