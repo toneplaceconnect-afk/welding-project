@@ -13,7 +13,6 @@
       req.onerror = () => reject(req.error);
     });
   }
-
   async function saveImages(images) {
     if (!images.length) return;
     try {
@@ -27,7 +26,6 @@
       db.close();
     } catch (_) {}
   }
-
   async function loadImages() {
     try {
       const db = await dbOpen();
@@ -40,10 +38,8 @@
       return Array.isArray(images) ? images : [];
     } catch (_) { return []; }
   }
-
   function resultBoxes() { return [document.getElementById('r1'), document.getElementById('r2')]; }
   function getImages() { return resultBoxes().map(box => box?.querySelector('img')?.src || '').filter(Boolean); }
-
   async function restoreImages() {
     const images = await loadImages();
     if (!images.length) return;
@@ -79,45 +75,104 @@
     sizes.dataset.enhanced = '1';
   }
 
-  // If the user describes the изделие in plain language but leaves the default
-  // "Стол" selected, synchronize the structured product with the clear intent.
-  // A manual product choice always wins; inference is only used while the default remains active.
-  function setupIntentInference() {
-    const description = document.getElementById('description');
-    if (!description || description.dataset.intentBound) return;
-    description.dataset.intentBound = '1';
+  // ---------- NATURAL-LANGUAGE INTENT ----------
+  // The form starts with useful defaults. A plain-language description can override
+  // untouched defaults, while an explicit user click always has priority.
+  const PRODUCT_RULES = [
+    { value: 'Беседка или пергола', re: /пергол\w*|pergola/i },
+    { value: 'Беседка или пергола', re: /беседк\w*/i },
+    { value: 'Навес или козырёк', re: /навес\w*|козыр[её]к\w*/i },
+    { value: 'Забор, ворота, калитка', re: /забор\w*|ворот\w*|калитк\w*/i },
+    { value: 'Лестница или перила', re: /лестниц\w*|перил\w*/i },
+    { value: 'Мангальная зона', re: /мангал\w*|барбекю|\bbbq\b/i },
+    { value: 'Стойка для бизнеса', re: /стойк\w*|ресепшн|барн\w* стойк/i },
+    { value: 'Стеллаж', re: /стеллаж\w*|полк\w*|этажер\w*/i },
+    { value: 'Скамья или табурет', re: /скамь\w*|табурет\w*|банкетк\w*/i },
+    { value: 'Стол', re: /обеден\w* стол|\bстол\w*/i }
+  ];
+  const PLACE_RULES = [
+    { value: 'Кафе / бар / магазин', re: /кафе|бар\b|ресторан|магазин|шоурум|ресепшн|коммерческ/i },
+    { value: 'Гараж / мастерская', re: /гараж|мастерск|цех|производств/i },
+    { value: 'Дача / участок', re: /дач\w*|участк\w*|улиц\w*|террас\w*|сад\w*|двор\b|беседк|пергол|навес\w*|мангал|барбекю/i },
+    { value: 'Дом / интерьер', re: /дом\b|квартир\w*|интерьер|гостин\w*|кухн\w*|спальн\w*/i }
+  ];
+  const MATERIAL_RULES = [
+    { value: 'Дерево + металл', re: /(дерев|деревян|массив|кедр|дуб|ясен|рейк|доск).*(металл|сталь|профил|каркас)|(?:металл|сталь|профил|каркас).*(дерев|деревян|массив|кедр|дуб|ясен|рейк|доск)/i },
+    { value: 'Сталь / нержавейка', re: /нержав|нержавеющ|inox/i },
+    { value: 'Металл', re: /металл|профильн\w* труб|профил\w* труб/i },
+    { value: 'Дерево', re: /дерев\w*|массив|кедр|дуб|ясен|рейк|доск/i }
+  ];
+  const COLOR_RULES = [
+    { value: 'Чёрный матовый', re: /ч[её]рн\w*|black|матов\w* ч[её]рн/i },
+    { value: 'Графит', re: /графит/i },
+    { value: 'Белый', re: /бел\w*/i },
+    { value: 'Коричневый', re: /коричнев\w*|шоколад\w*/i },
+    { value: 'Красный', re: /красн\w*/i },
+    { value: 'Под сталь', re: /под сталь|серебрист\w*|металлик/i }
+  ];
 
-    const productRules = [
-      { value: 'Беседка или пергола', re: /(?:хочу|заказать|нужна|нужен|сделать|изготовить|построить)[^.!?\n]{0,90}(пергол|беседк)/i },
-      { value: 'Навес или козырёк', re: /(?:хочу|заказать|нужен|нужна|сделать|изготовить)[^.!?\n]{0,90}(навес|козыр[её]к)/i },
-      { value: 'Забор, ворота, калитка', re: /(?:хочу|заказать|нужен|нужна|сделать|изготовить)[^.!?\n]{0,90}(забор|ворот|калитк)/i },
-      { value: 'Лестница или перила', re: /(?:хочу|заказать|нужна|нужен|сделать|изготовить)[^.!?\n]{0,90}(лестниц|перил)/i },
-      { value: 'Мангальная зона', re: /(?:хочу|заказать|нужна|нужен|сделать|изготовить)[^.!?\n]{0,90}(мангал|барбекю|bbq)/i },
-      { value: 'Стойка для бизнеса', re: /(?:хочу|заказать|нужна|нужен|сделать|изготовить)[^.!?\n]{0,90}(стойк|ресепш|барн[а-я]* сто)/i },
-      { value: 'Стеллаж', re: /(?:хочу|заказать|нужен|нужна|сделать|изготовить)[^.!?\n]{0,90}(стеллаж|стеллажн|полк)/i },
-      { value: 'Скамья или табурет', re: /(?:хочу|заказать|нужна|нужен|сделать|изготовить)[^.!?\n]{0,90}(скамь|табурет)/i }
-    ];
-
-    function syncIntent() {
-      const text = description.value.trim();
-      if (!text || typeof state === 'undefined' || state.product !== 'Стол') return;
-      const rule = productRules.find(x => x.re.test(text));
-      if (!rule) return;
-      const button = [...document.querySelectorAll('#products .choice')].find(x => x.dataset.value === rule.value);
-      if (!button) return;
-      document.querySelectorAll('#products .choice').forEach(x => x.classList.remove('active'));
-      button.classList.add('active');
-      state.product = rule.value;
-      if (typeof update === 'function') update();
-    }
-
-    description.addEventListener('input', syncIntent);
+  function markManualChoices() {
+    document.querySelectorAll('#products .choice, #materials .mat, #colors .swatch, #purpose .pill').forEach(btn => {
+      if (btn.dataset.intentBound) return;
+      btn.dataset.intentBound = '1';
+      btn.addEventListener('click', () => { btn.dataset.userSelected = '1'; }, { capture: true });
+    });
+  }
+  function hasManual(container) {
+    return [...document.querySelectorAll(`${container} [data-user-selected="1"]`)].length > 0;
+  }
+  function chooseProduct(value) {
+    if (hasManual('#products')) return;
+    const btn = [...document.querySelectorAll('#products .choice')].find(x => x.dataset.value === value);
+    if (btn) btn.click();
+  }
+  function chooseMaterial(value) {
+    if (hasManual('#materials')) return;
+    const btn = [...document.querySelectorAll('#materials .mat')].find(x => x.dataset.value === value);
+    if (btn) btn.click();
+  }
+  function chooseColor(value) {
+    if (hasManual('#colors')) return;
+    const btn = [...document.querySelectorAll('#colors .swatch')].find(x => x.dataset.name === value);
+    if (btn) btn.click();
+  }
+  function choosePlace(value) {
+    if (hasManual('#purpose')) return;
+    const btn = [...document.querySelectorAll('#purpose .pill')].find(x => x.textContent.trim() === value);
+    if (btn) btn.click();
+  }
+  function parseDimensions(text) {
+    const m = String(text || '').match(/\b(\d{3,5})\s*[xх×*]\s*(\d{3,5})\s*[xх×*]\s*(\d{3,5})\s*(?:мм|mm)?\b/i);
+    return m ? [m[1], m[2], m[3]] : null;
+  }
+  function fillDimensionsFromText(text) {
+    const values = parseDimensions(text);
+    if (!values) return;
+    ['width', 'depth', 'height'].forEach((id, i) => {
+      const input = document.getElementById(id);
+      if (input && !input.value.trim()) {
+        input.value = values[i];
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    });
+  }
+  function applyNaturalLanguageIntent() {
+    markManualChoices();
+    const text = document.getElementById('description')?.value?.trim() || '';
+    if (!text) return;
+    const product = PRODUCT_RULES.find(x => x.re.test(text));
+    if (product) chooseProduct(product.value);
+    const place = PLACE_RULES.find(x => x.re.test(text));
+    if (place) choosePlace(place.value);
+    const material = MATERIAL_RULES.find(x => x.re.test(text));
+    if (material) chooseMaterial(material.value);
+    const color = COLOR_RULES.find(x => x.re.test(text));
+    if (color) chooseColor(color.value);
+    fillDimensionsFromText(text);
   }
 
   let zoom = null, zoomImg = null, zoomScale = 1, zoomX = 0, zoomY = 0;
-  function applyZoom() {
-    if (zoomImg) zoomImg.style.transform = `translate(${zoomX}px,${zoomY}px) scale(${zoomScale})`;
-  }
+  function applyZoom() { if (zoomImg) zoomImg.style.transform = `translate(${zoomX}px,${zoomY}px) scale(${zoomScale})`; }
   function closeZoom() { if (zoom) zoom.classList.remove('open'); document.body.classList.remove('zoom-open'); }
   function openZoom(src, title) {
     if (!zoom) {
@@ -175,6 +230,7 @@
   function downloadAll() { const imgs = getImages(); if (!imgs.length) return alert('Сначала создайте визуализации.'); imgs.forEach((src, i) => setTimeout(() => downloadOne(src, i), i * 250)); }
 
   function mount() {
+    markManualChoices();
     const results = document.querySelector('.results');
     if (!results) return;
     if (!results.dataset.actionsMounted) {
@@ -196,6 +252,12 @@
     });
   }
 
+  // Correct the structured state immediately before the page's inline generate handler runs.
+  // Capture phase runs first, so the handler sends the corrected product/material/place to the API.
+  document.addEventListener('click', e => {
+    if (e.target?.closest?.('#generate')) applyNaturalLanguageIntent();
+  }, true);
+
   const observer = new MutationObserver(() => {
     mount();
     const imgs = getImages();
@@ -204,7 +266,6 @@
   observer.observe(document.body, { childList: true, subtree: true });
 
   improveSizeFields();
-  setupIntentInference();
   mount();
   restoreImages();
 })();
