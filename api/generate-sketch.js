@@ -1,7 +1,7 @@
 // Serverless-функция Vercel: /api/generate-sketch
 // Принимает POST { prompt, count } с фронтенда и генерирует изображения
 // через Pollinations. Ключ хранится только в переменных окружения Vercel.
-// Возвращает { images: ["data:image/png;base64,...", ...] }.
+// Возвращает { images: ["data:image/...;base64,...", ...] }.
 
 export default async function handler(request, response) {
   if (request.method !== 'POST') {
@@ -40,13 +40,13 @@ export default async function handler(request, response) {
     prompt;
 
   try {
-    // В актуальном Pollinations API для FLUX.2 Klein используется alias "klein".
-    // Делаем отдельный запрос для каждой картинки, сохраняя прежний count.
+    // Используем официальный стабильный alias Flux из Pollinations.
+    // Klein убран намеренно: текущий API-ключ не имеет доступа к нему.
     const requests = Array.from({ length: count }, async () => {
       const url =
         'https://gen.pollinations.ai/image/' +
         encodeURIComponent(fullPrompt) +
-        '?model=klein&width=1024&height=1024&nologo=true';
+        '?model=flux&width=1024&height=1024&nologo=true';
 
       const aiResponse = await fetch(url, {
         method: 'GET',
@@ -70,8 +70,9 @@ export default async function handler(request, response) {
         throw new Error('Pollinations ' + aiResponse.status + ': ' + message);
       }
 
+      const contentType = aiResponse.headers.get('content-type') || 'image/png';
       const buffer = Buffer.from(await aiResponse.arrayBuffer());
-      return 'data:image/png;base64,' + buffer.toString('base64');
+      return 'data:' + contentType.split(';')[0] + ';base64,' + buffer.toString('base64');
     });
 
     const images = await Promise.all(requests);
