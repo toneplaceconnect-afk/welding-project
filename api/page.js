@@ -22,9 +22,9 @@ function injectAssets(html, file) {
   }
 
   if (!result.includes('/site-ui.js')) {
-    result = result.replace('</body>', '  <script src="/site-ui.js?v=20260913-2" defer></script>\n</body>');
+    result = result.replace('</body>', '  <script src="/site-ui.js?v=20260913-3" defer></script>\n</body>');
   } else {
-    result = result.replace(/\/site-ui\.js(?:\?[^"']*)?/g, '/site-ui.js?v=20260913-2');
+    result = result.replace(/\/site-ui\.js(?:\?[^"']*)?/g, '/site-ui.js?v=20260913-3');
   }
 
   return result;
