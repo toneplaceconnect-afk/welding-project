@@ -21,10 +21,10 @@ function injectAssets(html, file) {
     result = result.replace('</head>', '  <link rel="stylesheet" href="/mobile.css">\n</head>');
   }
 
-  // One canonical header/back-to-top module for every page. The module replaces
-  // any legacy per-page header markup after the page is mounted.
   if (!result.includes('/site-ui.js')) {
-    result = result.replace('</body>', '  <script src="/site-ui.js" defer></script>\n</body>');
+    result = result.replace('</body>', '  <script src="/site-ui.js?v=20260913-2" defer></script>\n</body>');
+  } else {
+    result = result.replace(/\/site-ui\.js(?:\?[^"']*)?/g, '/site-ui.js?v=20260913-2');
   }
 
   return result;
