@@ -34,23 +34,40 @@
   }
 
   function ensureHeader() {
-    let header = document.querySelector('.site-header');
     const root = document.body;
-    const dc = root.querySelector('x-dc');
+    if (!root) return null;
+
+    const headers = Array.from(document.querySelectorAll('.site-header'));
+    let header = headers[0] || null;
+
+    // Keep exactly one shared header. If a page already contains one, reuse it.
+    headers.slice(1).forEach((extra) => extra.remove());
 
     if (!header) {
       const wrap = document.createRange().createContextualFragment(HEADER_HTML);
       header = wrap.firstElementChild;
       root.insertBefore(header, root.firstChild);
-    } else if (isInsideDc(header)) {
-      root.insertBefore(header, dc || root.firstChild);
+    }
+
+    // IMPORTANT: when the static header is inside <x-dc>, move it using
+    // the parent's insertBefore. Calling body.insertBefore(header, dc)
+    // while header is a descendant of dc throws a HierarchyRequestError.
+    const dc = root.querySelector('x-dc');
+    if (dc && isInsideDc(header) && dc.parentNode === root) {
+      root.insertBefore(header, dc);
     }
 
     return header;
   }
 
   function ensureTopButton() {
-    let top = document.querySelector('.site-top');
+    const root = document.body;
+    if (!root) return null;
+
+    const buttons = Array.from(document.querySelectorAll('.site-top'));
+    let top = buttons[0] || null;
+    buttons.slice(1).forEach((extra) => extra.remove());
+
     if (!top) {
       top = document.createElement('button');
       top.type = 'button';
@@ -58,9 +75,9 @@
       top.setAttribute('aria-label', 'Наверх');
       top.title = 'Наверх';
       top.textContent = '↑';
-      document.body.appendChild(top);
+      root.appendChild(top);
     } else if (isInsideDc(top)) {
-      document.body.appendChild(top);
+      root.appendChild(top);
     }
     return top;
   }
@@ -87,19 +104,18 @@
     if (burger) burger.setAttribute('aria-expanded', 'false');
   }
 
-  function init() {
+  function syncSharedUi() {
     ensureHeader();
     ensureTopButton();
     setActiveLink();
     updateOnScroll();
+  }
+
+  function init() {
+    syncSharedUi();
 
     if (!window.__siteHeaderObserver) {
-      const observer = new MutationObserver(() => {
-        ensureHeader();
-        ensureTopButton();
-        setActiveLink();
-        updateOnScroll();
-      });
+      const observer = new MutationObserver(() => syncSharedUi());
       observer.observe(document.body, { childList: true, subtree: true });
       window.__siteHeaderObserver = observer;
     }
