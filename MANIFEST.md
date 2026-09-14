@@ -1,201 +1,125 @@
 # ПРОЕКТ-СВАРКА — технический манифест
 
-Дата аудита и архитектурной очистки: 2026-09-14
+Дата аудита и архитектурной очистки: 2026-09-14 (v2)
 
 ## Статус
 
 **Архитектурная очистка выполнена. Production deployment READY.**
 
-Последний production deployment связан с commit `7afaaab5d7bca5bf29ad2ad20e8f6cc37b0aaae8` (`Prevent DC root refetch from reintroducing shared chrome`).
-
 Проект: `toneplaceconnect-afk/welding-project`.
 
 ## Что было сломано
 
-До очистки сайт имел несколько конкурирующих реализаций одного и того же chrome:
-
-- отдельная шапка внутри DC-компонентов;
-- отдельная шапка и футер в `create.html`;
-- `site-header.js`, который пытался переносить и пересобирать DOM;
-- `MutationObserver`, повторно запускавший синхронизацию после собственных изменений;
-- CSS-исключения только для `create.html` (`body:has(> .hero)` + `fixed`);
-- отдельная анимация вспышки логотипа в header и другая реализация в footer;
-- принудительное отключение reveal-анимаций через `html.js-reveal [data-reveal]`;
-- несколько вариантов написания бренда и разный размер шрифта на мобильных;
-- телефон header на части страниц вёл в Telegram вместо системного `tel:`;
-- локальный footer Create заменялся скриптом во время работы страницы;
-- динамический runtime DC удалял DOM внутри `<x-dc>`, после чего shared header пытался восстановиться поверх него;
-- `support.js` и DC runtime имели потенциальную гонку с загрузкой React/CDN;
-- при проблемах React существовал риск белого экрана.
+- Дублирующие footer/header на всех 5 DC-страницах (инлайн + site-shell.js);
+- `site-header.js` — мёртвый файл, загружался всеми страницами;
+- Телефон в инлайн-шапках вёл в Telegram вместо `tel:`;
+- `site-shell.js` селектор `body > footer` не удалял вложенные футеры;
+- Google Fonts загружались с разными весами на разных страницах;
+- `create.html` использовала Inter вместо Michroma;
+- `lang="ru"` отсутствовал на всех DC-страницах;
+- Media-query в `create-actions.css` в неправильном порядке;
+- API раскрывал внутренние ошибки Cloudflare клиенту;
+- `site-header.css` и `site-shell.js` имели разные версии кеша.
 
 ## Новая архитектура
 
-Теперь shared chrome имеет один runtime-источник:
+Shared chrome имеет один runtime-источник:
 
 ### `site-shell.js`
 
 Единственный JavaScript-источник:
-
 - header;
 - footer;
 - мобильное меню;
-- телефон;
+- телефон (`tel:+79831981588`);
 - кнопка «Наверх»;
 - active-состояние пункта меню;
 - состояние header при прокрутке.
 
-Внутри нет `MutationObserver`, повторной синхронизации DOM и бесконечного восстановления элементов.
+Внутри нет `MutationObserver`, повторной синхронизации DOM.
 
 Shell создаётся один раз при загрузке страницы.
 
 ### `site-header.css`
 
-Единый CSS для:
-
-- header;
-- footer;
-- логотипа;
-- единой анимации вспышки;
-- мобильного меню;
-- кнопки «Наверх».
-
-Убраны отдельные CSS-исключения для Create.
-
-Убраны принудительные правила, отключавшие `data-reveal`-анимации DC-страниц.
-
-### Логотип и анимация
-
-Источник поведения анимации взят из рабочей footer-реализации:
-
-`@keyframes logoflash`
-
-Header и footer используют один и тот же `.site-header__flash` и одну и ту же анимацию `logoflash`.
-
-SVG `assets/logo-mark.svg` не переписывался и не повреждался.
-
-### Бренд
-
-Единый текст:
-
-`ПРОЕКТ-СВАРКА`
-
-Без пробелов вокруг дефиса.
-
-Шрифт бренда: `Michroma, Unbounded, Inter`.
-
-Размер: 14px.
-
-Вес: 700.
-
-Цвет дефиса: фирменный красный.
-
-### Телефон
-
-Header и footer используют:
-
-`tel:+79831981588`
-
-Иконка телефона больше не является ссылкой Telegram.
+Единый CSS для header, footer, логотипа, анимации, мобильного меню, кнопки «Наверх».
 
 ### DC runtime
 
-`support.js` теперь:
-
+`support.js`:
 1. ждёт готовности DOM;
-2. извлекает header/footer из `<x-dc>` до запуска React runtime;
+2. извлекает header/footer из `<x-dc>` до запуска React (defensive, currently no-op);
 3. запускает React;
 4. запускает `support-runtime.js`;
 5. после этого подключает `site-shell.js`;
-6. при недоступности React оставляет raw DC-страницу видимой и всё равно подключает shell.
+6. при недоступности React оставляет raw DC-страницу видимой и подключает shell.
 
-`window.__resources` инициализируется пустым объектом до запуска runtime, чтобы встроенный root-fetch runtime не перечитал исходный HTML и не вернул старый header/footer обратно в React-дерево.
+`window.__resources` инициализируется пустым объектом до запуска runtime (совместимость с generated runtime).
 
-Это сделано намеренно как совместимость с текущим сгенерированным `support-runtime.js`, а не через MutationObserver или таймеры.
+### Шрифты
+
+Единый стек для контента DC-страниц:
+`'Michroma', 'Unbounded', 'Inter', system-ui, sans-serif`
+
+Шапка/навигация/футер: `Inter` (site-header.css).
+Бренд: `Michroma` (везде).
+
+Google Fonts: `Michroma`, `Unbounded:wght@400-800`, `Inter:wght@400-800` — единый набор на всех страницах.
+
+### Доступность
+
+- `lang="ru"` на всех страницах;
+- `<meta name="theme-color" content="#11131a">` на всех страницах.
 
 ## Create (`create.html`)
 
-Локальная шапка и локальный footer удалены из HTML.
+Страница разделяет единый shell:
+- `site-shell.js` (header, footer, кнопка «Наверх»);
+- `site-header.css` (стили шапки/футера);
+- `mobile.css` (адаптивность);
+- `create-actions.css` (специфичные стили Create);
+- `create-actions.js` (action-кнопки);
+- шрифт Michroma как основной.
 
-Страница содержит только собственный контент конструктора и подключает:
-
-- `site-header.css`;
-- `create-actions.css`;
-- `create-actions.js`;
-- `site-shell.js`.
-
-Больше нет отдельной архитектуры header/footer для Create.
-
-Сохранены существующие функции конструктора:
-
+Функции конструктора:
 - описание изделия;
 - загрузка до двух изображений;
 - `/api/generate-sketch`;
 - один результат визуализации;
-- существующие action-кнопки.
+- action-кнопки.
 
 ## Удалённые костыли
 
-Удалён файл:
+Удалён файл `site-header.js` — пустой IIFE, загружался всеми DC-страницами без пользы.
 
-`site-header.js`
+Из DC-страниц удалены:
+- инлайн `<header class="site-header">` (5 файлов);
+- инлайн `<footer>` (5 файлов);
+- кнопки `.site-top` (5 файлов);
+- ссылки на `site-header.js` (5 файлов).
 
-Причина: старый файл содержал DOM-нормализацию, `MutationObserver`, повторную установку footer/header и несколько page-specific исключений.
+## Исправления API
 
-Также удалены из общей CSS-логики:
-
-- `body:has(> .hero)` для отдельного fixed header;
-- принудительное раскрытие `[data-reveal]`;
-- отдельные mobile brand overrides, конфликтовавшие с единым размером;
-- динамическое восстановление shared chrome после DOM-мутаций.
+- Ошибки Cloudflare не раскрываются клиенту;
+- Добавлена валидация prompt (макс. 3000 символов);
+- Добавлена валидация referenceImages (макс. 2).
 
 ## Что сохранено
 
-Без изменения оставлены:
-
-- существующие изображения и SVG;
-- существующая DC-разметка контента;
-- существующие страницы и навигационные URL;
-- `vercel.json` и его redirects/rewrites;
-- API генерации визуализации;
-- `support-runtime.js` как текущий generated DC runtime;
-- `mobile.css` как существующий слой адаптации контента;
-- `create-actions.js/css`.
-
-## Проверка GitHub
-
-Текущее дерево `main` подтверждает наличие:
-
-- `site-shell.js`;
-- нового `site-header.css`;
-- нового `support.js`;
-- очищенного `create.html`.
-
-Legacy `site-header.js` в текущем дереве отсутствует.
-
-## Vercel
-
-Production project: `welding-project`.
-
-Production deployment для последнего коммита:
-
-`7afaaab5d7bca5bf29ad2ad20e8f6cc37b0aaae8`
-
-Состояние deployment: **READY**.
-
-## Ограничение проверки
-
-GitHub-структура, исходники, SHA и production deployment были проверены инструментами проекта.
-
-Полноценный физический smoke-test в реальном iPhone Safari из этой среды недоступен. Поэтому манифест **не утверждает**, что реальный iPhone был физически протестирован.
-
-Отдельно: наличие статуса Vercel `READY` подтверждает успешное размещение deployment, но не заменяет визуальный браузерный тест всех разрешений.
+- DC-разметка контента;
+- навигационные URL;
+- `vercel.json` redirects/rewrites;
+- `support-runtime.js` (generated DC runtime);
+- `mobile.css` (адаптивность);
+- `create-actions.js/css`;
+- `image-slot.js`;
+- `_ds/` (Nocturne DS — загружается DC-страницами, токены перезаписываются inline-стилями).
 
 ## Критерий дальнейших изменений
 
 Не добавлять новый JS/CSS для исправления отдельных страниц.
 
-Любое изменение header/footer/logo/mobile navigation должно выполняться только через:
-
+Изменения header/footer/logo/mobile navigation — только через:
 - `site-shell.js`;
 - `site-header.css`.
 
