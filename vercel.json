@@ -6,6 +6,8 @@
   "rewrites": [
     { "source": "/", "destination": "/Главная.dc.html" },
     { "source": "/favicon.ico", "destination": "/assets/favicon.svg" },
-    { "source": "/favicon.svg", "destination": "/assets/favicon.svg" }
+    { "source": "/favicon.svg", "destination": "/assets/favicon.svg" },
+    { "source": "/vendor/react.production.min.js", "destination": "https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js" },
+    { "source": "/vendor/react-dom.production.min.js", "destination": "https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js" }
   ]
 }
