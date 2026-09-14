@@ -59,7 +59,7 @@
 
   function replaceCreateFooter() {
     if (!isCreatePage() || !document.body) return;
-    document.querySelectorAll('body > footer').forEach((footer) => footer.remove());
+    document.querySelectorAll('body > footer:not(.site-footer)').forEach((footer) => footer.remove());
     if (!document.querySelector('body > .site-footer')) document.body.insertAdjacentHTML('beforeend', FOOTER_HTML);
   }
 
