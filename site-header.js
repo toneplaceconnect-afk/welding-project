@@ -14,11 +14,22 @@
         <div class="site-header__links">
           <a href="Главная.dc.html">Главная</a><a href="create.html">Создай своё</a><a href="Калькулятор.dc.html">Калькулятор</a><a href="Лофт-мебель.dc.html">Лофт-мебель</a><a href="Документация.dc.html">Документация</a><a href="Прайс.dc.html">Цены</a>
         </div>
-        <a class="site-header__phone" href="${PHONE_HREF}" aria-label="Позвонить">
-          <span class="site-header__phone-dot">☎</span><span class="site-header__phone-copy"><small>ЗВОНИТЕ СЕЙЧАС</small><strong>+7 983 198 15 88</strong></span>
-        </a>
+        <a class="site-header__phone" href="${PHONE_HREF}" aria-label="Позвонить"><span class="site-header__phone-dot">☎</span><span class="site-header__phone-copy"><small>ЗВОНИТЕ СЕЙЧАС</small><strong>+7 983 198 15 88</strong></span></a>
       </nav>
     </header>`;
+
+  function installBrandRules() {
+    if (document.getElementById('site-header-brand-rules')) return;
+    const style = document.createElement('style');
+    style.id = 'site-header-brand-rules';
+    style.textContent = `
+      .site-header__brand{font-family:Michroma,Unbounded,Inter,system-ui,sans-serif!important;font-size:14px!important;font-weight:700!important}
+      footer a[href="Главная.dc.html"]{font-family:Michroma,Unbounded,Inter,system-ui,sans-serif!important;font-size:14px!important;font-weight:700!important;line-height:1!important}
+      @media(max-width:900px){.site-header__brand{font-size:14px!important}}
+      @media(max-width:560px){.site-header__brand{font-size:14px!important}}
+    `;
+    document.head.appendChild(style);
+  }
 
   function isInsideDc(node) { return !!(node && node.closest && node.closest('x-dc')); }
 
@@ -80,7 +91,7 @@
     if (links) links.classList.remove('is-open'); if (burger) burger.setAttribute('aria-expanded', 'false');
   }
 
-  function syncSharedUi() { ensureHeader(); ensureTopButton(); setActiveLink(); updateOnScroll(); }
+  function syncSharedUi() { installBrandRules(); ensureHeader(); ensureTopButton(); setActiveLink(); updateOnScroll(); }
 
   function init() {
     syncSharedUi();
