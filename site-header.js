@@ -36,11 +36,20 @@
     const style = document.createElement('style');
     style.id = 'site-header-brand-rules';
     style.textContent = `
-      .site-header__brand,.site-footer__brand{font-family:Michroma,Unbounded,Inter,system-ui,sans-serif!important;font-size:14px!important;font-weight:700!important;letter-spacing:0!important;word-spacing:0!important}
+      .site-header__brand,.site-footer__brand{font-family:Michroma,Unbounded,Inter,system-ui,sans-serif!important;font-size:14px!important;font-weight:700!important;letter-spacing:0!important;word-spacing:0!important;white-space:nowrap!important}
       .site-header__brand .site-brand-name,.site-footer__brand .site-brand-name{white-space:nowrap!important;word-spacing:0!important}
       .site-brand-hyphen{font-family:Arial,Helvetica,sans-serif!important;color:#cf2026!important;font-weight:900!important}
-      @media(max-width:900px){.site-header__brand{font-size:14px!important}}
-      @media(max-width:560px){.site-header__brand{font-size:14px!important}}
+      .site-footer{background:#0d0f15;color:#b9bdcb;font-family:Inter,Arial,sans-serif}
+      .site-footer__grid{max-width:1240px;margin:0 auto;padding:46px 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px}
+      .site-footer__brand{display:flex;align-items:center;gap:12px;color:#fff!important;margin-bottom:14px;text-decoration:none;line-height:1!important}
+      .site-footer__brand .site-header__brand-mark{width:44px;height:42px;flex:0 0 44px}
+      .site-footer__grid>div>p{font-size:13px;margin:0;line-height:1.7}
+      .site-footer__grid h3{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;margin:0 0 14px}
+      .site-footer__links{display:flex;flex-direction:column;gap:9px;font-size:13px}.site-footer__links a,.site-footer__links span{color:#b9bdcb}
+      .site-footer__bottom{border-top:1px solid rgba(255,255,255,.08);padding:18px 28px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:space-between;font-size:10.5px;color:#6a6f80}
+      .site-footer__bottom>a{display:flex;align-items:center;gap:12px;color:#b9bdcb!important;text-decoration:none}.site-footer__bottom img{height:30px;width:auto;object-fit:contain;filter:brightness(0) invert(1) opacity(.85)}
+      @media(max-width:900px){.site-header__brand{font-size:14px!important}.site-footer__grid{padding:38px 22px;grid-template-columns:1fr;gap:30px}.site-footer__bottom{padding:16px 22px}}
+      @media(max-width:560px){.site-header__brand,.site-footer__brand{font-size:14px!important}}
     `;
     document.head.appendChild(style);
   }
@@ -51,9 +60,7 @@
   function replaceCreateFooter() {
     if (!isCreatePage() || !document.body) return;
     document.querySelectorAll('body > footer').forEach((footer) => footer.remove());
-    if (!document.querySelector('body > .site-footer')) {
-      document.body.insertAdjacentHTML('beforeend', FOOTER_HTML);
-    }
+    if (!document.querySelector('body > .site-footer')) document.body.insertAdjacentHTML('beforeend', FOOTER_HTML);
   }
 
   function ensureHeader() {
@@ -97,23 +104,15 @@
     const buttons = Array.from(document.querySelectorAll('.site-top'));
     let top = buttons[0] || null;
     buttons.slice(1).forEach((extra) => extra.remove());
-    if (!top) {
-      top = document.createElement('button'); top.type = 'button'; top.className = 'site-top';
-      top.setAttribute('aria-label', 'Наверх'); top.title = 'Наверх'; top.textContent = '↑'; root.appendChild(top);
-    } else if (isInsideDc(top)) root.appendChild(top);
-    if (!top.__scrollTopBound) {
-      top.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); scrollToTop(); });
-      top.__scrollTopBound = true;
-    }
+    if (!top) { top = document.createElement('button'); top.type = 'button'; top.className = 'site-top'; top.setAttribute('aria-label', 'Наверх'); top.title = 'Наверх'; top.textContent = '↑'; root.appendChild(top); }
+    else if (isInsideDc(top)) root.appendChild(top);
+    if (!top.__scrollTopBound) { top.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); scrollToTop(); }); top.__scrollTopBound = true; }
     return top;
   }
 
   function setActiveLink() {
     const current = decodeURIComponent(location.pathname.split('/').pop() || '');
-    document.querySelectorAll('.site-header__links a').forEach((a) => {
-      const href = decodeURIComponent((a.getAttribute('href') || '').split('/').pop() || '');
-      a.classList.toggle('active', href === current || (!current && href === 'Главная.dc.html'));
-    });
+    document.querySelectorAll('.site-header__links a').forEach((a) => { const href = decodeURIComponent((a.getAttribute('href') || '').split('/').pop() || ''); a.classList.toggle('active', href === current || (!current && href === 'Главная.dc.html')); });
   }
 
   function updateOnScroll() {
@@ -122,20 +121,10 @@
     const header = document.querySelector('.site-header'); if (header) header.classList.toggle('is-scrolled', y > 10);
   }
 
-  function closeMenu() {
-    const links = document.querySelector('.site-header__links'); const burger = document.querySelector('.site-header__burger');
-    if (links) links.classList.remove('is-open'); if (burger) burger.setAttribute('aria-expanded', 'false');
-  }
-
+  function closeMenu() { const links = document.querySelector('.site-header__links'); const burger = document.querySelector('.site-header__burger'); if (links) links.classList.remove('is-open'); if (burger) burger.setAttribute('aria-expanded', 'false'); }
   function syncSharedUi() { installBrandRules(); replaceCreateFooter(); ensureHeader(); ensureTopButton(); normalizeExistingFooter(); setActiveLink(); updateOnScroll(); }
 
-  function init() {
-    syncSharedUi();
-    if (!window.__siteHeaderObserver) {
-      const observer = new MutationObserver(() => syncSharedUi());
-      observer.observe(document.body, { childList: true, subtree: true }); window.__siteHeaderObserver = observer;
-    }
-  }
+  function init() { syncSharedUi(); if (!window.__siteHeaderObserver) { const observer = new MutationObserver(() => syncSharedUi()); observer.observe(document.body, { childList: true, subtree: true }); window.__siteHeaderObserver = observer; } }
 
   document.addEventListener('click', (event) => {
     const burger = event.target.closest('.site-header__burger');
