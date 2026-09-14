@@ -3,13 +3,13 @@
 
   const PHONE = '+79831981588';
   const PHONE_HREF = `tel:${PHONE}`;
+  const BRAND_NAME = 'ПРОЕКТ-СВАРКА';
+  const BRAND_HTML = `<span class="site-header__brand-mark"><img src="assets/logo-mark.svg" alt="${BRAND_NAME}"><span class="site-header__flash" aria-hidden="true"></span></span><span class="site-brand-name">ПРОЕКТ<span class="site-brand-hyphen">-</span>СВАРКА</span>`;
+
   const HEADER_HTML = `
     <header class="site-header">
       <nav class="site-header__nav">
-        <a class="site-header__brand" href="Главная.dc.html" aria-label="ПРОЕКТ-СВАРКА">
-          <span class="site-header__brand-mark"><img src="assets/logo-mark.svg" alt="ПРОЕКТ-СВАРКА"><span class="site-header__flash" aria-hidden="true"></span></span>
-          <span>ПРОЕКТ<em>-</em>СВАРКА</span>
-        </a>
+        <a class="site-header__brand" href="Главная.dc.html" aria-label="${BRAND_NAME}">${BRAND_HTML}</a>
         <button type="button" class="site-header__burger" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button>
         <div class="site-header__links">
           <a href="Главная.dc.html">Главная</a><a href="create.html">Создай своё</a><a href="Калькулятор.dc.html">Калькулятор</a><a href="Лофт-мебель.dc.html">Лофт-мебель</a><a href="Документация.dc.html">Документация</a><a href="Прайс.dc.html">Цены</a>
@@ -18,33 +18,43 @@
       </nav>
     </header>`;
 
+  const FOOTER_HTML = `
+    <footer class="site-footer">
+      <div class="site-footer__grid">
+        <div>
+          <a class="site-footer__brand" href="Главная.dc.html" aria-label="${BRAND_NAME}">${BRAND_HTML}</a>
+          <p>Сварочные и инженерные работы в регионе. Расчёт по СП и ГОСТ, цена в договоре.</p>
+        </div>
+        <div><h3>Разделы</h3><div class="site-footer__links"><a href="Калькулятор.dc.html">Калькулятор материалов</a><a href="Лофт-мебель.dc.html">Лофт-мебель</a><a href="Документация.dc.html">Документация</a><a href="Прайс.dc.html">Цены</a></div></div>
+        <div><h3>Контакты</h3><div class="site-footer__links"><a href="tel:${PHONE}">+7 983 198 15 88</a><a href="https://t.me/welding_project" target="_blank" rel="noopener">@welding_project</a><a href="mailto:ProektSvarka@yandex.ru">ProektSvarka@yandex.ru</a><span>Работаю по региону</span></div></div>
+      </div>
+      <div class="site-footer__bottom"><span>Проект-Сварка. Выезд и замер бесплатно.</span><a href="https://t.me/CompilePoint" target="_blank" rel="noopener"><img src="assets/logo-compilepoint-mark.png" alt="CompilePoint"><span>Разработано в «Точка Сборки»</span></a></div>
+    </footer>`;
+
   function installBrandRules() {
     if (document.getElementById('site-header-brand-rules')) return;
     const style = document.createElement('style');
     style.id = 'site-header-brand-rules';
     style.textContent = `
-      .site-header__brand{font-family:Michroma,Unbounded,Inter,system-ui,sans-serif!important;font-size:14px!important;font-weight:700!important;letter-spacing:0!important}
-      .site-header__brand>span:last-child{white-space:nowrap!important;word-spacing:0!important}
-      footer a[href="Главная.dc.html"]{font-family:Michroma,Unbounded,Inter,system-ui,sans-serif!important;font-size:14px!important;font-weight:700!important;line-height:1!important;letter-spacing:0!important;word-spacing:0!important}
-      footer a[href="Главная.dc.html"] .site-brand-name{white-space:nowrap!important;word-spacing:0!important}
+      .site-header__brand,.site-footer__brand{font-family:Michroma,Unbounded,Inter,system-ui,sans-serif!important;font-size:14px!important;font-weight:700!important;letter-spacing:0!important;word-spacing:0!important}
+      .site-header__brand .site-brand-name,.site-footer__brand .site-brand-name{white-space:nowrap!important;word-spacing:0!important}
+      .site-brand-hyphen{font-family:Arial,Helvetica,sans-serif!important;color:#cf2026!important;font-weight:900!important}
       @media(max-width:900px){.site-header__brand{font-size:14px!important}}
       @media(max-width:560px){.site-header__brand{font-size:14px!important}}
     `;
     document.head.appendChild(style);
   }
 
-  function normalizeFooterBrand() {
-    document.querySelectorAll('footer a[href="Главная.dc.html"]').forEach((brand) => {
-      if (brand.dataset.brandNormalized === '1') return;
-      const mark = brand.querySelector('span[style*="width:44px"], .site-header__brand-mark');
-      if (!mark) return;
-      const existingMark = mark.outerHTML;
-      brand.innerHTML = `${existingMark}<span class="site-brand-name">ПРОЕКТ<span class="site-brand-hyphen">-</span>СВАРКА</span>`;
-      brand.dataset.brandNormalized = '1';
-    });
-  }
-
+  function isCreatePage() { return /(?:^|\/)create\.html$/i.test(location.pathname); }
   function isInsideDc(node) { return !!(node && node.closest && node.closest('x-dc')); }
+
+  function replaceCreateFooter() {
+    if (!isCreatePage() || !document.body) return;
+    document.querySelectorAll('body > footer').forEach((footer) => footer.remove());
+    if (!document.querySelector('body > .site-footer')) {
+      document.body.insertAdjacentHTML('beforeend', FOOTER_HTML);
+    }
+  }
 
   function ensureHeader() {
     const root = document.body; if (!root) return null;
@@ -57,9 +67,22 @@
     }
     const dc = root.querySelector('x-dc');
     if (dc && isInsideDc(header) && dc.parentNode === root) root.insertBefore(header, dc);
+    const brand = header.querySelector('.site-header__brand');
+    if (brand) brand.innerHTML = BRAND_HTML;
     const phone = header.querySelector('.site-header__phone');
     if (phone) { phone.href = PHONE_HREF; phone.removeAttribute('target'); phone.removeAttribute('rel'); phone.setAttribute('aria-label', 'Позвонить'); }
     return header;
+  }
+
+  function normalizeExistingFooter() {
+    if (isCreatePage()) return;
+    document.querySelectorAll('footer a[href="Главная.dc.html"]').forEach((brand) => {
+      const mark = brand.querySelector('span[style*="width:44px"], .site-header__brand-mark');
+      if (!mark || brand.dataset.brandNormalized === '1') return;
+      const existingMark = mark.outerHTML;
+      brand.innerHTML = `${existingMark}<span class="site-brand-name">ПРОЕКТ<span class="site-brand-hyphen">-</span>СВАРКА</span>`;
+      brand.dataset.brandNormalized = '1';
+    });
   }
 
   function scrollToTop() {
@@ -104,7 +127,7 @@
     if (links) links.classList.remove('is-open'); if (burger) burger.setAttribute('aria-expanded', 'false');
   }
 
-  function syncSharedUi() { installBrandRules(); ensureHeader(); ensureTopButton(); normalizeFooterBrand(); setActiveLink(); updateOnScroll(); }
+  function syncSharedUi() { installBrandRules(); replaceCreateFooter(); ensureHeader(); ensureTopButton(); normalizeExistingFooter(); setActiveLink(); updateOnScroll(); }
 
   function init() {
     syncSharedUi();
