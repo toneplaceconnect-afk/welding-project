@@ -1,13 +1,13 @@
 (() => {
   'use strict';
+  if (window.__PROJECT_SVARKA_SITE_SHELL__) return;
+  window.__PROJECT_SVARKA_SITE_SHELL__ = true;
 
   const PHONE = '+79831981588';
   const BRAND = 'ПРОЕКТ-СВАРКА';
   const FLASH = '<span class="site-header__flash" aria-hidden="true"></span>';
   const BRAND_HTML = `<span class="site-header__brand-mark"><img src="assets/logo-mark.svg" alt="${BRAND}">${FLASH}</span><span class="site-brand-name">ПРОЕКТ<span class="site-brand-hyphen">-</span>СВАРКА</span>`;
-
   const HEADER_HTML = `<header class="site-header"><nav class="site-header__nav"><a class="site-header__brand" href="Главная.dc.html" aria-label="${BRAND}">${BRAND_HTML}</a><button type="button" class="site-header__burger" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button><div class="site-header__links"><a href="Главная.dc.html">Главная</a><a href="create.html">Создай своё</a><a href="Калькулятор.dc.html">Калькулятор</a><a href="Лофт-мебель.dc.html">Лофт-мебель</a><a href="Документация.dc.html">Документация</a><a href="Прайс.dc.html">Цены</a></div><a class="site-header__phone" href="tel:${PHONE}" aria-label="Позвонить"><span class="site-header__phone-dot">☎</span><span class="site-header__phone-copy"><small>ЗВОНИТЕ СЕЙЧАС</small><strong>+7 983 198 15 88</strong></span></a></nav></header>`;
-
   const FOOTER_HTML = `<footer class="site-footer"><div class="site-footer__grid"><div><a class="site-footer__brand" href="Главная.dc.html" aria-label="${BRAND}">${BRAND_HTML}</a><p>Сварочные и инженерные работы в регионе. Расчёт по СП и ГОСТ, цена в договоре.</p></div><div><h3>Разделы</h3><div class="site-footer__links"><a href="Калькулятор.dc.html">Калькулятор материалов</a><a href="Лофт-мебель.dc.html">Лофт-мебель</a><a href="Документация.dc.html">Документация</a><a href="Прайс.dc.html">Цены</a></div></div><div><h3>Контакты</h3><div class="site-footer__links"><a href="tel:${PHONE}">+7 983 198 15 88</a><a href="https://t.me/welding_project" target="_blank" rel="noopener">@welding_project</a><a href="mailto:ProektSvarka@yandex.ru">ProektSvarka@yandex.ru</a><span>Работаю по региону</span></div></div></div><div class="site-footer__bottom"><span>${BRAND}. Выезд и замер бесплатно.</span><a href="https://t.me/CompilePoint" target="_blank" rel="noopener"><img src="assets/logo-compilepoint-mark.png" alt="CompilePoint"><span>Разработано в «Точка Сборки»</span></a></div></footer>`;
 
   function renderShell() {
