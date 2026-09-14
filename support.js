@@ -42,6 +42,7 @@
         } catch (_) {}
       }
       if (!(window.React && window.ReactDOM)) throw new Error('React CDN unavailable');
+      window.__resources = window.__resources || {};
       await load('./support-runtime.js');
     } catch (e) {
       raw();
