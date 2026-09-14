@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"><link rel="stylesheet" href="mobile.css">
-  <link rel="stylesheet" href="site-header.css?v=20260914-1"><link rel="stylesheet" href="create-actions.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="site-header.css?v=20260914-2"><link rel="stylesheet" href="create-actions.css">
+<link href="https://fonts.googleapis.com/css2?family=Michroma&family=Inter:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>Создай своё — Проект-Сварка</title>
 <style>
 :root{--r:#cf2026;--d:#11131a;--i:#171a21;--m:#777d8c;--b:#f4f5f7}*{box-sizing:border-box}html,body{margin:0;background:var(--b);color:var(--i);font-family:Inter,Arial,sans-serif}button,input,textarea{font:inherit}a{text-decoration:none}.hero{background:var(--d);color:#fff}.hero-inner{max-width:1000px;margin:auto;padding:58px 28px 52px;text-align:center}.eyebrow{font:600 9px Unbounded,sans-serif;color:#8d92a3;letter-spacing:.12em;text-transform:uppercase}.hero h1{font:600 clamp(27px,4vw,45px) Unbounded,sans-serif;line-height:1.25;margin:16px auto;max-width:900px}.hero p{max-width:700px;margin:auto;color:#b9bdc9;font-size:13px;line-height:1.7}.layout{max-width:900px;margin:auto;padding:30px 22px 60px}.card{background:#fff;border:1px solid #e4e6eb;box-shadow:0 14px 40px #0f121912;padding:30px}.card h2{font:600 17px Unbounded,sans-serif;margin:0 0 9px}.hint{font-size:11px;line-height:1.7;color:var(--m);margin:0 0 20px}.section{border-top:1px solid #e8e9ed;padding-top:20px}.label{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#626876;margin-bottom:9px}.textarea{display:block;width:100%;min-height:250px;resize:vertical;border:1px solid #cfd3dc;background:#fff;padding:18px;outline:0;font-size:15px;line-height:1.65;color:var(--i)}.textarea:focus{border-color:#8c929e;box-shadow:0 0 0 3px #cf20261a}.textarea::placeholder{color:#9298a5}.drop{border:1px dashed #bfc4ce;background:#fafbfc;padding:18px;text-align:center;margin-top:13px}.drop strong{font-size:11px}.drop p{font-size:9px;color:var(--m);margin:6px 0 11px}.drop input{max-width:100%;font-size:10px}.generate{width:100%;border:0;background:var(--r);color:#fff;padding:19px;margin-top:20px;font:600 11px Unbounded,sans-serif;cursor:pointer;min-height:56px}.generate:hover{filter:brightness(1.06)}.generate:disabled{opacity:.55;cursor:wait}.status{font-size:9px;color:#717785;margin-top:10px;min-height:15px;text-align:center}.results{display:block;margin-top:18px}.result{width:100%;max-width:820px;margin:auto;aspect-ratio:4/3;background:#20232c;border:1px dashed #454a56;display:grid;place-items:center;overflow:hidden;color:#8f95a4;font-size:9px;text-align:center}.result img{width:100%;height:100%;object-fit:cover}.result.loading:after{content:'Создаём визуализацию…';color:#bfc3cc}.confirm{display:none;margin-top:15px;background:#151820;color:#fff;padding:16px}.confirm.show{display:block}.confirm strong{font:600 10px Unbounded,sans-serif}.confirm p{font-size:9px;line-height:1.6;color:#bfc3cc;margin:7px 0 0}@media(max-width:700px){.hero-inner{padding:42px 17px 38px}.hero h1{font-size:28px}.hero p{font-size:12px}.layout{padding:16px 12px 40px}.card{padding:20px 16px}.card h2{font-size:15px}.textarea{min-height:220px;padding:15px;font-size:16px}.generate{font-size:10px;padding:18px;min-height:56px}.drop{padding:16px 12px}}@media(max-width:380px){.hero-inner{padding:34px 14px 32px}.hero h1{font-size:23px}.layout{padding-left:9px;padding-right:9px}.card{padding:17px 13px}.textarea{min-height:210px}}
@@ -26,6 +26,47 @@
   </header>
 <section class="hero"><div class="hero-inner"><div class="eyebrow">Создай своё</div><h1>Расскажите, что хотите изготовить</h1><p>Опишите изделие своими словами. Не нужно знать размеры профиля, ГОСТы или специальные термины.</p></div></section>
 <main class="layout"><section class="card"><h2>Ваша идея</h2><p class="hint">Опишите изделие так, как объяснили бы мастеру. Укажите всё, что для вас важно: назначение, размеры, материалы, стиль и место использования.</p><div class="section"><div class="label">Опишите изделие</div><textarea class="textarea" id="description" placeholder="Например: хочу сделать стол для террасы 180×80 см. Чёрный металлический каркас, деревянная столешница из дуба. Современный стиль..."></textarea></div><div class="drop"><strong>Добавить фото / эскиз</strong><p>Необязательно. Фото, рисунок или пример понравившегося изделия помогут точнее понять идею.</p><input id="files" type="file" accept="image/*" multiple></div><button class="generate" id="generate">СОЗДАТЬ ВИЗУАЛИЗАЦИЮ</button><div class="status" id="status"></div><div class="results"><div class="result" id="r1">ВИЗУАЛИЗАЦИЯ</div></div><div class="confirm" id="confirm"><strong>Задание сформировано</strong><p id="confirmText"></p></div></section></main>
+<footer style="background:#0d0f15;color:#b9bdcb;font-family:Inter,Arial,sans-serif">
+    <div style="max-width:1240px;margin:0 auto;padding:46px 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px">
+      <div>
+        <a href="Главная.dc.html" style="display:flex;align-items:center;gap:12px;color:#fff;font-family:Michroma,Unbounded,Inter,system-ui,sans-serif;font-weight:700;font-size:14px;margin-bottom:14px">
+          <span style="position:relative;display:inline-flex;width:44px;height:42px;flex:0 0 auto">
+            <img src="assets/logo-mark.svg" alt="Проект-Сварка" style="width:100%;height:100%;object-fit:contain">
+            <span style="position:absolute;left:31%;top:77%;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#ff5a60 35%,rgba(207,32,38,0) 70%);animation:site-logo-flash 5s ease-in-out .8s infinite;pointer-events:none"></span>
+          </span>
+          ПРОЕКТ<span style="color:#cf2026;font-family:Arial,Helvetica,sans-serif;font-weight:900;margin:0 -.22em">-</span>СВАРКА
+        </a>
+        <p style="font-size:13px;margin:0;line-height:1.7">Сварочные и инженерные работы в регионе. Расчёт по СП и ГОСТ, цена в договоре.</p>
+      </div>
+      <div>
+        <h3 style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;margin:0 0 14px">Разделы</h3>
+        <div style="display:flex;flex-direction:column;gap:9px;font-size:13px">
+          <a href="Калькулятор.dc.html" style="color:#b9bdcb">Калькулятор материалов</a>
+          <a href="Лофт-мебель.dc.html" style="color:#b9bdcb">Лофт-мебель</a>
+          <a href="Документация.dc.html" style="color:#b9bdcb">Документация</a>
+          <a href="Прайс.dc.html" style="color:#b9bdcb">Цены</a>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;margin:0 0 14px">Контакты</h3>
+        <div style="display:flex;flex-direction:column;gap:9px;font-size:13px">
+          <a href="tel:+79831981588" style="color:#b9bdcb">+7 983 198 15 88</a>
+          <a href="https://t.me/welding_project" target="_blank" rel="noopener" style="color:#b9bdcb">@welding_project</a>
+          <a href="mailto:ProektSvarka@yandex.ru" style="color:#b9bdcb">ProektSvarka@yandex.ru</a>
+          <span>Работаю по региону</span>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,.08)">
+      <div style="max-width:1240px;margin:0 auto;padding:18px 28px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:space-between;font-size:10.5px;color:#6a6f80">
+        <span>Проект-Сварка. Выезд и замер бесплатно.</span>
+        <a href="https://t.me/CompilePoint" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;color:#b9bdcb">
+          <img src="assets/logo-compilepoint-mark.png" alt="CompilePoint" style="height:30px;width:auto;object-fit:contain;filter:brightness(0) invert(1) opacity(.85)">
+          <span>Разработано в «Точка Сборки»</span>
+        </a>
+      </div>
+    </div>
+  </footer>
 <script>
 const $=id=>document.getElementById(id);
 function fileToData(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{const max=512;const scale=Math.min(1,max/img.width,max/img.height);const w=Math.max(1,Math.round(img.width*scale));const h=Math.max(1,Math.round(img.height*scale));const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);resolve(canvas.toDataURL('image/jpeg',0.82))};img.onerror=reject;img.src=reader.result};reader.onerror=reject;reader.readAsDataURL(file)})}
@@ -33,5 +74,5 @@ function buildPrompt(){return $('description').value.trim()}
 $('generate').onclick=async()=>{const btn=$('generate'),text=$('description').value.trim();if(!text){$('status').textContent='Сначала опишите, что хотите изготовить.';$('description').focus();return}btn.disabled=true;$('status').textContent='Создаём визуализацию…';$('r1').className='result loading';$('r1').textContent='';$('confirm').classList.remove('show');try{const refs=await Promise.all([...$('files').files].slice(0,2).map(fileToData));const res=await fetch('/api/generate-sketch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:buildPrompt(),count:1,referenceImages:refs})});const data=await res.json();if(!res.ok)throw Error(data.error||'Не удалось создать визуализацию');const image=data.images?.[0];if(!image)throw Error('Визуализация не получена');$('r1').className='result';$('r1').innerHTML=`<img src="${image}" alt="Визуализация изделия">`;$('status').textContent='Готово.';$('confirm').classList.add('show');$('confirmText').textContent='Визуализация создана по вашему описанию.'}catch(e){$('status').textContent='Ошибка: '+e.message;$('r1').className='result';$('r1').textContent='Не удалось создать'}finally{btn.disabled=false}};
 </script><script src="/create-actions.js"></script>
   <button type="button" class="site-top" aria-label="Наверх" title="Наверх">↑</button>
-  <script src="/site-header.js?v=20260914-1" defer></script>
+  <script src="/site-header.js?v=20260914-2" defer></script>
 </body></html>
