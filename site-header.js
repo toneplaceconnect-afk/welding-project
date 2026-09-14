@@ -1,6 +1,8 @@
 (() => {
   'use strict';
 
+  const PHONE = '+79831981588';
+  const PHONE_HREF = `tel:${PHONE}`;
   const HEADER_HTML = `
     <header class="site-header">
       <nav class="site-header__nav">
@@ -12,7 +14,9 @@
         <div class="site-header__links">
           <a href="Главная.dc.html">Главная</a><a href="create.html">Создай своё</a><a href="Калькулятор.dc.html">Калькулятор</a><a href="Лофт-мебель.dc.html">Лофт-мебель</a><a href="Документация.dc.html">Документация</a><a href="Прайс.dc.html">Цены</a>
         </div>
-        <a class="site-header__phone" href="https://t.me/welding_project" target="_blank" rel="noopener" aria-label="Связаться в Telegram"><span class="site-header__phone-dot">☎</span><span class="site-header__phone-copy"><small>ЗВОНИТЕ СЕЙЧАС</small><strong>+7 983 198 15 88</strong></span></a>
+        <a class="site-header__phone" href="${PHONE_HREF}" aria-label="Позвонить">
+          <span class="site-header__phone-dot">☎</span><span class="site-header__phone-copy"><small>ЗВОНИТЕ СЕЙЧАС</small><strong>+7 983 198 15 88</strong></span>
+        </a>
       </nav>
     </header>`;
 
@@ -29,12 +33,12 @@
     }
     const dc = root.querySelector('x-dc');
     if (dc && isInsideDc(header) && dc.parentNode === root) root.insertBefore(header, dc);
+    const phone = header.querySelector('.site-header__phone');
+    if (phone) { phone.href = PHONE_HREF; phone.removeAttribute('target'); phone.removeAttribute('rel'); phone.setAttribute('aria-label', 'Позвонить'); }
     return header;
   }
 
   function scrollToTop() {
-    // Use all common scrolling roots; this remains reliable if a page/runtime
-    // changes which element owns the scroll position.
     try { window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); } catch (_) { window.scrollTo(0, 0); }
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
@@ -50,8 +54,6 @@
       top = document.createElement('button'); top.type = 'button'; top.className = 'site-top';
       top.setAttribute('aria-label', 'Наверх'); top.title = 'Наверх'; top.textContent = '↑'; root.appendChild(top);
     } else if (isInsideDc(top)) root.appendChild(top);
-    // Direct handler is intentionally attached to the actual button. This avoids
-    // losing the action when a page's runtime replaces event propagation.
     if (!top.__scrollTopBound) {
       top.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); scrollToTop(); });
       top.__scrollTopBound = true;
