@@ -47,14 +47,13 @@
     }
   });
 
-  window.addEventListener('scroll', () => {
+  function updateOnScroll() {
     const top = document.querySelector('.site-top');
     if (top) top.classList.toggle('is-visible', window.scrollY > 180);
-  }, { passive: true });
+    const header = document.querySelector('.site-header');
+    if (header) header.classList.toggle('is-scrolled', window.scrollY > 10);
+  }
 
-  // на случай если страница уже проскроллена к моменту загрузки скрипта
-  window.addEventListener('load', () => {
-    const top = document.querySelector('.site-top');
-    if (top) top.classList.toggle('is-visible', window.scrollY > 180);
-  });
+  window.addEventListener('scroll', updateOnScroll, { passive: true });
+  window.addEventListener('load', updateOnScroll);
 })();
