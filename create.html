@@ -5,7 +5,7 @@
 <meta name="theme-color" content="#11131a">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="stylesheet" href="mobile.css">
-<link rel="stylesheet" href="site-header.css?v=20260914-8">
+<link rel="stylesheet" href="site-header.css?v=20260914-10">
 <link rel="stylesheet" href="create-actions.css">
 <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Unbounded:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <title>Создай своё — Проект-Сварка</title>
@@ -23,5 +23,5 @@ function buildPrompt(){return $('description').value.trim()}
 $('generate').onclick=async()=>{const btn=$('generate'),text=$('description').value.trim();if(!text){$('status').textContent='Сначала опишите, что хотите изготовить.';$('description').focus();return}btn.disabled=true;$('status').textContent='Создаём визуализацию…';$('r1').className='result loading';$('r1').textContent='';$('confirm').classList.remove('show');try{const refs=await Promise.all([...$('files').files].slice(0,2).map(fileToData));const res=await fetch('/api/generate-sketch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:buildPrompt(),count:1,referenceImages:refs})});const data=await res.json();if(!res.ok)throw Error(data.error||'Не удалось создать визуализацию');const image=data.images?.[0];if(!image)throw Error('Визуализация не получена');$('r1').className='result';$('r1').innerHTML=`<img src="${image}" alt="Визуализация изделия">`;$('status').textContent='Готово.';$('confirm').classList.add('show');$('confirmText').textContent='Визуализация создана по вашему описанию.'}catch(e){$('status').textContent='Ошибка: '+e.message;$('r1').className='result';$('r1').textContent='Не удалось создать'}finally{btn.disabled=false}};
 </script>
 <script src="/create-actions.js"></script>
-<script src="/site-shell.js?v=20260914-8" defer></script>
+<script src="/site-shell.js?v=20260914-10" defer></script>
 </body></html>

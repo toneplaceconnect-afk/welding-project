@@ -1,5 +1,4 @@
 /* Create page: final layout and result actions. Keep this file limited to the current one-result constructor. */
-html,body,body *:not(.site-header,.site-header *){font-family:'Michroma','Unbounded','Inter',system-ui,sans-serif !important}
 .brand,.brand span,.eyebrow,h1,h2,h3,h4,h5,h6,.generate,.create-action,.zoom-title,.zoom-ui button{font-family:'Unbounded','Michroma','Inter',system-ui,sans-serif !important}
 h1,h2,h3,h4,h5,h6{letter-spacing:-.02em !important}
 p,li,figcaption{letter-spacing:normal !important;word-spacing:normal !important}
