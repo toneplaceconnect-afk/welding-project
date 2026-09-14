@@ -15,10 +15,11 @@
 
   const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
 
+  // DC templates still contain legacy chrome. It must never enter the React tree,
+  // because site-shell.js is the single source of truth for header/footer.
   const removeEmbeddedShell = () => {
     const dc = document.querySelector('x-dc');
-    if (!dc) return;
-    dc.querySelectorAll('header.site-header, footer, .site-top').forEach(node => node.remove());
+    if (dc) dc.querySelectorAll('header.site-header, footer, .site-top').forEach(node => node.remove());
     document.querySelectorAll('body > footer, body > .site-top').forEach(node => node.remove());
   };
 
