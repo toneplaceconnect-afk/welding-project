@@ -13,6 +13,8 @@
     document.head.appendChild(s);
   });
 
+  const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
+
   const extractShell = () => {
     const dc = document.querySelector('x-dc');
     if (!dc || !document.body) return;
@@ -29,7 +31,7 @@
     s.textContent = 'x-dc{display:block!important}';
     s.dataset.dcFallback = 'true';
     document.head.appendChild(s);
-    console.warn('[dc] React unavailable; raw page kept visible');
+    console.warn('[dc] React unavailable or DC runtime failed; raw page kept visible');
   };
 
   const boot = async () => {
@@ -44,6 +46,9 @@
       if (!(window.React && window.ReactDOM)) throw new Error('React runtime unavailable');
       window.__resources = window.__resources || {};
       await load('./support-runtime.js?v=20260914-2');
+      await nextFrame();
+      const root = document.getElementById('dc-root');
+      if (!root || !root.children.length) throw new Error('DC runtime did not mount the page');
     } catch (e) {
       raw();
       console.error('[dc] bootstrap failed:', e);
