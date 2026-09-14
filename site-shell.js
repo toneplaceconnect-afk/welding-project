@@ -12,7 +12,7 @@
 
   function renderShell() {
     if (!document.body) return;
-    document.querySelectorAll('.site-header, body > footer, .site-top').forEach(node => node.remove());
+    document.querySelectorAll('.site-header, footer, .site-top').forEach(node => node.remove());
     document.body.insertAdjacentHTML('afterbegin', HEADER_HTML);
     document.body.insertAdjacentHTML('beforeend', FOOTER_HTML);
     const top = document.createElement('button');

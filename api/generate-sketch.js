@@ -58,7 +58,7 @@ async function analyzeBrief(clientBrief, accountId, token) {
       max_tokens: 900
     })
   });
-  if (!r.ok) throw Error('Cloudflare semantic analysis ' + r.status + ': ' + (await r.text()).slice(0, 700));
+  if (!r.ok) throw Error('Сервис анализа временно недоступен. Попробуйте позже.');
   const d = await r.json();
   const text = d?.result?.response || d?.result?.choices?.[0]?.message?.content || d?.choices?.[0]?.message?.content;
   if (!text) throw Error('Cloudflare semantic analysis did not return a specification.');
@@ -84,11 +84,10 @@ async function generateImage(prompt, refs, accountId, token) {
   });
 
   if (!r.ok) {
-    const details = (await r.text()).slice(0, 900);
     if (r.status === 403 || r.status === 429) {
-      throw Error('Cloudflare Workers AI временно недоступен (' + r.status + '). Проверьте дневной бесплатный лимит Workers AI и права API-токена. ' + details);
+      throw Error('Сервис генерации временно недоступен. Проверьте дневной лимит и попробуйте позже.');
     }
-    throw Error('Cloudflare image generation ' + r.status + ': ' + details);
+    throw Error('Сервис генерации временно недоступен. Попробуйте позже.');
   }
 
   const d = await r.json();
@@ -115,6 +114,8 @@ export default async function handler(request, response) {
   const clientPrompt = String(body.prompt || '').trim();
   const refs = Array.isArray(body.referenceImages) ? body.referenceImages.slice(0, 2) : [];
   if (!clientPrompt) return response.status(400).json({ error: 'Пустой запрос (prompt).' });
+  if (clientPrompt.length > 3000) return response.status(400).json({ error: 'Описание слишком длинное. Максимум 3000 символов.' });
+  if (refs.length > 2) return response.status(400).json({ error: 'Максимум 2 изображения.' });
 
   try {
     let visualSpec = clientPrompt;
