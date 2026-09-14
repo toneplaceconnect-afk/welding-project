@@ -6,8 +6,8 @@
   const HEADER_HTML = `
     <header class="site-header">
       <nav class="site-header__nav">
-        <a class="site-header__brand" href="Главная.dc.html" aria-label="Проект-Сварка">
-          <span class="site-header__brand-mark"><img src="assets/logo-mark.svg" alt="Проект-Сварка"><span class="site-header__flash" aria-hidden="true"></span></span>
+        <a class="site-header__brand" href="Главная.dc.html" aria-label="ПРОЕКТ-СВАРКА">
+          <span class="site-header__brand-mark"><img src="assets/logo-mark.svg" alt="ПРОЕКТ-СВАРКА"><span class="site-header__flash" aria-hidden="true"></span></span>
           <span>ПРОЕКТ<em>-</em>СВАРКА</span>
         </a>
         <button type="button" class="site-header__burger" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -23,12 +23,25 @@
     const style = document.createElement('style');
     style.id = 'site-header-brand-rules';
     style.textContent = `
-      .site-header__brand{font-family:Michroma,Unbounded,Inter,system-ui,sans-serif!important;font-size:14px!important;font-weight:700!important}
-      footer a[href="Главная.dc.html"]{font-family:Michroma,Unbounded,Inter,system-ui,sans-serif!important;font-size:14px!important;font-weight:700!important;line-height:1!important}
+      .site-header__brand{font-family:Michroma,Unbounded,Inter,system-ui,sans-serif!important;font-size:14px!important;font-weight:700!important;letter-spacing:0!important}
+      .site-header__brand>span:last-child{white-space:nowrap!important;word-spacing:0!important}
+      footer a[href="Главная.dc.html"]{font-family:Michroma,Unbounded,Inter,system-ui,sans-serif!important;font-size:14px!important;font-weight:700!important;line-height:1!important;letter-spacing:0!important;word-spacing:0!important}
+      footer a[href="Главная.dc.html"] .site-brand-name{white-space:nowrap!important;word-spacing:0!important}
       @media(max-width:900px){.site-header__brand{font-size:14px!important}}
       @media(max-width:560px){.site-header__brand{font-size:14px!important}}
     `;
     document.head.appendChild(style);
+  }
+
+  function normalizeFooterBrand() {
+    document.querySelectorAll('footer a[href="Главная.dc.html"]').forEach((brand) => {
+      if (brand.dataset.brandNormalized === '1') return;
+      const mark = brand.querySelector('span[style*="width:44px"], .site-header__brand-mark');
+      if (!mark) return;
+      const existingMark = mark.outerHTML;
+      brand.innerHTML = `${existingMark}<span class="site-brand-name">ПРОЕКТ<span class="site-brand-hyphen">-</span>СВАРКА</span>`;
+      brand.dataset.brandNormalized = '1';
+    });
   }
 
   function isInsideDc(node) { return !!(node && node.closest && node.closest('x-dc')); }
@@ -91,7 +104,7 @@
     if (links) links.classList.remove('is-open'); if (burger) burger.setAttribute('aria-expanded', 'false');
   }
 
-  function syncSharedUi() { installBrandRules(); ensureHeader(); ensureTopButton(); setActiveLink(); updateOnScroll(); }
+  function syncSharedUi() { installBrandRules(); ensureHeader(); ensureTopButton(); normalizeFooterBrand(); setActiveLink(); updateOnScroll(); }
 
   function init() {
     syncSharedUi();
