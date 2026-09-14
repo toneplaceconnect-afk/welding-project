@@ -1,8 +1,8 @@
 (() => {
   'use strict';
 
-  const REACT = ['https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js','https://unpkg.com/react@18.3.1/umd/react.production.min.js'];
-  const DOM = ['https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js','https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js'];
+  const REACT = ['/vendor/react.production.min.js','https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js','https://unpkg.com/react@18.3.1/umd/react.production.min.js'];
+  const DOM = ['/vendor/react-dom.production.min.js','https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js','https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js'];
 
   const load = src => new Promise((resolve, reject) => {
     const s = document.createElement('script');
@@ -19,7 +19,7 @@
     Array.from(dc.children).filter(node => node.matches('header.site-header, footer, .site-top')).forEach(node => document.body.appendChild(node));
   };
 
-  const loadShell = () => load('./site-shell.js').catch(err => console.error('[site-shell] failed to load:', err));
+  const loadShell = () => load('./site-shell.js?v=20260914-9').catch(err => console.error('[site-shell] failed to load:', err));
 
   const raw = () => {
     document.querySelectorAll('style').forEach(s => {
@@ -35,15 +35,15 @@
   const boot = async () => {
     extractShell();
     try {
-      for (let i = 0; i < 2 && !(window.React && window.ReactDOM); i++) {
+      for (let i = 0; i < REACT.length && !(window.React && window.ReactDOM); i++) {
         try {
           if (!window.React) await load(REACT[i]);
           if (!window.ReactDOM) await load(DOM[i]);
         } catch (_) {}
       }
-      if (!(window.React && window.ReactDOM)) throw new Error('React CDN unavailable');
+      if (!(window.React && window.ReactDOM)) throw new Error('React runtime unavailable');
       window.__resources = window.__resources || {};
-      await load('./support-runtime.js');
+      await load('./support-runtime.js?v=20260914-2');
     } catch (e) {
       raw();
       console.error('[dc] bootstrap failed:', e);
