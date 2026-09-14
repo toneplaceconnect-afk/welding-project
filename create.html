@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"><link rel="stylesheet" href="mobile.css">
-  <link rel="stylesheet" href="site-header.css?v=20260914-6"><link rel="stylesheet" href="create-actions.css">
+  <link rel="stylesheet" href="site-header.css?v=20260914-7"><link rel="stylesheet" href="create-actions.css">
 <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Inter:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>Создай своё — Проект-Сварка</title>
 <style>
@@ -13,8 +13,8 @@
 <body>
 <header class="site-header">
     <nav class="site-header__nav">
-      <a class="site-header__brand" href="Главная.dc.html" aria-label="Проект-Сварка">
-        <span class="site-header__brand-mark"><img src="assets/logo-mark.svg" alt="Проект-Сварка"><span class="site-header__flash"></span></span><span>ПРОЕКТ<em>-</em>СВАРКА</span>
+      <a class="site-header__brand" href="Главная.dc.html" aria-label="ПРОЕКТ-СВАРКА">
+        <span class="site-header__brand-mark"><img src="assets/logo-mark.svg" alt="ПРОЕКТ-СВАРКА"><span class="site-header__flash" aria-hidden="true"></span></span><span>ПРОЕКТ<em>-</em>СВАРКА</span>
       </a>
       <button type="button" class="site-header__burger" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button>
       <div class="site-header__links"><a href="Главная.dc.html">Главная</a><a href="create.html" class="active">Создай своё</a><a href="Калькулятор.dc.html">Калькулятор</a><a href="Лофт-мебель.dc.html">Лофт-мебель</a><a href="Документация.dc.html">Документация</a><a href="Прайс.dc.html">Цены</a></div>
@@ -27,7 +27,7 @@
     <div style="max-width:1240px;margin:0 auto;padding:46px 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px">
       <div>
         <a href="Главная.dc.html" style="display:flex;align-items:center;gap:12px;color:#fff;font-family:Michroma,Unbounded,Inter,system-ui,sans-serif;font-weight:700;font-size:14px;margin-bottom:14px">
-          <span style="position:relative;display:inline-flex;width:44px;height:42px;flex:0 0 auto"><img src="assets/logo-mark.svg" alt="Проект-Сварка" style="width:100%;height:100%;object-fit:contain"><span style="position:absolute;left:31%;top:77%;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#ff5a60 35%,rgba(207,32,38,0) 70%);animation:site-logo-flash 5s ease-in-out .8s infinite;pointer-events:none"></span></span>
+          <span style="position:relative;display:inline-flex;width:44px;height:42px;flex:0 0 auto"><img src="assets/logo-mark.svg" alt="ПРОЕКТ-СВАРКА" style="width:100%;height:100%;object-fit:contain"><span style="position:absolute;left:31%;top:77%;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#ff5a60 35%,rgba(207,32,38,0) 70%);animation:site-logo-flash 5s ease-in-out .8s infinite;pointer-events:none"></span></span>
           ПРОЕКТ<span style="color:#cf2026;font-family:Arial,Helvetica,sans-serif;font-weight:900">-</span>СВАРКА
         </a>
         <p style="font-size:13px;margin:0;line-height:1.7">Сварочные и инженерные работы в регионе. Расчёт по СП и ГОСТ, цена в договоре.</p>
@@ -44,5 +44,5 @@ function buildPrompt(){return $('description').value.trim()}
 $('generate').onclick=async()=>{const btn=$('generate'),text=$('description').value.trim();if(!text){$('status').textContent='Сначала опишите, что хотите изготовить.';$('description').focus();return}btn.disabled=true;$('status').textContent='Создаём визуализацию…';$('r1').className='result loading';$('r1').textContent='';$('confirm').classList.remove('show');try{const refs=await Promise.all([...$('files').files].slice(0,2).map(fileToData));const res=await fetch('/api/generate-sketch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:buildPrompt(),count:1,referenceImages:refs})});const data=await res.json();if(!res.ok)throw Error(data.error||'Не удалось создать визуализацию');const image=data.images?.[0];if(!image)throw Error('Визуализация не получена');$('r1').className='result';$('r1').innerHTML=`<img src="${image}" alt="Визуализация изделия">`;$('status').textContent='Готово.';$('confirm').classList.add('show');$('confirmText').textContent='Визуализация создана по вашему описанию.'}catch(e){$('status').textContent='Ошибка: '+e.message;$('r1').className='result';$('r1').textContent='Не удалось создать'}finally{btn.disabled=false}};
 </script><script src="/create-actions.js"></script>
   <button type="button" class="site-top" aria-label="Наверх" title="Наверх">↑</button>
-  <script src="/site-header.js?v=20260914-6" defer></script>
+  <script src="/site-header.js?v=20260914-7" defer></script>
 </body></html>
