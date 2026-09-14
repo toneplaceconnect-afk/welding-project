@@ -1,0 +1,58 @@
+/* Project-Svarka DC bootstrap: prefer a locally served runtime and provide a visible raw-template fallback. */
+(() => {
+  'use strict';
+  const RUNTIME = './support-runtime.js';
+  const REACT = 'https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js';
+  const REACT_DOM = 'https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js';
+  const REACT_FALLBACK = 'https://unpkg.com/react@18.3.1/umd/react.production.min.js';
+  const REACT_DOM_FALLBACK = 'https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js';
+
+  function load(src) {
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.async = false;
+      s.onload = resolve;
+      s.onerror = () => reject(new Error('failed to load ' + src));
+      document.head.appendChild(s);
+    });
+  }
+
+  function showRaw() {
+    document.querySelectorAll('style[data-dc-hide-raw]').forEach(s => s.remove());
+    const style = document.createElement('style');
+    style.setAttribute('data-dc-fallback', 'true');
+    style.textContent = 'x-dc{display:block!important}';
+    document.head.appendChild(style);
+    document.documentElement.classList.add('dc-raw-fallback');
+    console.warn('[dc] React runtime unavailable; showing the static page instead.');
+  }
+
+  async function loadReactPair() {
+    if (window.React && window.ReactDOM) return;
+    try {
+      await Promise.all([load(REACT), load(REACT_DOM)]);
+      return;
+    } catch (_) {
+      if (window.React && window.ReactDOM) return;
+    }
+    try {
+      if (!window.React) await load(REACT_FALLBACK);
+      if (!window.ReactDOM) await load(REACT_DOM_FALLBACK);
+      if (window.React && window.ReactDOM) return;
+    } catch (_) {}
+    throw new Error('React CDN unavailable');
+  }
+
+  async function boot() {
+    try {
+      await loadReactPair();
+      await load(RUNTIME);
+    } catch (err) {
+      showRaw();
+      console.error('[dc] bootstrap failed:', err);
+    }
+  }
+
+  boot();
+})();
