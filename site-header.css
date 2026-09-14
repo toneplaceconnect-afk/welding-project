@@ -2,6 +2,11 @@
 .site-header,.site-header *{box-sizing:border-box}
 .site-header{position:sticky;top:0;z-index:1000;width:100%;background:#11131a!important;backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom:1px solid rgba(255,255,255,.08);font-family:Inter,Arial,sans-serif;transition:border-color .3s ease}
 .site-header.is-scrolled{background:#11131a!important;border-bottom-color:rgba(255,255,255,.12)}
+/* На странице «Создай своё» iOS Safari может некорректно обрабатывать sticky
+   из-за overflow-контекста страницы. Используем тот же визуальный header,
+   но fixed только здесь; отступ возвращает header в поток документа. */
+body:has(> .hero){padding-top:66px}
+body:has(> .hero)>.site-header{position:fixed;left:0;right:0;top:0}
 .site-header__nav{max-width:1240px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:18px;position:relative;min-width:0}
 .site-header__brand{display:flex;align-items:center;gap:12px;color:#fff!important;font-family:Michroma,Unbounded,Inter,system-ui,sans-serif!important;font-weight:700!important;font-size:14px!important;line-height:1;text-decoration:none;white-space:nowrap;min-width:0;flex:0 1 auto}
 .site-header__brand:hover,.site-header__brand:focus-visible,.site-header__brand:visited{color:#fff!important}
@@ -30,4 +35,5 @@
 html.js-reveal [data-reveal]{opacity:1!important;transform:none!important}
 @media(max-width:900px){
 .site-header__nav{flex-wrap:nowrap;gap:10px;padding:9px 14px}.site-header__brand{min-width:0;flex:1 1 auto;font-size:10.5px!important;gap:7px}.site-header__brand-mark{width:38px;height:36px;flex-basis:38px}.site-header__burger{display:block}.site-header__phone{margin-left:0;gap:0}.site-header__phone-copy{display:none}.site-header__phone-dot{width:28px;height:28px;font-size:12px}.site-header__links{display:none;position:absolute;top:100%;left:0;right:0;z-index:1001;flex-direction:column;gap:0;flex-wrap:nowrap;background:#11131a;padding:6px 22px 14px;box-shadow:0 18px 30px rgba(0,0,0,.35)}.site-header__links.is-open{display:flex}.site-header__links a{width:100%;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px!important}.site-header__links a:last-child{border-bottom:0}.site-top{right:14px;bottom:14px;width:44px;height:44px}}
-@media(max-width:560px){.site-header__nav{padding:8px 12px;gap:8px}.site-header__brand{font-size:10px!important;gap:6px}.site-header__brand-mark{width:34px;height:34px;flex-basis:34px}.site-header__burger{width:32px;height:32px;flex-basis:32px}.site-header__phone-dot{width:27px;height:27px;font-size:11px}.site-top{right:12px;bottom:12px;width:46px;height:46px;font-size:21px}}
+@media(max-width:900px){body:has(> .hero){padding-top:54px}}
+@media(max-width:560px){.site-header__nav{padding:8px 12px;gap:8px}.site-header__brand{font-size:10px!important;gap:6px}.site-header__brand-mark{width:34px;height:34px;flex-basis:34px}.site-header__burger{width:32px;height:32px;flex-basis:32px}.site-header__phone-dot{width:27px;height:27px;font-size:11px}.site-top{right:12px;bottom:12px;width:46px;height:46px;font-size:21px}body:has(> .hero){padding-top:50px}}
