@@ -15,13 +15,14 @@
 
   const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
 
-  const extractShell = () => {
+  const removeEmbeddedShell = () => {
     const dc = document.querySelector('x-dc');
-    if (!dc || !document.body) return;
-    Array.from(dc.children).filter(node => node.matches('header.site-header, footer, .site-top')).forEach(node => document.body.appendChild(node));
+    if (!dc) return;
+    dc.querySelectorAll('header.site-header, footer, .site-top').forEach(node => node.remove());
+    document.querySelectorAll('body > footer, body > .site-top').forEach(node => node.remove());
   };
 
-  const loadShell = () => load('./site-shell.js?v=20260914-9').catch(err => console.error('[site-shell] failed to load:', err));
+  const loadShell = () => load('./site-shell.js?v=20260914-10').catch(err => console.error('[site-shell] failed to load:', err));
 
   const raw = () => {
     document.querySelectorAll('style').forEach(s => {
@@ -35,7 +36,7 @@
   };
 
   const boot = async () => {
-    extractShell();
+    removeEmbeddedShell();
     try {
       for (let i = 0; i < REACT.length && !(window.React && window.ReactDOM); i++) {
         try {
