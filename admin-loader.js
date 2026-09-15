@@ -101,6 +101,23 @@
       const heroImg = document.querySelector('#loft-hero');
       if (heroImg) heroImg.setAttribute('src', p.hero_image);
     }
+    setText('#loft-why-title', p.why_title);
+    setText('#loft-why-text', p.why_text);
+    setAttr('#loft-why-cta', 'href', p.why_cta_href);
+    setText('#loft-why-cta', p.why_cta);
+    setText('#loft-products-eyebrow', p.products_eyebrow);
+    setText('#loft-products-title', p.products_title);
+    setText('#loft-products-text', p.products_text);
+    setText('#loft-process-title', p.process_title);
+    setText('#loft-process-text', p.process_text);
+    if (p.process_steps) {
+      const ol = document.getElementById('loft-process-steps');
+      if (ol) ol.innerHTML = p.process_steps.map(s => '<li>' + s + '</li>').join('');
+    }
+    setAttr('#loft-process-cta1', 'href', p.process_cta1_href);
+    setText('#loft-process-cta1', p.process_cta1);
+    setAttr('#loft-process-cta2', 'href', p.process_cta2_href);
+    setText('#loft-process-cta2', p.process_cta2);
     if (p.products) {
       const grid = document.getElementById('katalog-products');
       if (grid) {
