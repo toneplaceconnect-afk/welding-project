@@ -261,9 +261,8 @@ function renderHome() {
     ${arraySection('pages.home.directions', p.directions, [
       { key: 'title', label: 'Название' },
       { key: 'text', label: 'Описание', type: 'textarea' },
-      { key: 'image', label: 'Фото (путь)' }
+      { key: 'image', label: 'Фото' }
     ], 'Карточки направлений')}
-    ${dropZone('pages.home.directions_images')}
 
     <div class="section-title">Лофт-галерея</div>
     ${field('pages.home.loft_eyebrow', 'Eyebrow', p.loft_eyebrow)}
@@ -271,9 +270,8 @@ function renderHome() {
     ${field('pages.home.loft_text', 'Текст', p.loft_text, 'textarea')}
     ${arraySection('pages.home.loft_items', p.loft_items, [
       { key: 'caption', label: 'Подпись' },
-      { key: 'image', label: 'Фото (путь)' }
+      { key: 'image', label: 'Фото' }
     ], 'Фото галерея')}
-    ${dropZone('pages.home.loft_images')}
 
     <div class="section-title">Заявка</div>
     ${field('pages.home.form_eyebrow', 'Eyebrow', p.form_eyebrow)}
@@ -425,6 +423,10 @@ async function uploadArrayImage(arrayKey, index, fieldKey, file) {
     for (const p of parts) { if (!obj[p]) obj[p] = []; obj = obj[p]; }
     if (obj[index]) {
       obj[index][fieldKey] = res.url;
+      if (fieldKey === 'image') {
+        if (!obj[index].images) obj[index].images = [];
+        if (!obj[index].images.includes(res.url)) obj[index].images.push(res.url);
+      }
       renderPanel(currentTab);
     }
   } else {

@@ -61,12 +61,33 @@
     if (p.hero_image) setSrc('#hero-photo', p.hero_image);
 
     const dirTitles = document.querySelectorAll('#napravleniya h3');
-    const dirTexts = document.querySelectorAll('#napravleniya ~ div p, #napravleniya + div + div p');
     if (p.directions) {
       p.directions.forEach((d, i) => {
         if (dirTitles[i]) dirTitles[i].textContent = d.title;
-        const img = document.querySelector(`#dir-${i + 1}`);
-        if (img && d.image) img.src = d.image;
+        const slot = document.querySelector(`#dir-${i + 1}`);
+        if (slot) {
+          if (d.images && d.images.length > 0) {
+            slot.setAttribute('src', d.images[0]);
+            slot.setAttribute('data-images', JSON.stringify(d.images));
+          } else if (d.image) {
+            slot.setAttribute('src', d.image);
+          }
+        }
+      });
+    }
+
+    const loftItems = document.querySelectorAll('[id^="home-loft-"]');
+    if (p.loft_items) {
+      p.loft_items.forEach((item, i) => {
+        const slot = document.querySelector(`#home-loft-${i + 1}`);
+        if (slot) {
+          if (item.images && item.images.length > 0) {
+            slot.setAttribute('src', item.images[0]);
+            slot.setAttribute('data-images', JSON.stringify(item.images));
+          } else if (item.image) {
+            slot.setAttribute('src', item.image);
+          }
+        }
       });
     }
   }
@@ -84,7 +105,15 @@
       const grid = document.getElementById('katalog-products');
       if (grid) {
         grid.innerHTML = p.products.map((item, i) => {
-          const images = item.images && item.images.length > 0 ? item.images : (item.image ? [item.image] : []);
+          function normUrl(u) {
+            if (!u) return '';
+            const m = u.match(/raw\.githubusercontent\.com\/[^/]+\/[^/]+\/[^/]+\/(.+)/);
+            return m ? m[1] : u;
+          }
+          let images = [];
+          const img = normUrl(item.image);
+          if (img) images.push(img);
+          if (item.images) item.images.forEach(src => { const n = normUrl(src); if (n && !images.includes(n)) images.push(n); });
           const hasGallery = images.length > 1;
           const imgHtml = hasGallery
             ? `<image-slot id="loft-prod-${i}" src="${images[0]}" data-images='${JSON.stringify(images)}' shape="rect" placeholder="${item.title || ''}"></image-slot>`

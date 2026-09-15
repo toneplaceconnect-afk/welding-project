@@ -114,17 +114,9 @@
     if (counter) counter.textContent = `${active + 1} / ${container._total}`;
   }
 
-  async function init() {
-    createZoom();
-    let galleryMap = {};
-    try {
-      const r = await fetch('/content.json?t=' + Date.now());
-      if (r.ok) {
-        const data = await r.json();
-        galleryMap = data.galleryImages || {};
-      }
-    } catch (_) {}
-    document.querySelectorAll('image-slot').forEach(slot => {
+  function processSlots(root) {
+    root.querySelectorAll('image-slot').forEach(slot => {
+      if (slot.dataset.galleryDone) return;
       const id = slot.getAttribute('id');
       const src = slot.getAttribute('src');
       const imagesAttr = slot.getAttribute('data-images');
@@ -132,9 +124,31 @@
       if (!images && id && galleryMap[id]) images = galleryMap[id];
       if (!images && src) images = [src];
       if (!images || images.length <= 1) return;
+      slot.dataset.galleryDone = '1';
       const title = slot.getAttribute('placeholder') || '';
       buildGallery(slot, images, title);
     });
+  }
+
+  async function init() {
+    createZoom();
+    try {
+      const r = await fetch('/content.json?t=' + Date.now());
+      if (r.ok) {
+        const data = await r.json();
+        galleryMap = data.galleryImages || {};
+      }
+    } catch (_) {}
+    processSlots(document);
+
+    const observer = new MutationObserver(mutations => {
+      for (const m of mutations) {
+        for (const node of m.addedNodes) {
+          if (node.nodeType === 1) processSlots(node);
+        }
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
