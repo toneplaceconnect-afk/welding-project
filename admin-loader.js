@@ -81,23 +81,22 @@
       if (heroImg) heroImg.src = p.hero_image;
     }
     if (p.products) {
-      const cards = document.querySelectorAll('[id^="loft-"]');
-      p.products.forEach((prod, i) => {
-        const card = document.querySelector(`#loft-${i + 1}`);
-        if (card) {
-          const parent = card.closest('div');
-          if (parent) {
-            const h3 = parent.querySelector('h3');
-            const desc = parent.querySelector('p');
-            if (h3) h3.textContent = prod.title;
-            if (desc) desc.textContent = prod.text;
-          }
-        }
-        if (prod.image) {
-          const img = document.querySelector(`#loft-${i + 1}`);
-          if (img) img.src = prod.image;
-        }
-      });
+      const grid = document.getElementById('katalog-products');
+      if (grid) {
+        grid.innerHTML = p.products.map(item => `
+          <article class="card" data-reveal style="background:#fff;box-shadow:0 10px 34px rgba(10,12,18,.1);overflow:hidden;transition:transform .3s,box-shadow .3s" style-hover="transform:translateY(-4px);box-shadow:0 16px 40px rgba(10,12,18,.16)">
+            <div style="height:180px">${item.image ? `<img src="${item.image}" alt="" style="width:100%;height:100%;object-fit:cover">` : `<div style="width:100%;height:100%;background:#e6e8ee;display:flex;align-items:center;justify-content:center;color:#8d92a3;font-size:11px">Нет фото</div>`}</div>
+            <div style="padding:20px">
+              <h3 style="font-size:12.5px;font-weight:700;margin:0 0 8px;line-height:1.5">${item.title || ''}</h3>
+              <p style="font-size:10.5px;color:#6a6f80;margin:0;line-height:1.9">${item.text || ''}</p>
+              <p style="font-size:9.5px;color:#cf2026;font-weight:700;margin:14px 0 0;letter-spacing:.06em;text-transform:uppercase">${item.price || 'Цена по договорённости'}</p>
+            </div>
+          </article>
+        `).join('');
+        grid.querySelectorAll('[data-reveal]').forEach(el => {
+          if (el.getBoundingClientRect().top < window.innerHeight * 0.94) el.classList.add('in');
+        });
+      }
     }
   }
 
