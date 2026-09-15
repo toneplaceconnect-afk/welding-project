@@ -110,11 +110,14 @@ const PAGES = [
   { id: 'create', label: 'Создай своё' }
 ];
 
-async function api(path, body, method = 'POST') {
+async function api(action, body, method = 'POST') {
   const opts = { method, headers: { 'Content-Type': 'application/json' } };
   if (token) opts.headers['Authorization'] = `Bearer ${token}`;
-  if (body) opts.body = JSON.stringify(body);
-  const r = await fetch('/api/admin-cms' + path, opts);
+  if (body) opts.body = JSON.stringify({ ...body, action });
+  else opts.body = JSON.stringify({ action });
+  let url = '/api/admin-cms';
+  if (method === 'GET') url += '?action=' + action;
+  const r = await fetch(url, opts);
   return r.json();
 }
 
@@ -124,7 +127,7 @@ async function doLogin() {
   const errEl = document.getElementById('loginError');
   errEl.style.display = 'none';
   try {
-    const res = await api('/auth', { password: pw });
+    const res = await api('auth', { password: pw });
     if (!res.ok) {
       errEl.textContent = res.error || 'Неверный пароль';
       errEl.style.display = 'block';
@@ -152,7 +155,7 @@ function doLogout() {
 }
 
 async function loadContent() {
-  const res = await api('/content', null, 'GET');
+  const res = await api('content', null, 'GET');
   if (res.error) { alert(res.error); return; }
   content = res.content;
   fileSha = res.sha;
@@ -394,7 +397,7 @@ async function handleFiles(files, targetKey) {
     const r = await fetch('/api/admin-cms', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ filename: file.name, data: base64 })
+      body: JSON.stringify({ action: 'upload', filename: file.name, data: base64 })
     });
     const res = await r.json();
     if (res.ok && res.url) {
@@ -436,7 +439,7 @@ async function doSave() {
   status.textContent = 'Сохранение...';
   status.className = 'save-status';
   collectForm();
-  const res = await api('/save', { content, sha: fileSha });
+  const res = await api('save', { content, sha: fileSha });
   btn.disabled = false;
   if (res.ok) {
     status.textContent = 'Сохранено! Vercel задеплоит через 1-2 минуты.';

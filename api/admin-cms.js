@@ -1,37 +1,85 @@
 const ADMIN_PW = process.env.ADMIN_PASSWORD || 'test';
+const REPO = 'toneplaceconnect-afk/welding-project';
+const BRANCH = 'main';
 
 export default async function handler(request, response) {
+  response.setHeader('Content-Type', 'application/json');
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+  if (request.method === 'OPTIONS') { response.status(204).end(); return; }
+
   try {
-    response.setHeader('Content-Type', 'application/json');
-    response.setHeader('Access-Control-Allow-Origin', '*');
-    response.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
-    if (request.method === 'OPTIONS') { response.status(204).end(); return; }
+    let body = {};
+    if (request.method === 'POST') {
+      const chunks = [];
+      for await (const chunk of request) chunks.push(chunk);
+      const raw = Buffer.concat(chunks).toString();
+      if (raw) body = JSON.parse(raw);
+    }
 
-    const url = request.url || '';
-    const body = request.body || {};
+    const action = body.action || new URL(request.url, 'https://x').searchParams.get('action') || '';
+    const pw = String(body.password || '');
+    const auth = request.headers.authorization || '';
+    const bearer = auth.replace(/^Bearer\s+/i, '').trim();
 
-    if (url === '/api/admin-cms' && request.method === 'POST') {
-      const pw = String(body.password || '');
-      if (pw !== ADMIN_PW) { response.status(401).json({ error: 'wrong' }); return; }
+    if (action === 'auth' && request.method === 'POST') {
+      if (pw !== ADMIN_PW) { response.status(401).json({ error: 'wrong password' }); return; }
       response.status(200).json({ ok: true, token: pw });
       return;
     }
 
-    const auth = request.headers.authorization || '';
-    const token = auth.replace(/^Bearer\s+/i, '').trim();
-    if (token !== ADMIN_PW) { response.status(401).json({ error: 'unauth' }); return; }
+    if (bearer !== ADMIN_PW) { response.status(401).json({ error: 'unauth' }); return; }
 
-    if (url === '/api/admin-cms/content' && request.method === 'GET') {
-      response.status(200).json({ ok: true, step: 'content' });
+    if (action === 'content' && request.method === 'GET') {
+      const ghRes = await fetch('https://api.github.com/repos/' + REPO + '/contents/content.json', {
+        headers: { Authorization: 'Bearer ' + process.env.GITHUB_TOKEN, Accept: 'application/vnd.github.v3+json' }
+      });
+      if (!ghRes.ok) { response.status(502).json({ error: 'GitHub ' + ghRes.status }); return; }
+      const file = await ghRes.json();
+      const content = JSON.parse(Buffer.from(file.content, 'base64').toString());
+      response.status(200).json({ ok: true, content, sha: file.sha });
       return;
     }
 
-    if (url === '/api/admin-cms/save' && request.method === 'POST') {
-      response.status(200).json({ ok: true, step: 'save' });
+    if (action === 'save' && request.method === 'POST') {
+      const content = body.content;
+      const sha = body.sha;
+      if (!content || !sha) { response.status(400).json({ error: 'missing content/sha' }); return; }
+      const ghRes = await fetch('https://api.github.com/repos/' + REPO + '/contents/content.json', {
+        method: 'PUT',
+        headers: {
+          Authorization: 'Bearer ' + process.env.GITHUB_TOKEN,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: 'CMS update', content: Buffer.from(JSON.stringify(content, null, 2)).toString('base64'), sha, branch: BRANCH })
+      });
+      if (!ghRes.ok) { const e = await ghRes.text(); response.status(502).json({ error: 'GitHub ' + ghRes.status, detail: e }); return; }
+      const result = await ghRes.json();
+      response.status(200).json({ ok: true, sha: result.content.sha });
       return;
     }
 
-    response.status(200).json({ ok: true, url: url });
+    if (action === 'upload' && request.method === 'POST') {
+      const { filename, data } = body;
+      if (!filename || !data) { response.status(400).json({ error: 'missing filename/data' }); return; }
+      const safeName = 'upload-' + Date.now() + '-' + filename.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const ghRes = await fetch('https://api.github.com/repos/' + REPO + '/contents/assets/uploads/' + safeName, {
+        method: 'PUT',
+        headers: {
+          Authorization: 'Bearer ' + process.env.GITHUB_TOKEN,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: 'Upload ' + filename, content: data, branch: BRANCH })
+      });
+      if (!ghRes.ok) { const e = await ghRes.text(); response.status(502).json({ error: 'GitHub ' + ghRes.status, detail: e }); return; }
+      const result = await ghRes.json();
+      response.status(200).json({ ok: true, url: result.content.download_url, sha: result.content.sha });
+      return;
+    }
+
+    response.status(200).json({ ok: true, action });
   } catch (e) {
     response.status(500).json({ error: e.message });
   }
