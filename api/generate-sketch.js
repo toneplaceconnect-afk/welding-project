@@ -58,7 +58,10 @@ async function analyzeBrief(clientBrief, accountId, token) {
       max_tokens: 900
     })
   });
-  if (!r.ok) throw Error('Сервис анализа временно недоступен. Попробуйте позже.');
+  if (!r.ok) {
+    const errBody = await r.text().catch(() => '');
+    throw Error('Сервис анализа временно недоступен (HTTP ' + r.status + '). ' + errBody.slice(0, 200));
+  }
   const d = await r.json();
   const text = d?.result?.response || d?.result?.choices?.[0]?.message?.content || d?.choices?.[0]?.message?.content;
   if (!text) throw Error('Cloudflare semantic analysis did not return a specification.');
@@ -84,10 +87,11 @@ async function generateImage(prompt, refs, accountId, token) {
   });
 
   if (!r.ok) {
+    const errBody = await r.text().catch(() => '');
     if (r.status === 403 || r.status === 429) {
-      throw Error('Сервис генерации временно недоступен. Проверьте дневной лимит и попробуйте позже.');
+      throw Error('Сервис генерации временно недоступен (HTTP ' + r.status + '). Проверьте дневной лимит и попробуйте позже.');
     }
-    throw Error('Сервис генерации временно недоступен. Попробуйте позже.');
+    throw Error('Сервис генерации временно недоступен (HTTP ' + r.status + '). ' + errBody.slice(0, 200));
   }
 
   const d = await r.json();
