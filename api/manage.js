@@ -14,10 +14,7 @@ export default async function handler(req, res) {
     if (req.method === 'OPTIONS') { res.status(204).end(); return; }
 
     if (req.method === 'POST' && req.url === '/api/manage/auth') {
-      let raw = '';
-      for await (const c of req) raw += c;
-      let body = {};
-      try { body = JSON.parse(raw); } catch(_) {}
+      const body = req.body || {};
       const pw = String(body.password || '');
       const hash = await sha256(pw);
       const expected = await sha256(ADMIN_PW);
