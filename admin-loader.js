@@ -206,6 +206,9 @@
   const start = async () => {
     await loadContent();
     applyAll();
+    setTimeout(applyAll, 300);
+    setTimeout(applyAll, 1000);
+    setTimeout(applyAll, 3000);
   };
 
   if (document.readyState === 'loading') {
