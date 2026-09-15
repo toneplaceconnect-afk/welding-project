@@ -1,6 +1,6 @@
 /* Проект-Сварка — mobile adaptation layer. Desktop layout remains unchanged. */
 @media (max-width: 900px){
-  html,body{max-width:100%;overflow-x:hidden}
+  html,body{max-width:100%;overflow-x:clip}
   body{font-size:14px}
 
   /* Generic content containers */

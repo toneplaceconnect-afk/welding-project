@@ -1,6 +1,6 @@
 # ПРОЕКТ-СВАРКА — технический манифест
 
-Дата аудита и архитектурной очистки: 2026-09-14 (v2)
+Дата аудита и архитектурной очистки: 2026-09-15 (v3)
 
 ## Статус
 
@@ -19,7 +19,10 @@
 - `lang="ru"` отсутствовал на всех DC-страницах;
 - Media-query в `create-actions.css` в неправильном порядке;
 - API раскрывал внутренние ошибки Cloudflare клиенту;
-- `site-header.css` и `site-shell.js` имели разные версии кеша.
+- `site-header.css` и `site-shell.js` имели разные версии кеша;
+- Футер прижимался к верху страницы вместо низа (`FULL_PAGE_CSS` с `height:100%`);
+- Шапка/футер использовали Inter вместо Michroma;
+- `position:sticky` на шапке ломался из-за `overflow-x:hidden` в mobile.css.
 
 ## Новая архитектура
 
@@ -58,11 +61,10 @@ Shell создаётся один раз при загрузке страниц�
 
 ### Шрифты
 
-Единый стек для контента DC-страниц:
+Единый стек для **всех** элементов (контент, шапка, футер, навигация):
 `'Michroma', 'Unbounded', 'Inter', system-ui, sans-serif`
 
-Шапка/навигация/футер: `Inter` (site-header.css).
-Бренд: `Michroma` (везде).
+Бренд/заголовки: `'Unbounded', 'Michroma', 'Inter', system-ui, sans-serif`
 
 Google Fonts: `Michroma`, `Unbounded:wght@400-800`, `Inter:wght@400-800` — единый набор на всех страницах.
 
@@ -70,6 +72,12 @@ Google Fonts: `Michroma`, `Unbounded:wght@400-800`, `Inter:wght@400-800` — е�
 
 - `lang="ru"` на всех страницах;
 - `<meta name="theme-color" content="#11131a">` на всех страницах.
+
+## Layout
+
+- `FULL_PAGE_CSS` устанавливает `min-height:100vh` на `#dc-root` и `.sc-host` (без фиксированного `height:100%`);
+- `body` использует естественную высоту (auto) — футер прижат к низу;
+- `overflow-x:clip` вместо `overflow-x:hidden` на `html,body` — не ломает `position:sticky`.
 
 ## Create (`create.html`)
 
