@@ -35,6 +35,10 @@
       zoomImg.addEventListener('mousedown', e => { if (e.button !== 0) return; dragging = true; sx = e.clientX - zoomX; sy = e.clientY - zoomY; zoomImg.classList.add('dragging'); });
       window.addEventListener('mousemove', e => { if (!dragging) return; zoomX = e.clientX - sx; zoomY = e.clientY - sy; applyZoom(); });
       window.addEventListener('mouseup', () => { dragging = false; zoomImg.classList.remove('dragging'); });
+      let touchDragging = false, touchSX = 0, touchSY = 0, pinchDist = 0;
+      zoomImg.addEventListener('touchstart', e => { if (e.touches.length === 1) { touchDragging = true; touchSX = e.touches[0].clientX - zoomX; touchSY = e.touches[0].clientY - zoomY; } else if (e.touches.length === 2) { touchDragging = false; const dx = e.touches[0].clientX - e.touches[1].clientX; const dy = e.touches[0].clientY - e.touches[1].clientY; pinchDist = Math.hypot(dx, dy); } }, { passive: true });
+      zoomImg.addEventListener('touchmove', e => { e.preventDefault(); if (e.touches.length === 1 && touchDragging) { zoomX = e.touches[0].clientX - touchSX; zoomY = e.touches[0].clientY - touchSY; applyZoom(); } else if (e.touches.length === 2 && pinchDist > 0) { const dx = e.touches[0].clientX - e.touches[1].clientX; const dy = e.touches[0].clientY - e.touches[1].clientY; const dist = Math.hypot(dx, dy); zoomScale = Math.max(.5, Math.min(4, zoomScale * (dist / pinchDist))); pinchDist = dist; applyZoom(); } }, { passive: false });
+      zoomImg.addEventListener('touchend', () => { touchDragging = false; pinchDist = 0; }, { passive: true });
       zoomImg.addEventListener('wheel', e => { e.preventDefault(); zoomScale = Math.max(.5, Math.min(4, zoomScale + (e.deltaY < 0 ? .2 : -.2))); applyZoom(); }, { passive: false });
     }
     zoomImg.src = src;

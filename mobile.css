@@ -45,7 +45,7 @@
 
   /* Forms / calculator / create page */
   form{width:100% !important;box-sizing:border-box !important}
-  input,select,textarea,button{max-width:100% !important;box-sizing:border-box !important;font-size:13px !important}
+  input,select,textarea,button{max-width:100% !important;box-sizing:border-box !important;font-size:16px !important}
   input,select{min-height:44px !important}
   textarea{min-height:110px !important}
   button,[role="button"]{min-height:44px}
