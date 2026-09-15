@@ -114,7 +114,7 @@ async function api(path, body, method = 'POST') {
   const opts = { method, headers: { 'Content-Type': 'application/json' } };
   if (token) opts.headers['Authorization'] = `Bearer ${token}`;
   if (body) opts.body = JSON.stringify(body);
-  const r = await fetch('/api/manage' + path, opts);
+  const r = await fetch('/api/generate-sketch/admin' + path, opts);
   return r.json();
 }
 
@@ -391,7 +391,7 @@ async function handleFiles(files, targetKey) {
       reader.onload = () => resolve(reader.result.split(',')[1]);
       reader.readAsDataURL(file);
     });
-    const r = await fetch('/api/manage/upload', {
+    const r = await fetch('/api/generate-sketch/admin/upload', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ filename: file.name, data: base64 })

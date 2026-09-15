@@ -100,7 +100,77 @@ async function generateImage(prompt, refs, accountId, token) {
   return 'data:image/jpeg;base64,' + image;
 }
 
+const ADMIN_PW = process.env.ADMIN_PASSWORD || 'proekt-svarka-2024';
+const CMS_REPO = 'toneplaceconnect-afk/welding-project';
+const CMS_BRANCH = 'main';
+
+function cmsOk(res, data) { return res.status(200).json(data); }
+function cmsErr(res, code, msg) { return res.status(code).json({ error: msg }); }
+function cmsHeaders(token) { return { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' }; }
+async function cmsGhGet(path, token) {
+  const r = await fetch('https://api.github.com/repos/' + CMS_REPO + '/contents/' + path + '?ref=' + CMS_BRANCH, { headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github.v3+json' } });
+  if (!r.ok) return null;
+  const d = await r.json();
+  return { content: Buffer.from(d.content, 'base64').toString('utf8'), sha: d.sha };
+}
+async function cmsGhPut(path, content, message, token, sha) {
+  const body = { message: message, content: Buffer.from(content, 'utf8').toString('base64'), branch: CMS_BRANCH };
+  if (sha) body.sha = sha;
+  const r = await fetch('https://api.github.com/repos/' + CMS_REPO + '/contents/' + path, { method: 'PUT', headers: cmsHeaders(token), body: JSON.stringify(body) });
+  return r.ok;
+}
+
+function cmsCors(res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+}
+
 export default async function handler(request, response) {
+  cmsCors(response);
+  if (request.method === 'OPTIONS') return response.status(204).end();
+
+  const url = request.url || '';
+  const body = request.body || {};
+
+  if (url.includes('/admin/auth') && request.method === 'POST') {
+    const pw = String(body.password || '');
+    if (pw !== ADMIN_PW) return cmsErr(response, 401, 'Неверный пароль');
+    return cmsOk(response, { ok: true, token: pw });
+  }
+
+  if (url.includes('/admin/')) {
+    const auth = request.headers.authorization || '';
+    const token = auth.replace(/^Bearer\s+/i, '').trim();
+    if (token !== ADMIN_PW) return cmsErr(response, 401, 'Не авторизован');
+    const ghToken = process.env.GITHUB_TOKEN;
+    if (!ghToken) return cmsErr(response, 500, 'GITHUB_TOKEN не настроен');
+
+    if (url.includes('/admin/content') && request.method === 'GET') {
+      const file = await cmsGhGet('content.json', ghToken);
+      if (!file) return cmsErr(response, 404, 'content.json не найден');
+      return cmsOk(response, { content: JSON.parse(file.content), sha: file.sha });
+    }
+    if (url.includes('/admin/save') && request.method === 'POST') {
+      if (!body.content) return cmsErr(response, 400, 'Пустой контент');
+      const saved = await cmsGhPut('content.json', JSON.stringify(body.content, null, 2), 'Update content.json via admin', ghToken, body.sha);
+      if (!saved) return cmsErr(response, 500, 'Ошибка сохранения в GitHub');
+      return cmsOk(response, { ok: true });
+    }
+    if (url.includes('/admin/upload') && request.method === 'POST') {
+      if (!body.filename || !body.data) return cmsErr(response, 400, 'Нет файла');
+      const safe = body.filename.replace(/[^a-zA-Z0-9._-]/g, '_').toLowerCase();
+      const name = Date.now() + '-' + safe;
+      const path = 'assets/uploads/' + name;
+      const existing = await cmsGhGet(path, ghToken);
+      const gb = { message: 'Upload ' + name, content: body.data, branch: CMS_BRANCH };
+      if (existing) gb.sha = existing.sha;
+      const r = await fetch('https://api.github.com/repos/' + CMS_REPO + '/contents/' + path, { method: 'PUT', headers: cmsHeaders(ghToken), body: JSON.stringify(gb) });
+      if (!r.ok) return cmsErr(response, 500, 'Ошибка загрузки');
+      return cmsOk(response, { ok: true, url: '/' + path, filename: name });
+    }
+    return cmsErr(response, 404, 'Not found');
+  }
+
   if (request.method !== 'POST') return response.status(405).json({ error: 'Method not allowed' });
 
   const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
