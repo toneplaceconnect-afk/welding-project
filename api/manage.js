@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 const ADMIN_PW = process.env.ADMIN_PASSWORD || 'proekt-svarka-2024';
 const ADMIN_PASSWORD_HASH = crypto.createHash('sha256').update(ADMIN_PW).digest('hex');
@@ -12,7 +12,7 @@ function safeCompare(a, b) {
   return crypto.timingSafeEqual(ab, bb);
 }
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
@@ -29,4 +29,4 @@ module.exports = async function handler(req, res) {
     return;
   }
   res.status(404).json({ error: 'Not found' });
-};
+}
