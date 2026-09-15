@@ -8,7 +8,7 @@
   const PAGE_MAP = {
     'Главная.dc.html': 'home',
     'Калькулятор.dc.html': 'calculator',
-    'Лофт-мебель.dc.html': 'loft',
+    'katalog.dc.html': 'loft',
     'Прайс.dc.html': 'prices',
     'Документация.dc.html': 'docs',
     'create.html': 'create'

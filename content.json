@@ -27,7 +27,7 @@
         { "label": "Отопление", "href": "#napravleniya" },
         { "label": "Водоснабжение", "href": "#napravleniya" },
         { "label": "Проекты и расчёт", "href": "Калькулятор.dc.html" },
-        { "label": "Лофт-мебель металл + дерево", "href": "Лофт-мебель.dc.html" }
+        { "label": "Каталог", "href": "katalog.dc.html" }
       ],
       "directions_eyebrow": "Направления работ",
       "directions_title": "Делаю то, что должно стоять десятки лет",
@@ -52,10 +52,10 @@
       "create_cta": "Собрать свою идею",
       "create_cta_href": "create.html",
       "loft_eyebrow": "Металл + дерево",
-      "loft_title": "Лофт-предметы под ваш проект",
+      "loft_title": "Изделия из металла и дерева",
       "loft_text": "Металлокаркас держит нагрузку, дерево задаёт вид. Породу подбираем по наличию — кедр, лиственница, сосна; свой материал тоже принимаю. Беседки и навесы считаю на снеговую нагрузку региона.",
       "loft_cta": "Все изделия",
-      "loft_cta_href": "Лофт-мебель.dc.html",
+      "loft_cta_href": "katalog.dc.html",
       "loft_items": [
         { "caption": "Столы и столешницы", "image": "assets/photo/glavnaya/loft-stoly.webp", "images": ["assets/photo/glavnaya/loft-stoly.webp"] },
         { "caption": "Стеллажи и хранение", "image": "assets/photo/glavnaya/loft-stellazhi.webp", "images": ["assets/photo/glavnaya/loft-stellazhi.webp"] },
@@ -65,12 +65,12 @@
       "form_eyebrow": "Заявка",
       "form_title": "Опишите задачу — назову решение и сроки",
       "form_text": "Стоимость называю после уточнения деталей или бесплатного замера: без этого любая цифра будет обманом. Заявка уходит в Telegram одним сообщением.",
-      "form_options": ["Забор, ворота, калитка", "Навес или козырёк", "Лестница, перила", "Отопление", "Водоснабжение", "Лофт-мебель (металл + дерево)", "Другое"],
+      "form_options": ["Забор, ворота, калитка", "Навес или козырёк", "Лестница, перила", "Отопление", "Водоснабжение", "Каталог изделий", "Мангалы, грили", "Изделия из металла", "Другое"],
       "form_submit": "Отправить в Telegram",
       "form_hint": "Текст заявки скопируется в буфер — вставьте его в чат."
     },
     "loft": {
-      "hero_title": "Лофт-предметы на сварном каркасе — для дома, участка и кафе",
+      "hero_title": "Каталог изделий — мебель, мангалы, конструкции из металла",
       "hero_text": "Каркас варю сам, дерево подбираем вместе и по наличию: в регионе это чаще кедр, лиственница и сосна, реже — мебельный щит. Свой материал тоже принимаю — если у вас уже есть доска или слэб, работаю с ним. Металл — порошковая окраска в любой RAL или патина под лофт. Цена по каждому изделию — по договорённости, после эскиза и выбора материала.",
       "hero_image": "assets/photo/loft-mebel/glavnoe-foto.webp",
       "hero_images": ["assets/photo/loft-mebel/glavnoe-foto.webp"],
@@ -87,7 +87,9 @@
         { "title": "Скамьи, табуреты, вешала", "text": "Прихожая, терраса, раздевалка. Простая геометрия, которую не расшатать.", "image": "assets/photo/loft-mebel/skami.webp", "images": ["assets/photo/loft-mebel/skami.webp"], "price": "Цена по договорённости" },
         { "title": "Мебель для кафе и баров", "text": "Барные и ресепшн-стойки, столы и стулья на сварном каркасе, витринные стеллажи. Комплектом на зал.", "image": "assets/photo/loft-mebel/mebel-dlya-kafe.webp", "images": ["assets/photo/loft-mebel/mebel-dlya-kafe.webp"], "price": "Цена по договорённости" },
         { "title": "Беседки, перголы, навесы", "text": "Металлокаркас с деревянной обшивкой: держит снег, не ведёт от влаги. Считаю под нагрузку района.", "image": "assets/photo/loft-mebel/besedki-navesy.webp", "images": ["assets/photo/loft-mebel/besedki-navesy.webp"], "price": "Цена по договорённости" },
-        { "title": "Лестницы и мангальные зоны", "text": "Лестница на металлокосоуре с деревянными ступенями, перила, уличная кухня с металлической столешницей.", "image": "assets/photo/loft-mebel/lestnicy-mangaly.webp", "images": ["assets/photo/loft-mebel/lestnicy-mangaly.webp"], "price": "Цена по договорённости" }
+        { "title": "Лестницы и мангальные зоны", "text": "Лестница на металлокосоуре с деревянными ступенями, перила, уличная кухня с металлической столешницей.", "image": "assets/photo/loft-mebel/lestnicy-mangaly.webp", "images": ["assets/photo/loft-mebel/lestnicy-mangaly.webp"], "price": "Цена по договорённости" },
+        { "title": "Мангалы и грили", "text": "Стационарные и разборные, с козырьком и рабочей зоной. Усиленное дно, регулируемая решётка, полки для дров. Под конкретную площадку.", "image": "assets/photo/loft-mebel/mangaly.webp", "images": ["assets/photo/loft-mebel/mangaly.webp"], "price": "Цена по договорённости" },
+        { "title": "Изделия из металла", "text": "Кованые и сварные элементы: вазоны, подставки, полки, декор для заборов и фасадов. Порошковая окраска или патина.", "image": "assets/photo/loft-mebel/izdeliya-iz-metalla.webp", "images": ["assets/photo/loft-mebel/izdeliya-iz-metalla.webp"], "price": "Цена по договорённости" }
       ],
       "process_title": "Как рождается изделие",
       "process_steps": [
@@ -115,7 +117,7 @@
         { "work": "Монтаж отопления, тёплый пол", "price": "по договорённости" },
         { "work": "Водоснабжение и разводка", "price": "по договорённости" },
         { "work": "Электрика котельной и щит", "price": "по договорённости" },
-        { "work": "Лофт-мебель: металл + дерево", "price": "по договорённости" },
+        { "work": "Каталог: мебель, мангалы, изделия из металла", "price": "по договорённости" },
         { "work": "Слесарные работы, ремонт металла", "price": "по договорённости" }
       ],
       "special_rows": [
@@ -156,6 +158,8 @@
     "loft-3": ["assets/photo/loft-mebel/skami.webp"],
     "loft-4": ["assets/photo/loft-mebel/mebel-dlya-kafe.webp"],
     "loft-5": ["assets/photo/loft-mebel/besedki-navesy.webp"],
-    "loft-6": ["assets/photo/loft-mebel/lestnicy-mangaly.webp"]
+    "loft-6": ["assets/photo/loft-mebel/lestnicy-mangaly.webp"],
+    "loft-7": ["assets/photo/loft-mebel/mangaly.webp"],
+    "loft-8": ["assets/photo/loft-mebel/izdeliya-iz-metalla.webp"]
   }
 }
