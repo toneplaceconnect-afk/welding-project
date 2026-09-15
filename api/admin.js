@@ -1,6 +1,7 @@
 import { createHash, timingSafeEqual } from 'crypto';
 
-const ADMIN_PASSWORD_HASH = createHash('sha256').update(process.env.ADMIN_PASSWORD || 'proekt-svarka-2024').digest('hex');
+const ADMIN_PW = process.env.ADMIN_PASSWORD || 'proekt-svarka-2024';
+const ADMIN_PASSWORD_HASH = createHash('sha256').update(ADMIN_PW).digest('hex');
 const REPO = 'toneplaceconnect-afk/welding-project';
 const BRANCH = 'main';
 const CONTENT_PATH = 'content.json';
@@ -72,11 +73,15 @@ export default async function handler(request) {
   const path = url.pathname.replace(/^\/api\/admin/, '');
 
   if (request.method === 'POST' && path === '/auth') {
-    const body = await request.json().catch(() => ({}));
-    const password = String(body.password || '');
-    const hash = createHash('sha256').update(password).digest('hex');
-    if (!safeCompare(hash, ADMIN_PASSWORD_HASH)) return json({ error: 'Неверный пароль' }, 401);
-    return json({ ok: true, token: password });
+    try {
+      const body = await request.json().catch(() => ({}));
+      const password = String(body.password || '');
+      const hash = createHash('sha256').update(password).digest('hex');
+      if (!safeCompare(hash, ADMIN_PASSWORD_HASH)) return json({ error: 'Неверный пароль' }, 401);
+      return json({ ok: true, token: password });
+    } catch (e) {
+      return json({ error: 'Auth error: ' + e.message }, 500);
+    }
   }
 
   if (!checkAuth(request)) return json({ error: 'Не авторизован' }, 401);
