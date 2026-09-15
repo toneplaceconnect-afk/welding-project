@@ -5,6 +5,7 @@
 
   const SCROLL_INTERVAL = 5000;
   let galleryId = 0;
+  let galleryMap = {};
 
   function createZoom() {
     if (document.getElementById('gallery-zoom')) return;
@@ -67,7 +68,7 @@
       images.forEach((_, i) => {
         const dot = document.createElement('button');
         dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
-        dot.onclick = () => { current = i; scrollTo(indexOf(id, i)); updateDots(id, i); };
+        dot.onclick = () => { current = i; scrollTo(id, i); updateDots(id, i); };
         dots.appendChild(dot);
       });
       container.appendChild(dots);
@@ -75,7 +76,7 @@
       const intervalId = setInterval(() => {
         if (!document.getElementById(id)) { clearInterval(intervalId); return; }
         current = (current + 1) % images.length;
-        scrollTo(indexOf(id, current));
+        scrollTo(id, current);
         updateDots(id, current);
       }, SCROLL_INTERVAL);
       container._galleryInterval = intervalId;
@@ -90,18 +91,11 @@
     }
   }
 
-  function indexOf(id, i) {
+  function scrollTo(id, index) {
     const track = document.getElementById(id);
-    if (!track) return 0;
-    return i;
-  }
-
-  function scrollTo(index) {
-    const galleries = document.querySelectorAll('.gallery-track');
-    galleries.forEach(track => {
-      const slide = track.children[index];
-      if (slide) slide.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-    });
+    if (!track) return;
+    const slide = track.children[index];
+    if (slide) slide.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
   }
 
   function updateDots(id, active) {

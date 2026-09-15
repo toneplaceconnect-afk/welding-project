@@ -155,36 +155,68 @@
     setText('.generate', p.submit_text);
   }
 
-  function applyPage(pageId) {
-    if (!CMS || !CMS.pages) return;
-    applyGlobal(CMS.global);
-    const page = CMS.pages[pageId];
-    const applyFns = { home: applyHome, loft: applyLoft, prices: applyPrices, create: applyCreate };
-    if (applyFns[pageId]) applyFns[pageId](page);
+  function applyGalleryImages() {
+    if (!CMS || !CMS.galleryImages) return;
+    Object.entries(CMS.galleryImages).forEach(([id, images]) => {
+      const slot = document.getElementById(id);
+      if (slot && images && images.length > 0) {
+        slot.setAttribute('src', images[0]);
+        if (images.length > 1) slot.setAttribute('data-images', JSON.stringify(images));
+      }
+    });
   }
 
-  async function init() {
+  function applyAll() {
+    if (!CMS) return;
     const pageId = getPageId();
+    if (pageId) applyPage(pageId);
+    applyGlobal(CMS.global);
+    applyGalleryImages();
+  }
+
+  async function loadAndApply() {
     try {
       const r = await fetch('/content.json?t=' + Date.now());
       if (!r.ok) return;
       CMS = await r.json();
-      if (pageId) applyPage(pageId);
-      applyGlobal(CMS.global);
-      if (CMS.galleryImages) {
-        Object.entries(CMS.galleryImages).forEach(([id, images]) => {
-          const slot = document.getElementById(id);
-          if (slot && images && images.length > 0) {
-            slot.setAttribute('src', images[0]);
-            if (images.length > 1) slot.setAttribute('data-images', JSON.stringify(images));
-          }
-        });
-      }
+      applyAll();
     } catch (e) {
       console.warn('CMS loader: failed to load content.json', e);
     }
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  let reapplyPending = false;
+  function scheduleReapply() {
+    if (reapplyPending || !CMS) return;
+    reapplyPending = true;
+    setTimeout(() => { reapplyPending = false; if (CMS) applyAll(); }, 150);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAndApply();
+      const obs = new MutationObserver(() => {
+        if (!document.querySelector('x-dc') && document.getElementById('dc-root')) {
+          obs.disconnect();
+          scheduleReapply();
+        }
+      });
+      obs.observe(document.body, { childList: true, subtree: true });
+      setTimeout(() => { obs.disconnect(); }, 8000);
+      setTimeout(() => { if (CMS) applyAll(); }, 1500);
+      setTimeout(() => { if (CMS) applyAll(); }, 3000);
+    });
+  } else {
+    loadAndApply();
+    const obs = new MutationObserver(() => {
+      if (!document.querySelector('x-dc') && document.getElementById('dc-root')) {
+        obs.disconnect();
+        scheduleReapply();
+      }
+    });
+    obs.observe(document.body, { childList: true, subtree: true });
+    setTimeout(() => { obs.disconnect(); }, 8000);
+    setTimeout(() => { if (CMS) applyAll(); }, 1500);
+    setTimeout(() => { if (CMS) applyAll(); }, 3000);
+  }
 })();
