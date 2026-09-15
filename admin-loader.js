@@ -191,49 +191,44 @@
     applyGalleryImages();
   }
 
-  async function loadAndApply() {
+  async function loadContent() {
     try {
       const r = await fetch('/content.json?t=' + Date.now());
       if (!r.ok) return;
       CMS = await r.json();
-      applyAll();
     } catch (e) {
       console.warn('CMS loader: failed to load content.json', e);
     }
   }
 
-  let reapplyPending = false;
-  function scheduleReapply() {
-    if (reapplyPending || !CMS) return;
-    reapplyPending = true;
-    setTimeout(() => { reapplyPending = false; if (CMS) applyAll(); }, 150);
+  function waitForReactThenApply() {
+    let attempts = 0;
+    const maxAttempts = 60;
+    const interval = setInterval(() => {
+      attempts++;
+      if (attempts > maxAttempts) { clearInterval(interval); return; }
+      if (!CMS) return;
+      const pageId = getPageId();
+      if (!pageId) return;
+      const grid = document.getElementById('katalog-products');
+      const heroImg = document.querySelector('#loft-hero');
+      const target = grid || heroImg;
+      if (!target) return;
+      if (grid && grid.children.length > 0) return;
+      applyAll();
+    }, 200);
   }
 
+  const start = async () => {
+    await loadContent();
+    if (!CMS) return;
+    applyAll();
+    waitForReactThenApply();
+  };
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      loadAndApply();
-      const obs = new MutationObserver(() => {
-        if (!document.querySelector('x-dc') && document.getElementById('dc-root')) {
-          obs.disconnect();
-          scheduleReapply();
-        }
-      });
-      obs.observe(document.body, { childList: true, subtree: true });
-      setTimeout(() => { obs.disconnect(); }, 8000);
-      setTimeout(() => { if (CMS) applyAll(); }, 1500);
-      setTimeout(() => { if (CMS) applyAll(); }, 3000);
-    });
+    document.addEventListener('DOMContentLoaded', start);
   } else {
-    loadAndApply();
-    const obs = new MutationObserver(() => {
-      if (!document.querySelector('x-dc') && document.getElementById('dc-root')) {
-        obs.disconnect();
-        scheduleReapply();
-      }
-    });
-    obs.observe(document.body, { childList: true, subtree: true });
-    setTimeout(() => { obs.disconnect(); }, 8000);
-    setTimeout(() => { if (CMS) applyAll(); }, 1500);
-    setTimeout(() => { if (CMS) applyAll(); }, 3000);
+    start();
   }
 })();
