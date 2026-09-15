@@ -1,0 +1,161 @@
+{
+  "global": {
+    "brand": "ПРОЕКТ-СВАРКА",
+    "phone": "+79831981588",
+    "phoneFormatted": "+7 983 198 15 88",
+    "email": "ProektSvarka@yandex.ru",
+    "telegram": "@welding_project",
+    "telegramUrl": "https://t.me/welding_project",
+    "footerDescription": "Сварочные и инженерные работы в регионе. Расчёт по СП и ГОСТ, цена в договоре.",
+    "footerBottom": "ПРОЕКТ-СВАРКА. Выезд и замер бесплатно."
+  },
+  "pages": {
+    "home": {
+      "hero_title": "Сварка и инженерные решения в регионе",
+      "hero_text": "Металлоконструкции, отопление, водоснабжение и предметы из металла с деревом. Считаю по действующим СП и ГОСТ, а не на глаз. Выезд и замер бесплатно, цена фиксируется в договоре и не меняется.",
+      "hero_image": "assets/hero-welder.png",
+      "hero_cta1_text": "Оставить заявку",
+      "hero_cta1_href": "#zayavka",
+      "hero_cta2_text": "Создай своё",
+      "hero_cta2_href": "create.html",
+      "intro_title": "Пять направлений, одна ответственность",
+      "intro_text": "Беру объект целиком: расчёт, закупка металла, изготовление и монтаж. Ни один этап не отдаю на сторону.",
+      "intro_link_text": "Подробнее",
+      "intro_link_href": "#napravleniya",
+      "cards": [
+        { "label": "Металло-конструкции", "href": "#napravleniya" },
+        { "label": "Отопление", "href": "#napravleniya" },
+        { "label": "Водоснабжение", "href": "#napravleniya" },
+        { "label": "Проекты и расчёт", "href": "Калькулятор.dc.html" },
+        { "label": "Лофт-мебель металл + дерево", "href": "Лофт-мебель.dc.html" }
+      ],
+      "directions_eyebrow": "Направления работ",
+      "directions_title": "Делаю то, что должно стоять десятки лет",
+      "directions_text": "Сечение трубы и шаг столбов считаю под снеговую и ветровой район вашего участка — те нагрузки, что реально стоят в регионе. Мощность котла и секции радиаторов — покомнатно, а не «в среднем по дому».",
+      "directions_cta": "Обсудить задачу",
+      "directions": [
+        { "title": "Заборы, ворота, навесы", "text": "Каркас под снеговую нагрузку района, профлист или евроштакетник, автоматика на ворота.", "image": "assets/photo/glavnaya/zabory-vorota-navesy.webp", "images": ["assets/photo/glavnaya/zabory-vorota-navesy.webp"] },
+        { "title": "Отопление и тёплый пол", "text": "Котёл, разводка, радиаторы, контур ГВС. Расчёт под −40 °C.", "image": "assets/photo/glavnaya/otoplenie.webp", "images": ["assets/photo/glavnaya/otoplenie.webp"] },
+        { "title": "Водоснабжение", "text": "Скважина или центральный ввод, разводка по точкам, фильтрация.", "image": "assets/photo/glavnaya/vodosnabzhenie.webp", "images": ["assets/photo/glavnaya/vodosnabzhenie.webp"] },
+        { "title": "Лестницы и перила", "text": "Металлокосоур с деревянными ступенями, ограждения, ремонт металла.", "image": "assets/photo/glavnaya/lestnicy-perila.webp", "images": ["assets/photo/glavnaya/lestnicy-perila.webp"] }
+      ],
+      "calc_eyebrow": "Расчёт до выезда",
+      "calc_title": "Калькулятор считает материал, а не цену",
+      "calc_text": "Введите длину и высоту забора, марку профнастила и тип грунта — получите число столбов, метраж трубы на лаги, количество листов, саморезов и расходников. Формулы взяты из СП 22.13330 и СП 20.13330.",
+      "calc_cta1": "Открыть калькулятор",
+      "calc_cta1_href": "Калькулятор.dc.html",
+      "calc_cta2": "Нормативы",
+      "calc_cta2_href": "Документация.dc.html",
+      "create_eyebrow": "Создай своё",
+      "create_title": "Не знаете, как это должно выглядеть — нейронка покажет эскиз",
+      "create_text": "Отмечаете готовые пункты — из них складывается описание изделия, по нему рисуются два эскиза. Объяснение на каждом шаге, можно приложить фото места и свой набросок.",
+      "create_cta": "Собрать свою идею",
+      "create_cta_href": "create.html",
+      "loft_eyebrow": "Металл + дерево",
+      "loft_title": "Лофт-предметы под ваш проект",
+      "loft_text": "Металлокаркас держит нагрузку, дерево задаёт вид. Породу подбираем по наличию — кедр, лиственница, сосна; свой материал тоже принимаю. Беседки и навесы считаю на снеговую нагрузку региона.",
+      "loft_cta": "Все изделия",
+      "loft_cta_href": "Лофт-мебель.dc.html",
+      "loft_items": [
+        { "caption": "Столы и столешницы", "image": "assets/photo/glavnaya/loft-stoly.webp", "images": ["assets/photo/glavnaya/loft-stoly.webp"] },
+        { "caption": "Стеллажи и хранение", "image": "assets/photo/glavnaya/loft-stellazhi.webp", "images": ["assets/photo/glavnaya/loft-stellazhi.webp"] },
+        { "caption": "Беседки и мангальные зоны", "image": "assets/photo/glavnaya/loft-besedki.webp", "images": ["assets/photo/glavnaya/loft-besedki.webp"] },
+        { "caption": "Мебель для кафе и баров", "image": "assets/photo/glavnaya/loft-kafe.webp", "images": ["assets/photo/glavnaya/loft-kafe.webp"] }
+      ],
+      "form_eyebrow": "Заявка",
+      "form_title": "Опишите задачу — назову решение и сроки",
+      "form_text": "Стоимость называю после уточнения деталей или бесплатного замера: без этого любая цифра будет обманом. Заявка уходит в Telegram одним сообщением.",
+      "form_options": ["Забор, ворота, калитка", "Навес или козырёк", "Лестница, перила", "Отопление", "Водоснабжение", "Лофт-мебель (металл + дерево)", "Другое"],
+      "form_submit": "Отправить в Telegram",
+      "form_hint": "Текст заявки скопируется в буфер — вставьте его в чат."
+    },
+    "loft": {
+      "hero_title": "Лофт-предметы на сварном каркасе — для дома, участка и кафе",
+      "hero_text": "Каркас варю сам, дерево подбираем вместе и по наличию: в регионе это чаще кедр, лиственница и сосна, реже — мебельный щит. Свой материал тоже принимаю — если у вас уже есть доска или слэб, работаю с ним. Металл — порошковая окраска в любой RAL или патина под лофт. Цена по каждому изделию — по договорённости, после эскиза и выбора материала.",
+      "hero_image": "assets/photo/loft-mebel/glavnoe-foto.webp",
+      "hero_images": ["assets/photo/loft-mebel/glavnoe-foto.webp"],
+      "why_title": "Почему металлокаркас",
+      "why_text": "Сварная рама не рассыхается и не расшатывается в соединениях — в отличие от шкантов и стяжек. Для беседок и навесов каркас считаю на снеговую нагрузку региона: усиленное сечение стропил и уменьшенный шаг обрешётки против стандартных таблиц.",
+      "why_cta": "Обсудить изделие",
+      "why_cta_href": "#zakaz",
+      "products_eyebrow": "Изделия",
+      "products_title": "Что делаю",
+      "products_text": "Под каждое изделие считаю метраж трубы на каркас, объём дерева на столешницу или сиденье, крепёж и площадь окраски — ведомость получаете вместе с эскизом.",
+      "products": [
+        { "title": "Столы и столешницы", "text": "Обеденные, журнальные, рабочие. Массив или щит на сварной раме, скрытое крепление столешницы. Порода — по наличию или ваша собственная доска.", "image": "assets/photo/loft-mebel/stoly.webp", "images": ["assets/photo/loft-mebel/stoly.webp"], "price": "Цена по договорённости" },
+        { "title": "Стеллажи и полки", "text": "Открытые стеллажи в комнату, витринные — в магазин, усиленные — в гараж и мастерскую.", "image": "assets/photo/loft-mebel/stellazhi.webp", "images": ["assets/photo/loft-mebel/stellazhi.webp"], "price": "Цена по договорённости" },
+        { "title": "Скамьи, табуреты, вешала", "text": "Прихожая, терраса, раздевалка. Простая геометрия, которую не расшатать.", "image": "assets/photo/loft-mebel/skami.webp", "images": ["assets/photo/loft-mebel/skami.webp"], "price": "Цена по договорённости" },
+        { "title": "Мебель для кафе и баров", "text": "Барные и ресепшн-стойки, столы и стулья на сварном каркасе, витринные стеллажи. Комплектом на зал.", "image": "assets/photo/loft-mebel/mebel-dlya-kafe.webp", "images": ["assets/photo/loft-mebel/mebel-dlya-kafe.webp"], "price": "Цена по договорённости" },
+        { "title": "Беседки, перголы, навесы", "text": "Металлокаркас с деревянной обшивкой: держит снег, не ведёт от влаги. Считаю под нагрузку района.", "image": "assets/photo/loft-mebel/besedki-navesy.webp", "images": ["assets/photo/loft-mebel/besedki-navesy.webp"], "price": "Цена по договорённости" },
+        { "title": "Лестницы и мангальные зоны", "text": "Лестница на металлокосоуре с деревянными ступенями, перила, уличная кухня с металлической столешницей.", "image": "assets/photo/loft-mebel/lestnicy-mangaly.webp", "images": ["assets/photo/loft-mebel/lestnicy-mangaly.webp"], "price": "Цена по договорённости" }
+      ],
+      "process_title": "Как рождается изделие",
+      "process_steps": [
+        "Вы присылаете референс или описание и габариты.",
+        "Делаю эскиз и ведомость материалов, согласуем породу дерева по наличию и цвет металла.",
+        "Называю стоимость и срок, фиксируем в договоре.",
+        "Изготовление, окраска, доставка и установка."
+      ],
+      "process_text": "Пришлите референс в Telegram или на почту — отвечу с эскизом и сроком. Либо посчитайте материал в калькуляторе.",
+      "process_cta1": "Написать в Telegram",
+      "process_cta1_href": "https://t.me/welding_project",
+      "process_cta2": "Калькулятор",
+      "process_cta2_href": "Калькулятор.dc.html"
+    },
+    "prices": {
+      "hero_title": "Цена — по договорённости, после замера",
+      "hero_text": "Готового списка цен нет намеренно. Объём работ по забору, отоплению или мебели зависит от грунта, высоты, материала и состояния объекта — фиксированная цифра в таблице всегда оказывается либо завышенной, либо неправдой. Считаю по вашему объекту и фиксирую сумму в договоре.",
+      "table_header1": "Вид работ",
+      "table_header2": "Стоимость",
+      "rows": [
+        { "work": "Заборы, ворота, калитки", "price": "по договорённости" },
+        { "work": "Навесы, козырьки, беседки", "price": "по договорённости" },
+        { "work": "Мангальные зоны и уличные кухни", "price": "по договорённости" },
+        { "work": "Лестницы, перила, ограждения", "price": "по договорённости" },
+        { "work": "Монтаж отопления, тёплый пол", "price": "по договорённости" },
+        { "work": "Водоснабжение и разводка", "price": "по договорённости" },
+        { "work": "Электрика котельной и щит", "price": "по договорённости" },
+        { "work": "Лофт-мебель: металл + дерево", "price": "по договорённости" },
+        { "work": "Слесарные работы, ремонт металла", "price": "по договорённости" }
+      ],
+      "special_rows": [
+        { "work": "Выезд и замер", "price": "бесплатно" },
+        { "work": "Чертёж и ведомость материалов при заказе работ", "price": "входит в стоимость" }
+      ],
+      "cta_title": "Как узнать стоимость сейчас",
+      "cta_text": "Посчитайте материалы в калькуляторе и пришлите ведомость в Telegram — отвечу суммой работ и сроком. Либо просто опишите задачу: перезвоню и договоримся о замере.",
+      "cta1": "Калькулятор материалов",
+      "cta1_href": "Калькулятор.dc.html",
+      "cta2": "Оставить заявку",
+      "cta2_href": "Главная.dc.html#zayavka"
+    },
+    "create": {
+      "hero_title": "Расскажите, что хотите изготовить",
+      "hero_text": "Опишите изделие своими словами. Не нужно знать размеры профиля, ГОСТы или специальные термины.",
+      "card_title": "Ваша идея",
+      "hint": "Опишите изделие так, как объяснили бы мастеру. Укажите всё, что для вас важно: назначение, размеры, материалы, стиль и место использования.",
+      "field_label": "Опишите изделие",
+      "placeholder": "Например: хочу сделать стол для террасы 180×80 см. Чёрный металлический каркас, деревянная столешница из дуба. Современный стиль...",
+      "drop_title": "Добавить фото / эскиз",
+      "drop_text": "Необязательно. Фото, рисунок или пример понравившегося изделия помогут точнее понять идею.",
+      "submit_text": "СОЗДАТЬ ВИЗУАЛИЗАЦИЮ"
+    }
+  },
+  "galleryImages": {
+    "home-loft-1": ["assets/photo/glavnaya/loft-stoly.webp"],
+    "home-loft-2": ["assets/photo/glavnaya/loft-stellazhi.webp"],
+    "home-loft-3": ["assets/photo/glavnaya/loft-besedki.webp"],
+    "home-loft-4": ["assets/photo/glavnaya/loft-kafe.webp"],
+    "dir-1": ["assets/photo/glavnaya/zabory-vorota-navesy.webp"],
+    "dir-2": ["assets/photo/glavnaya/otoplenie.webp"],
+    "dir-3": ["assets/photo/glavnaya/vodosnabzhenie.webp"],
+    "dir-4": ["assets/photo/glavnaya/lestnicy-perila.webp"],
+    "loft-hero": ["assets/photo/loft-mebel/glavnoe-foto.webp"],
+    "loft-1": ["assets/photo/loft-mebel/stoly.webp"],
+    "loft-2": ["assets/photo/loft-mebel/stellazhi.webp"],
+    "loft-3": ["assets/photo/loft-mebel/skami.webp"],
+    "loft-4": ["assets/photo/loft-mebel/mebel-dlya-kafe.webp"],
+    "loft-5": ["assets/photo/loft-mebel/besedki-navesy.webp"],
+    "loft-6": ["assets/photo/loft-mebel/lestnicy-mangaly.webp"]
+  }
+}
