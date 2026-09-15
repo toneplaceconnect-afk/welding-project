@@ -206,7 +206,14 @@ function arraySection(key, items, fields, label) {
   (items || []).forEach((item, i) => {
     html += `<div class="array-item"><button class="remove-item" onclick="removeArrayItem('${key}',${i})">Удалить</button>`;
     fields.forEach(f => {
-      html += field(`${key}.${i}.${f.key}`, f.label, item[f.key], f.type || 'input');
+      const val = item[f.key] || '';
+      const fid = `f-${(key + '.' + i + '.' + f.key).replace(/\./g, '-')}`;
+      if (f.key === 'image') {
+        const thumb = val ? `<img src="${esc(val)}" style="width:40px;height:40px;object-fit:cover;border-radius:2px;border:1px solid #ddd">` : '';
+        html += `<div class="field"><label>${f.label}</label><div style="display:flex;gap:6px;align-items:center">${thumb}<input id="${fid}" data-key="${key}.${i}.${f.key}" value="${esc(val)}" style="flex:1"><label style="cursor:pointer;background:#cf2026;color:#fff;padding:6px 10px;font-size:10px;border-radius:2px;white-space:nowrap">Загрузить<input type="file" accept="image/*" style="display:none" onchange="uploadArrayImage('${key}',${i},'${f.key}',this.files[0])"></label></div></div>`;
+      } else {
+        html += field(`${key}.${i}.${f.key}`, f.label, val, f.type || 'input');
+      }
     });
     html += `</div>`;
   });
@@ -294,10 +301,9 @@ function renderLoft() {
     ${arraySection('pages.loft.products', p.products, [
       { key: 'title', label: 'Название' },
       { key: 'text', label: 'Описание', type: 'textarea' },
-      { key: 'image', label: 'Фото (путь)' },
+      { key: 'image', label: 'Фото' },
       { key: 'price', label: 'Цена' }
     ], 'Карточки изделий')}
-    ${dropZone('pages.loft.products_images')}
 
     <div class="section-title">Процесс</div>
     ${field('pages.loft.process_title', 'Заголовок', p.process_title)}
@@ -386,6 +392,32 @@ function bindDropZones() {
     zone.ondrop = e => { e.preventDefault(); zone.classList.remove('dragover'); handleFiles(e.dataTransfer.files, zone.dataset.key); };
     input.onchange = e => handleFiles(e.target.files, zone.dataset.key);
   });
+}
+
+async function uploadArrayImage(arrayKey, index, fieldKey, file) {
+  if (!file || !token) return;
+  const base64 = await new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.readAsDataURL(file);
+  });
+  const r = await fetch('/api/admin-cms?action=upload', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+    body: JSON.stringify({ action: 'upload', filename: file.name, data: base64 })
+  });
+  const res = await r.json();
+  if (res.ok && res.url) {
+    const parts = arrayKey.split('.');
+    let obj = content;
+    for (const p of parts) { if (!obj[p]) obj[p] = []; obj = obj[p]; }
+    if (obj[index]) {
+      obj[index][fieldKey] = res.url;
+      renderPanel(currentTab);
+    }
+  } else {
+    alert('Ошибка загрузки: ' + (res.error || ''));
+  }
 }
 
 async function handleFiles(files, targetKey) {
