@@ -23,21 +23,64 @@
       "intro_link_text": "Подробнее",
       "intro_link_href": "#napravleniya",
       "cards": [
-        { "label": "Металло-конструкции", "href": "#napravleniya" },
-        { "label": "Отопление", "href": "#napravleniya" },
-        { "label": "Водоснабжение", "href": "#napravleniya" },
-        { "label": "Проекты и расчёт", "href": "Калькулятор.dc.html" },
-        { "label": "Каталог", "href": "katalog.dc.html" }
+        {
+          "label": "Металло-конструкции",
+          "href": "#napravleniya"
+        },
+        {
+          "label": "Отопление",
+          "href": "#napravleniya"
+        },
+        {
+          "label": "Водоснабжение",
+          "href": "#napravleniya"
+        },
+        {
+          "label": "Проекты и расчёт",
+          "href": "Калькулятор.dc.html"
+        },
+        {
+          "label": "Каталог",
+          "href": "katalog.dc.html"
+        }
       ],
       "directions_eyebrow": "Направления работ",
       "directions_title": "Делаю то, что должно стоять десятки лет",
       "directions_text": "Сечение трубы и шаг столбов считаю под снеговую и ветровой район вашего участка — те нагрузки, что реально стоят в регионе. Мощность котла и секции радиаторов — покомнатно, а не «в среднем по дому».",
       "directions_cta": "Обсудить задачу",
       "directions": [
-        { "title": "Заборы, ворота, навесы", "text": "Каркас под снеговую нагрузку района, профлист или евроштакетник, автоматика на ворота.", "image": "assets/photo/glavnaya/zabory-vorota-navesy.webp", "images": ["assets/photo/glavnaya/zabory-vorota-navesy.webp"] },
-        { "title": "Отопление и тёплый пол", "text": "Котёл, разводка, радиаторы, контур ГВС. Расчёт под −40 °C.", "image": "assets/photo/glavnaya/otoplenie.webp", "images": ["assets/photo/glavnaya/otoplenie.webp"] },
-        { "title": "Водоснабжение", "text": "Скважина или центральный ввод, разводка по точкам, фильтрация.", "image": "assets/photo/glavnaya/vodosnabzhenie.webp", "images": ["assets/photo/glavnaya/vodosnabzhenie.webp"] },
-        { "title": "Лестницы и перила", "text": "Металлокосоур с деревянными ступенями, ограждения, ремонт металла.", "image": "assets/photo/glavnaya/lestnicy-perila.webp", "images": ["assets/photo/glavnaya/lestnicy-perila.webp"] }
+        {
+          "title": "Заборы, ворота, навесы",
+          "text": "Каркас под снеговую нагрузку района, профлист или евроштакетник, автоматика на ворота.",
+          "image": "assets/photo/glavnaya/zabory-vorota-navesy.webp",
+          "images": [
+            "assets/photo/glavnaya/zabory-vorota-navesy.webp"
+          ]
+        },
+        {
+          "title": "Отопление и тёплый пол",
+          "text": "Котёл, разводка, радиаторы, контур ГВС. Расчёт под −40 °C.",
+          "image": "assets/photo/glavnaya/otoplenie.webp",
+          "images": [
+            "assets/photo/glavnaya/otoplenie.webp"
+          ]
+        },
+        {
+          "title": "Водоснабжение",
+          "text": "Скважина или центральный ввод, разводка по точкам, фильтрация.",
+          "image": "assets/photo/glavnaya/vodosnabzhenie.webp",
+          "images": [
+            "assets/photo/glavnaya/vodosnabzhenie.webp"
+          ]
+        },
+        {
+          "title": "Лестницы и перила",
+          "text": "Металлокосоур с деревянными ступенями, ограждения, ремонт металла.",
+          "image": "assets/photo/glavnaya/lestnicy-perila.webp",
+          "images": [
+            "assets/photo/glavnaya/lestnicy-perila.webp"
+          ]
+        }
       ],
       "calc_eyebrow": "Расчёт до выезда",
       "calc_title": "Калькулятор считает материал, а не цену",
@@ -57,15 +100,49 @@
       "loft_cta": "Все изделия",
       "loft_cta_href": "katalog.dc.html",
       "loft_items": [
-        { "caption": "Столы и столешницы", "image": "assets/photo/glavnaya/loft-stoly.webp", "images": ["assets/photo/glavnaya/loft-stoly.webp"] },
-        { "caption": "Стеллажи и хранение", "image": "assets/photo/glavnaya/loft-stellazhi.webp", "images": ["assets/photo/glavnaya/loft-stellazhi.webp"] },
-        { "caption": "Беседки и мангальные зоны", "image": "assets/photo/glavnaya/loft-besedki.webp", "images": ["assets/photo/glavnaya/loft-besedki.webp"] },
-        { "caption": "Мебель для кафе и баров", "image": "assets/photo/glavnaya/loft-kafe.webp", "images": ["assets/photo/glavnaya/loft-kafe.webp"] }
+        {
+          "caption": "Столы и столешницы",
+          "image": "assets/photo/glavnaya/loft-stoly.webp",
+          "images": [
+            "assets/photo/glavnaya/loft-stoly.webp"
+          ]
+        },
+        {
+          "caption": "Стеллажи и хранение",
+          "image": "assets/photo/glavnaya/loft-stellazhi.webp",
+          "images": [
+            "assets/photo/glavnaya/loft-stellazhi.webp"
+          ]
+        },
+        {
+          "caption": "Беседки и мангальные зоны",
+          "image": "assets/photo/glavnaya/loft-besedki.webp",
+          "images": [
+            "assets/photo/glavnaya/loft-besedki.webp"
+          ]
+        },
+        {
+          "caption": "Мебель для кафе и баров",
+          "image": "assets/photo/glavnaya/loft-kafe.webp",
+          "images": [
+            "assets/photo/glavnaya/loft-kafe.webp"
+          ]
+        }
       ],
       "form_eyebrow": "Заявка",
       "form_title": "Опишите задачу — назову решение и сроки",
       "form_text": "Стоимость называю после уточнения деталей или бесплатного замера: без этого любая цифра будет обманом. Заявка уходит в Telegram одним сообщением.",
-      "form_options": ["Забор, ворота, калитка", "Навес или козырёк", "Лестница, перила", "Отопление", "Водоснабжение", "Каталог изделий", "Мангалы, грили", "Изделия из металла", "Другое"],
+      "form_options": [
+        "Забор, ворота, калитка",
+        "Навес или козырёк",
+        "Лестница, перила",
+        "Отопление",
+        "Водоснабжение",
+        "Каталог изделий",
+        "Мангалы, грили",
+        "Изделия из металла",
+        "Другое"
+      ],
       "form_submit": "Отправить в Telegram",
       "form_hint": "Текст заявки скопируется в буфер — вставьте его в чат."
     },
@@ -73,7 +150,6 @@
       "hero_title": "Каталог изделий — мебель, мангалы, конструкции из металла",
       "hero_text": "Каркас варю сам, дерево подбираем вместе и по наличию: в регионе это чаще кедр, лиственница и сосна, реже — мебельный щит. Свой материал тоже принимаю — если у вас уже есть доска или слэб, работаю с ним. Металл — порошковая окраска в любой RAL или патина под лофт. Цена по каждому изделию — по договорённости, после эскиза и выбора материала.",
       "hero_image": "assets/photo/loft-mebel/glavnoe-foto.webp",
-      "hero_images": ["assets/photo/loft-mebel/glavnoe-foto.webp"],
       "why_title": "Почему металлокаркас",
       "why_text": "Сварная рама не рассыхается и не расшатывается в соединениях — в отличие от шкантов и стяжек. Для беседок и навесов каркас считаю на снеговую нагрузку региона: усиленное сечение стропил и уменьшенный шаг обрешётки против стандартных таблиц.",
       "why_cta": "Обсудить изделие",
@@ -82,14 +158,78 @@
       "products_title": "Что делаю",
       "products_text": "Под каждое изделие считаю метраж трубы на каркас, объём дерева на столешницу или сиденье, крепёж и площадь окраски — ведомость получаете вместе с эскизом.",
       "products": [
-        { "title": "Столы и столешницы", "text": "Обеденные, журнальные, рабочие. Массив или щит на сварной раме, скрытое крепление столешницы. Порода — по наличию или ваша собственная доска.", "image": "assets/photo/loft-mebel/stoly.webp", "images": ["assets/photo/loft-mebel/stoly.webp"], "price": "Цена по договорённости" },
-        { "title": "Стеллажи и полки", "text": "Открытые стеллажи в комнату, витринные — в магазин, усиленные — в гараж и мастерскую.", "image": "assets/photo/loft-mebel/stellazhi.webp", "images": ["assets/photo/loft-mebel/stellazhi.webp"], "price": "Цена по договорённости" },
-        { "title": "Скамьи, табуреты, вешала", "text": "Прихожая, терраса, раздевалка. Простая геометрия, которую не расшатать.", "image": "assets/photo/loft-mebel/skami.webp", "images": ["assets/photo/loft-mebel/skami.webp"], "price": "Цена по договорённости" },
-        { "title": "Мебель для кафе и баров", "text": "Барные и ресепшн-стойки, столы и стулья на сварном каркасе, витринные стеллажи. Комплектом на зал.", "image": "assets/photo/loft-mebel/mebel-dlya-kafe.webp", "images": ["assets/photo/loft-mebel/mebel-dlya-kafe.webp"], "price": "Цена по договорённости" },
-        { "title": "Беседки, перголы, навесы", "text": "Металлокаркас с деревянной обшивкой: держит снег, не ведёт от влаги. Считаю под нагрузку района.", "image": "assets/photo/loft-mebel/besedki-navesy.webp", "images": ["assets/photo/loft-mebel/besedki-navesy.webp"], "price": "Цена по договорённости" },
-        { "title": "Лестницы и мангальные зоны", "text": "Лестница на металлокосоуре с деревянными ступенями, перила, уличная кухня с металлической столешницей.", "image": "assets/photo/loft-mebel/lestnicy-mangaly.webp", "images": ["assets/photo/loft-mebel/lestnicy-mangaly.webp"], "price": "Цена по договорённости" },
-        { "title": "Мангалы и грили", "text": "Стационарные и разборные, с козырьком и рабочей зоной. Усиленное дно, регулируемая решётка, полки для дров. Под конкретную площадку.", "image": "assets/photo/loft-mebel/mangaly.webp", "images": ["assets/photo/loft-mebel/mangaly.webp"], "price": "Цена по договорённости" },
-        { "title": "Изделия из металла", "text": "Кованые и сварные элементы: вазоны, подставки, полки, декор для заборов и фасадов. Порошковая окраска или патина.", "image": "assets/photo/loft-mebel/izdeliya-iz-metalla.webp", "images": ["assets/photo/loft-mebel/izdeliya-iz-metalla.webp"], "price": "Цена по договорённости" }
+        {
+          "title": "Столы и столешницы",
+          "text": "Обеденные, журнальные, рабочие. Массив или щит на сварной раме, скрытое крепление столешницы. Порода — по наличию или ваша собственная доска.",
+          "image": "assets/photo/loft-mebel/stoly.webp",
+          "images": [
+            "assets/photo/loft-mebel/stoly.webp"
+          ],
+          "price": "Цена по договорённости"
+        },
+        {
+          "title": "Стеллажи и полки",
+          "text": "Открытые стеллажи в комнату, витринные — в магазин, усиленные — в гараж и мастерскую.",
+          "image": "assets/photo/loft-mebel/stellazhi.webp",
+          "images": [
+            "assets/photo/loft-mebel/stellazhi.webp"
+          ],
+          "price": "Цена по договорённости"
+        },
+        {
+          "title": "Скамьи, табуреты, вешала",
+          "text": "Прихожая, терраса, раздевалка. Простая геометрия, которую не расшатать.",
+          "image": "assets/photo/loft-mebel/skami.webp",
+          "images": [
+            "assets/photo/loft-mebel/skami.webp"
+          ],
+          "price": "Цена по договорённости"
+        },
+        {
+          "title": "Мебель для кафе и баров",
+          "text": "Барные и ресепшн-стойки, столы и стулья на сварном каркасе, витринные стеллажи. Комплектом на зал.",
+          "image": "assets/photo/loft-mebel/mebel-dlya-kafe.webp",
+          "images": [
+            "assets/photo/loft-mebel/mebel-dlya-kafe.webp"
+          ],
+          "price": "Цена по договорённости"
+        },
+        {
+          "title": "Беседки, перголы, навесы",
+          "text": "Металлокаркас с деревянной обшивкой: держит снег, не ведёт от влаги. Считаю под нагрузку района.",
+          "image": "assets/photo/loft-mebel/besedki-navesy.webp",
+          "images": [
+            "assets/photo/loft-mebel/besedki-navesy.webp"
+          ],
+          "price": "Цена по договорённости"
+        },
+        {
+          "title": "Лестницы и мангальные зоны",
+          "text": "Лестница на металлокосоуре с деревянными ступенями, перила, уличная кухня с металлической столешницей.",
+          "image": "assets/photo/loft-mebel/lestnicy-mangaly.webp",
+          "images": [
+            "assets/photo/loft-mebel/lestnicy-mangaly.webp"
+          ],
+          "price": "Цена по договорённости"
+        },
+        {
+          "title": "Мангалы и грили",
+          "text": "Стационарные и разборные, с козырьком и рабочей зоной. Усиленное дно, регулируемая решётка, полки для дров. Под конкретную площадку.",
+          "image": "https://raw.githubusercontent.com/toneplaceconnect-afk/welding-project/main/assets/uploads/upload-1789453501461-e56eddcb-db75-4e24-b8c8-738b51af97da.png",
+          "images": [
+            "assets/photo/loft-mebel/mangaly.webp"
+          ],
+          "price": "Цена по договорённости"
+        },
+        {
+          "title": "Изделия из металла",
+          "text": "Кованые и сварные элементы: вазоны, подставки, полки, декор для заборов и фасадов. Порошковая окраска или патина.",
+          "image": "assets/photo/loft-mebel/izdeliya-iz-metalla.webp",
+          "images": [
+            "assets/photo/loft-mebel/izdeliya-iz-metalla.webp"
+          ],
+          "price": "Цена по договорённости"
+        }
       ],
       "process_title": "Как рождается изделие",
       "process_steps": [
@@ -110,19 +250,52 @@
       "table_header1": "Вид работ",
       "table_header2": "Стоимость",
       "rows": [
-        { "work": "Заборы, ворота, калитки", "price": "по договорённости" },
-        { "work": "Навесы, козырьки, беседки", "price": "по договорённости" },
-        { "work": "Мангальные зоны и уличные кухни", "price": "по договорённости" },
-        { "work": "Лестницы, перила, ограждения", "price": "по договорённости" },
-        { "work": "Монтаж отопления, тёплый пол", "price": "по договорённости" },
-        { "work": "Водоснабжение и разводка", "price": "по договорённости" },
-        { "work": "Электрика котельной и щит", "price": "по договорённости" },
-        { "work": "Каталог: мебель, мангалы, изделия из металла", "price": "по договорённости" },
-        { "work": "Слесарные работы, ремонт металла", "price": "по договорённости" }
+        {
+          "work": "Заборы, ворота, калитки",
+          "price": "по договорённости"
+        },
+        {
+          "work": "Навесы, козырьки, беседки",
+          "price": "по договорённости"
+        },
+        {
+          "work": "Мангальные зоны и уличные кухни",
+          "price": "по договорённости"
+        },
+        {
+          "work": "Лестницы, перила, ограждения",
+          "price": "по договорённости"
+        },
+        {
+          "work": "Монтаж отопления, тёплый пол",
+          "price": "по договорённости"
+        },
+        {
+          "work": "Водоснабжение и разводка",
+          "price": "по договорённости"
+        },
+        {
+          "work": "Электрика котельной и щит",
+          "price": "по договорённости"
+        },
+        {
+          "work": "Каталог: мебель, мангалы, изделия из металла",
+          "price": "по договорённости"
+        },
+        {
+          "work": "Слесарные работы, ремонт металла",
+          "price": "по договорённости"
+        }
       ],
       "special_rows": [
-        { "work": "Выезд и замер", "price": "бесплатно" },
-        { "work": "Чертёж и ведомость материалов при заказе работ", "price": "входит в стоимость" }
+        {
+          "work": "Выезд и замер",
+          "price": "бесплатно"
+        },
+        {
+          "work": "Чертёж и ведомость материалов при заказе работ",
+          "price": "входит в стоимость"
+        }
       ],
       "cta_title": "Как узнать стоимость сейчас",
       "cta_text": "Посчитайте материалы в калькуляторе и пришлите ведомость в Telegram — отвечу суммой работ и сроком. Либо просто опишите задачу: перезвоню и договоримся о замере.",
@@ -144,22 +317,56 @@
     }
   },
   "galleryImages": {
-    "home-loft-1": ["assets/photo/glavnaya/loft-stoly.webp"],
-    "home-loft-2": ["assets/photo/glavnaya/loft-stellazhi.webp"],
-    "home-loft-3": ["assets/photo/glavnaya/loft-besedki.webp"],
-    "home-loft-4": ["assets/photo/glavnaya/loft-kafe.webp"],
-    "dir-1": ["assets/photo/glavnaya/zabory-vorota-navesy.webp"],
-    "dir-2": ["assets/photo/glavnaya/otoplenie.webp"],
-    "dir-3": ["assets/photo/glavnaya/vodosnabzhenie.webp"],
-    "dir-4": ["assets/photo/glavnaya/lestnicy-perila.webp"],
-    "loft-hero": ["assets/photo/loft-mebel/glavnoe-foto.webp"],
-    "loft-1": ["assets/photo/loft-mebel/stoly.webp"],
-    "loft-2": ["assets/photo/loft-mebel/stellazhi.webp"],
-    "loft-3": ["assets/photo/loft-mebel/skami.webp"],
-    "loft-4": ["assets/photo/loft-mebel/mebel-dlya-kafe.webp"],
-    "loft-5": ["assets/photo/loft-mebel/besedki-navesy.webp"],
-    "loft-6": ["assets/photo/loft-mebel/lestnicy-mangaly.webp"],
-    "loft-7": ["assets/photo/loft-mebel/mangaly.webp"],
-    "loft-8": ["assets/photo/loft-mebel/izdeliya-iz-metalla.webp"]
+    "home-loft-1": [
+      "assets/photo/glavnaya/loft-stoly.webp"
+    ],
+    "home-loft-2": [
+      "assets/photo/glavnaya/loft-stellazhi.webp"
+    ],
+    "home-loft-3": [
+      "assets/photo/glavnaya/loft-besedki.webp"
+    ],
+    "home-loft-4": [
+      "assets/photo/glavnaya/loft-kafe.webp"
+    ],
+    "dir-1": [
+      "assets/photo/glavnaya/zabory-vorota-navesy.webp"
+    ],
+    "dir-2": [
+      "assets/photo/glavnaya/otoplenie.webp"
+    ],
+    "dir-3": [
+      "assets/photo/glavnaya/vodosnabzhenie.webp"
+    ],
+    "dir-4": [
+      "assets/photo/glavnaya/lestnicy-perila.webp"
+    ],
+    "loft-hero": [
+      "assets/photo/loft-mebel/glavnoe-foto.webp"
+    ],
+    "loft-1": [
+      "assets/photo/loft-mebel/stoly.webp"
+    ],
+    "loft-2": [
+      "assets/photo/loft-mebel/stellazhi.webp"
+    ],
+    "loft-3": [
+      "assets/photo/loft-mebel/skami.webp"
+    ],
+    "loft-4": [
+      "assets/photo/loft-mebel/mebel-dlya-kafe.webp"
+    ],
+    "loft-5": [
+      "assets/photo/loft-mebel/besedki-navesy.webp"
+    ],
+    "loft-6": [
+      "assets/photo/loft-mebel/lestnicy-mangaly.webp"
+    ],
+    "loft-7": [
+      "assets/photo/loft-mebel/mangaly.webp"
+    ],
+    "loft-8": [
+      "assets/photo/loft-mebel/izdeliya-iz-metalla.webp"
+    ]
   }
 }
