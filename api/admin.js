@@ -1,7 +1,7 @@
-import { createHash, timingSafeEqual } from 'crypto';
+const crypto = require('crypto');
 
 const ADMIN_PW = process.env.ADMIN_PASSWORD || 'proekt-svarka-2024';
-const ADMIN_PASSWORD_HASH = createHash('sha256').update(ADMIN_PW).digest('hex');
+const ADMIN_PASSWORD_HASH = crypto.createHash('sha256').update(ADMIN_PW).digest('hex');
 const REPO = 'toneplaceconnect-afk/welding-project';
 const BRANCH = 'main';
 const CONTENT_PATH = 'content.json';
@@ -11,13 +11,13 @@ function safeCompare(a, b) {
   const ab = Buffer.from(a || '');
   const bb = Buffer.from(b || '');
   if (ab.length !== bb.length) return false;
-  return timingSafeEqual(ab, bb);
+  return crypto.timingSafeEqual(ab, bb);
 }
 
-function checkAuth(request) {
-  const auth = request.headers.get('authorization') || '';
+function checkAuth(req) {
+  const auth = req.headers['authorization'] || '';
   const token = auth.replace(/^Bearer\s+/i, '').trim();
-  const hash = createHash('sha256').update(token).digest('hex');
+  const hash = crypto.createHash('sha256').update(token).digest('hex');
   return safeCompare(hash, ADMIN_PASSWORD_HASH);
 }
 
@@ -41,14 +41,10 @@ async function githubPut(path, content, message, token, sha) {
   return r.ok;
 }
 
-async function githubUpload(filename, buffer, token) {
+async function githubUpload(filename, base64Data, token) {
   const path = `${ASSETS_DIR}/${filename}`;
   const existing = await githubGet(path, token);
-  const body = {
-    message: `Upload ${filename}`,
-    content: buffer.toString('base64'),
-    branch: BRANCH
-  };
+  const body = { message: `Upload ${filename}`, content: base64Data, branch: BRANCH };
   if (existing) body.sha = existing.sha;
   const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
     method: 'PUT',
@@ -59,64 +55,70 @@ async function githubUpload(filename, buffer, token) {
   return `/${path}`;
 }
 
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type' }
+function cors(res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+  return res;
+}
+
+function getBody(req) {
+  return new Promise((resolve) => {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try { resolve(JSON.parse(body)); } catch (_) { resolve({}); }
+    });
   });
 }
 
-export default async function handler(request) {
-  if (request.method === 'OPTIONS') return json({}, 204);
+module.exports = async function handler(req, res) {
+  if (req.method === 'OPTIONS') return cors(res).status(204).end();
 
-  const url = new URL(request.url);
-  const path = url.pathname.replace(/^\/api\/admin/, '');
+  const path = (req.url || '').replace(/^\/api\/admin/, '');
 
-  if (request.method === 'POST' && path === '/auth') {
+  if (req.method === 'POST' && path === '/auth') {
     try {
-      const body = await request.json().catch(() => ({}));
+      const body = await getBody(req);
       const password = String(body.password || '');
-      const hash = createHash('sha256').update(password).digest('hex');
-      if (!safeCompare(hash, ADMIN_PASSWORD_HASH)) return json({ error: 'Неверный пароль' }, 401);
-      return json({ ok: true, token: password });
+      const hash = crypto.createHash('sha256').update(password).digest('hex');
+      if (!safeCompare(hash, ADMIN_PASSWORD_HASH)) return cors(res).status(401).json({ error: 'Неверный пароль' });
+      return cors(res).status(200).json({ ok: true, token: password });
     } catch (e) {
-      return json({ error: 'Auth error: ' + e.message }, 500);
+      return cors(res).status(500).json({ error: 'Auth error: ' + e.message });
     }
   }
 
-  if (!checkAuth(request)) return json({ error: 'Не авторизован' }, 401);
+  if (!checkAuth(req)) return cors(res).status(401).json({ error: 'Не авторизован' });
 
   const token = process.env.GITHUB_TOKEN;
-  if (!token) return json({ error: 'GITHUB_TOKEN не настроен в Vercel' }, 500);
+  if (!token) return cors(res).status(500).json({ error: 'GITHUB_TOKEN не настроен в Vercel' });
 
-  if (request.method === 'GET' && path === '/content') {
+  if (req.method === 'GET' && path === '/content') {
     const file = await githubGet(CONTENT_PATH, token);
-    if (!file) return json({ error: 'content.json не найден' }, 404);
-    return json({ content: JSON.parse(file.content), sha: file.sha });
+    if (!file) return cors(res).status(404).json({ error: 'content.json не найден' });
+    return cors(res).status(200).json({ content: JSON.parse(file.content), sha: file.sha });
   }
 
-  if (request.method === 'POST' && path === '/save') {
-    const body = await request.json().catch(() => ({}));
+  if (req.method === 'POST' && path === '/save') {
+    const body = await getBody(req);
     const { content, sha } = body;
-    if (!content) return json({ error: 'Пустой контент' }, 400);
+    if (!content) return cors(res).status(400).json({ error: 'Пустой контент' });
     const jsonStr = JSON.stringify(content, null, 2);
     const ok = await githubPut(CONTENT_PATH, jsonStr, 'Update content.json via admin panel', token, sha);
-    if (!ok) return json({ error: 'Ошибка сохранения в GitHub' }, 500);
-    return json({ ok: true });
+    if (!ok) return cors(res).status(500).json({ error: 'Ошибка сохранения в GitHub' });
+    return cors(res).status(200).json({ ok: true });
   }
 
-  if (request.method === 'POST' && path === '/upload') {
-    const formData = await request.formData();
-    const file = formData.get('file');
-    if (!file || typeof file === 'string') return json({ error: 'Файл не загружен' }, 400);
-    const ext = file.name.split('.').pop() || 'png';
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').toLowerCase();
-    const filename = `${Date.now()}-${safeName}`;
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const url = await githubUpload(filename, buffer, token);
-    if (!url) return json({ error: 'Ошибка загрузки в GitHub' }, 500);
-    return json({ ok: true, url, filename });
+  if (req.method === 'POST' && path === '/upload') {
+    const body = await getBody(req);
+    const { filename, data } = body;
+    if (!filename || !data) return cors(res).status(400).json({ error: 'Нет файла' });
+    const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, '_').toLowerCase();
+    const uniqueName = `${Date.now()}-${safeName}`;
+    const url = await githubUpload(uniqueName, data, token);
+    if (!url) return cors(res).status(500).json({ error: 'Ошибка загрузки в GitHub' });
+    return cors(res).status(200).json({ ok: true, url, filename: uniqueName });
   }
 
-  return json({ error: 'Not found' }, 404);
-}
+  return cors(res).status(404).json({ error: 'Not found' });
+};

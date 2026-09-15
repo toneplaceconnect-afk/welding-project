@@ -386,9 +386,16 @@ function bindDropZones() {
 
 async function handleFiles(files, targetKey) {
   for (const file of files) {
-    const fd = new FormData();
-    fd.append('file', file);
-    const r = await fetch('/api/admin/upload', { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: fd });
+    const reader = new FileReader();
+    const base64 = await new Promise(resolve => {
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.readAsDataURL(file);
+    });
+    const r = await fetch('/api/admin/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ filename: file.name, data: base64 })
+    });
     const res = await r.json();
     if (res.ok && res.url) {
       const parts = targetKey.split('.');
