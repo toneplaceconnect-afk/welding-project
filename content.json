@@ -215,7 +215,7 @@
         {
           "title": "Мангалы и грили",
           "text": "Стационарные и разборные, с козырьком и рабочей зоной. Усиленное дно, регулируемая решётка, полки для дров. Под конкретную площадку.",
-          "image": "https://raw.githubusercontent.com/toneplaceconnect-afk/welding-project/main/assets/uploads/upload-1789453501461-e56eddcb-db75-4e24-b8c8-738b51af97da.png",
+          "image": "assets/uploads/upload-1789453501461-e56eddcb-db75-4e24-b8c8-738b51af97da.png",
           "images": [
             "assets/photo/loft-mebel/mangaly.webp"
           ],
@@ -361,12 +361,6 @@
     ],
     "loft-6": [
       "assets/photo/loft-mebel/lestnicy-mangaly.webp"
-    ],
-    "loft-7": [
-      "assets/photo/loft-mebel/mangaly.webp"
-    ],
-    "loft-8": [
-      "assets/photo/loft-mebel/izdeliya-iz-metalla.webp"
     ]
   }
 }
