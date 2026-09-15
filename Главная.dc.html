@@ -363,6 +363,7 @@ class Component extends DCLogic {
     this._scan = scan;
     window.addEventListener('scroll', scan, { passive: true });
     window.addEventListener('resize', scan);
+    if (window.__applyCMS) window.__applyCMS();
   }
   componentWillUnmount() {
     if (this._scan) { window.removeEventListener('scroll', this._scan); window.removeEventListener('resize', this._scan); }

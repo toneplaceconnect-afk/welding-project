@@ -191,6 +191,8 @@
     applyGalleryImages();
   }
 
+  window.__applyCMS = applyAll;
+
   async function loadContent() {
     try {
       const r = await fetch('/content.json?t=' + Date.now());
@@ -201,29 +203,9 @@
     }
   }
 
-  function waitForReactThenApply() {
-    let attempts = 0;
-    const maxAttempts = 60;
-    const interval = setInterval(() => {
-      attempts++;
-      if (attempts > maxAttempts) { clearInterval(interval); return; }
-      if (!CMS) return;
-      const pageId = getPageId();
-      if (!pageId) return;
-      const grid = document.getElementById('katalog-products');
-      const heroImg = document.querySelector('#loft-hero');
-      const target = grid || heroImg;
-      if (!target) return;
-      if (grid && grid.children.length > 0) return;
-      applyAll();
-    }, 200);
-  }
-
   const start = async () => {
     await loadContent();
-    if (!CMS) return;
     applyAll();
-    waitForReactThenApply();
   };
 
   if (document.readyState === 'loading') {
