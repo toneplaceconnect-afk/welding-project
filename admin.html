@@ -111,12 +111,13 @@ const PAGES = [
 ];
 
 async function api(action, body, method = 'POST') {
-  const opts = { method, headers: { 'Content-Type': 'application/json' } };
-  if (token) opts.headers['Authorization'] = `Bearer ${token}`;
-  if (body) opts.body = JSON.stringify({ ...body, action });
-  else opts.body = JSON.stringify({ action });
-  let url = '/api/admin-cms';
-  if (method === 'GET') url += '?action=' + action;
+  const opts = { method, headers: {} };
+  if (token) opts.headers['Authorization'] = 'Bearer ' + token;
+  let url = '/api/admin-cms?action=' + action;
+  if (method === 'POST') {
+    opts.headers['Content-Type'] = 'application/json';
+    opts.body = JSON.stringify(body || { action });
+  }
   const r = await fetch(url, opts);
   return r.json();
 }
@@ -394,9 +395,9 @@ async function handleFiles(files, targetKey) {
       reader.onload = () => resolve(reader.result.split(',')[1]);
       reader.readAsDataURL(file);
     });
-    const r = await fetch('/api/admin-cms', {
+    const r = await fetch('/api/admin-cms?action=upload', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
       body: JSON.stringify({ action: 'upload', filename: file.name, data: base64 })
     });
     const res = await r.json();

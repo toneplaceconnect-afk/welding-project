@@ -9,6 +9,9 @@ export default async function handler(request, response) {
   if (request.method === 'OPTIONS') { response.status(204).end(); return; }
 
   try {
+    const u = new URL(request.url, 'https://x');
+    const action = u.searchParams.get('action') || '';
+
     let body = {};
     if (request.method === 'POST') {
       const chunks = [];
@@ -17,7 +20,6 @@ export default async function handler(request, response) {
       if (raw) body = JSON.parse(raw);
     }
 
-    const action = body.action || new URL(request.url, 'https://x').searchParams.get('action') || '';
     const pw = String(body.password || '');
     const auth = request.headers.authorization || '';
     const bearer = auth.replace(/^Bearer\s+/i, '').trim();
