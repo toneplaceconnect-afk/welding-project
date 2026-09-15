@@ -121,7 +121,14 @@
     if (p.products) {
       const grid = document.getElementById('katalog-products');
       if (grid) {
-        grid.innerHTML = p.products.map((item, i) => {
+        const cards = grid.querySelectorAll('article');
+        p.products.forEach((item, i) => {
+          if (!cards[i]) return;
+          const h3 = cards[i].querySelector('h3');
+          if (h3) h3.textContent = item.title || '';
+          const ps = cards[i].querySelectorAll('p');
+          if (ps[0]) ps[0].textContent = item.text || '';
+          if (ps[1]) ps[1].textContent = item.price || 'Цена по договорённости';
           function normUrl(u) {
             if (!u) return '';
             const m = u.match(/raw\.githubusercontent\.com\/[^/]+\/[^/]+\/[^/]+\/(.+)/);
@@ -131,22 +138,15 @@
           const img = normUrl(item.image);
           if (img) images.push(img);
           if (item.images) item.images.forEach(src => { const n = normUrl(src); if (n && !images.includes(n)) images.push(n); });
-          const hasGallery = images.length > 1;
-          const imgHtml = hasGallery
-            ? `<image-slot id="loft-prod-${i}" src="${images[0]}" data-images='${JSON.stringify(images)}' shape="rect" placeholder="${item.title || ''}"></image-slot>`
-            : images.length === 1
-              ? `<img src="${images[0]}" alt="" style="width:100%;height:100%;object-fit:cover">`
-              : `<div style="width:100%;height:100%;background:#e6e8ee;display:flex;align-items:center;justify-content:center;color:#8d92a3;font-size:11px">Нет фото</div>`;
-          return `
-          <article class="card" data-reveal style="background:#fff;box-shadow:0 10px 34px rgba(10,12,18,.1);overflow:hidden;transition:transform .3s,box-shadow .3s" style-hover="transform:translateY(-4px);box-shadow:0 16px 40px rgba(10,12,18,.16)">
-            <div style="height:180px">${imgHtml}</div>
-            <div style="padding:20px">
-              <h3 style="font-size:12.5px;font-weight:700;margin:0 0 8px;line-height:1.5">${item.title || ''}</h3>
-              <p style="font-size:10.5px;color:#6a6f80;margin:0;line-height:1.9">${item.text || ''}</p>
-              <p style="font-size:9.5px;color:#cf2026;font-weight:700;margin:14px 0 0;letter-spacing:.06em;text-transform:uppercase">${item.price || 'Цена по договорённости'}</p>
-            </div>
-          </article>`;
-        }).join('');
+          const slot = cards[i].querySelector('image-slot');
+          if (slot && images.length > 0) {
+            slot.setAttribute('src', images[0]);
+            if (images.length > 1) slot.setAttribute('data-images', JSON.stringify(images));
+          } else if (!slot && images.length === 1) {
+            const imgEl = cards[i].querySelector('div > img');
+            if (imgEl) imgEl.src = images[0];
+          }
+        });
         grid.querySelectorAll('[data-reveal]').forEach(el => {
           if (el.getBoundingClientRect().top < window.innerHeight * 0.94) el.classList.add('in');
         });
@@ -198,6 +198,7 @@
       const r = await fetch('/content.json?t=' + Date.now());
       if (!r.ok) return;
       CMS = await r.json();
+      window.__CMS_DATA__ = CMS;
     } catch (e) {
       console.warn('CMS loader: failed to load content.json', e);
     }
@@ -206,9 +207,6 @@
   const start = async () => {
     await loadContent();
     applyAll();
-    setTimeout(applyAll, 300);
-    setTimeout(applyAll, 1000);
-    setTimeout(applyAll, 3000);
   };
 
   if (document.readyState === 'loading') {

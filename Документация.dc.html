@@ -97,7 +97,18 @@ class Component extends DCLogic {
     };
     window.addEventListener('scroll', this._onScroll, { passive: true });
     this._onScroll();
-    if (window.__applyCMS) window.__applyCMS();
+    async function _cmsApply() {
+      try {
+        const r = await fetch('/content.json?t=' + Date.now());
+        if (!r.ok) return;
+        const cms = await r.json();
+        window.__CMS_DATA__ = cms;
+        if (window.__applyCMS) window.__applyCMS();
+      } catch(e) {}
+    }
+    _cmsApply();
+    setTimeout(_cmsApply, 600);
+    setTimeout(_cmsApply, 1800);
   }
   componentWillUnmount() {
     if (this._scan) { window.removeEventListener('scroll', this._scan); window.removeEventListener('resize', this._scan); }

@@ -120,7 +120,10 @@
       if (!images || images.length <= 1) return;
       slot.dataset.galleryDone = '1';
       const title = slot.getAttribute('placeholder') || '';
-      buildGallery(slot, images, title);
+      const galleryDiv = document.createElement('div');
+      galleryDiv.className = 'gallery';
+      slot.parentNode.replaceChild(galleryDiv, slot);
+      buildGallery(galleryDiv, images, title);
     });
   }
 
