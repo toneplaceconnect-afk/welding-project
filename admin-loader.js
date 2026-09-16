@@ -58,7 +58,8 @@
     setText('section[style*="min-height"] h1', p.hero_title);
     const heroP = document.querySelector('section[style*="min-height"] p');
     if (heroP && p.hero_text) heroP.textContent = p.hero_text;
-    if (p.hero_image) setSrc('#hero-photo', p.hero_image);
+    const homeHero = (p.hero_images && p.hero_images.length ? p.hero_images[0] : p.hero_image);
+    if (homeHero) setSrc('#hero-photo', homeHero);
 
     const dirTitles = document.querySelectorAll('#napravleniya h3');
     if (p.directions) {
@@ -97,9 +98,13 @@
     setText('section[style*="min-height"] h1', p.hero_title);
     const heroP = document.querySelector('section[style*="min-height"] p');
     if (heroP && p.hero_text) heroP.textContent = p.hero_text;
-    if (p.hero_image) {
+    const loftHeroImgs = (p.hero_images && p.hero_images.length ? p.hero_images : (p.hero_image ? [p.hero_image] : []));
+    if (loftHeroImgs.length) {
       const heroImg = document.querySelector('#loft-hero');
-      if (heroImg) heroImg.setAttribute('src', p.hero_image);
+      if (heroImg) {
+        heroImg.setAttribute('src', loftHeroImgs[0]);
+        if (loftHeroImgs.length > 1) heroImg.setAttribute('data-images', JSON.stringify(loftHeroImgs));
+      }
     }
     setText('#loft-why-title', p.why_title);
     setText('#loft-why-text', p.why_text);
@@ -185,10 +190,10 @@
 
   function applyAll() {
     if (!CMS) return;
+    applyGalleryImages();
     const pageId = getPageId();
     if (pageId) applyPage(pageId);
     applyGlobal(CMS.global);
-    applyGalleryImages();
     if (window.__galleryRescan) window.__galleryRescan();
   }
 
