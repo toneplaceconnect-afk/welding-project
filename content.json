@@ -54,9 +54,9 @@
           "text": "Каркас под снеговую нагрузку района, профлист или евроштакетник, автоматика на ворота.",
           "image": "https://raw.githubusercontent.com/toneplaceconnect-afk/welding-project/main/assets/uploads/upload-1789468759716-ec314e15-3bdc-4517-b260-9447b9475a96.png",
           "images": [
+            "https://raw.githubusercontent.com/toneplaceconnect-afk/welding-project/main/assets/uploads/upload-1789468759716-ec314e15-3bdc-4517-b260-9447b9475a96.png",
             "assets/photo/glavnaya/zabory-vorota-navesy.webp",
-            "https://raw.githubusercontent.com/toneplaceconnect-afk/welding-project/main/assets/uploads/upload-1789457919143-ec314e15-3bdc-4517-b260-9447b9475a96.png",
-            "https://raw.githubusercontent.com/toneplaceconnect-afk/welding-project/main/assets/uploads/upload-1789468759716-ec314e15-3bdc-4517-b260-9447b9475a96.png"
+            "https://raw.githubusercontent.com/toneplaceconnect-afk/welding-project/main/assets/uploads/upload-1789457919143-ec314e15-3bdc-4517-b260-9447b9475a96.png"
           ]
         },
         {
@@ -332,7 +332,9 @@
       "assets/photo/glavnaya/loft-kafe.webp"
     ],
     "dir-1": [
-      "assets/photo/glavnaya/zabory-vorota-navesy.webp"
+      "https://raw.githubusercontent.com/toneplaceconnect-afk/welding-project/main/assets/uploads/upload-1789468759716-ec314e15-3bdc-4517-b260-9447b9475a96.png",
+      "assets/photo/glavnaya/zabory-vorota-navesy.webp",
+      "https://raw.githubusercontent.com/toneplaceconnect-afk/welding-project/main/assets/uploads/upload-1789457919143-ec314e15-3bdc-4517-b260-9447b9475a96.png"
     ],
     "dir-2": [
       "assets/photo/glavnaya/otoplenie.webp"
