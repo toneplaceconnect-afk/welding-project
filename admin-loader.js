@@ -55,16 +55,34 @@
 
   function applyHome(p) {
     if (!p) return;
-    setText('section[style*="min-height"] h1', p.hero_title);
-    const heroP = document.querySelector('section[style*="min-height"] p');
-    if (heroP && p.hero_text) heroP.textContent = p.hero_text;
+    setText('#home-hero-title', p.hero_title);
+    setText('#home-hero-text', p.hero_text);
     const homeHero = (p.hero_images && p.hero_images.length ? p.hero_images[0] : p.hero_image);
     if (homeHero) setSrc('#hero-photo', homeHero);
+    setText('#home-hero-cta1', p.hero_cta1_text);
+    setText('#home-hero-cta2', p.hero_cta2_text);
+    setText('#home-intro-title', p.intro_title);
+    setText('#home-intro-text', p.intro_text);
+    setText('#home-intro-link', p.intro_link_text);
+    if (p.cards) {
+      p.cards.forEach((c, i) => {
+        const el = document.getElementById('home-card-' + (i + 1));
+        if (el && c.label) el.textContent = c.label;
+      });
+    }
+    setText('#home-dir-eyebrow', p.directions_eyebrow);
+    setText('#home-dir-title', p.directions_title);
+    setText('#home-dir-text', p.directions_text);
+    setText('#home-dir-cta', p.directions_cta);
 
     const dirTitles = document.querySelectorAll('#napravleniya h3');
     if (p.directions) {
       p.directions.forEach((d, i) => {
-        if (dirTitles[i]) dirTitles[i].textContent = d.title;
+        if (dirTitles[i]) {
+          if (d.title) dirTitles[i].textContent = d.title;
+          const cardP = dirTitles[i].parentElement ? dirTitles[i].parentElement.querySelector('p') : null;
+          if (cardP && d.text) cardP.textContent = d.text;
+        }
         const slot = document.querySelector(`#dir-${i + 1}`);
         if (slot) {
           if (d.images && d.images.length > 0) {
@@ -77,9 +95,28 @@
       });
     }
 
-    const loftItems = document.querySelectorAll('[id^="home-loft-"]');
+    setText('#home-calc-eyebrow', p.calc_eyebrow);
+    setText('#home-calc-title', p.calc_title);
+    setText('#home-calc-text', p.calc_text);
+    setText('#home-calc-cta1', p.calc_cta1);
+    setText('#home-calc-cta2', p.calc_cta2);
+    setText('#home-create-eyebrow', p.create_eyebrow);
+    setText('#home-create-title', p.create_title);
+    setText('#home-create-text', p.create_text);
+    setText('#home-create-cta', p.create_cta);
+    setText('#home-loft-eyebrow', p.loft_eyebrow);
+    setText('#home-loft-title', p.loft_title);
+    setText('#home-loft-text', p.loft_text);
+    setText('#home-loft-cta', p.loft_cta);
+    setText('#home-form-eyebrow', p.form_eyebrow);
+    setText('#home-form-title', p.form_title);
+    setText('#home-form-text', p.form_text);
+    setText('#home-form-submit', p.form_submit);
+
     if (p.loft_items) {
+      const caps = document.querySelectorAll('figure figcaption');
       p.loft_items.forEach((item, i) => {
+        if (caps[i] && item.caption) caps[i].textContent = item.caption;
         const slot = document.querySelector(`#home-loft-${i + 1}`);
         if (slot) {
           if (item.images && item.images.length > 0) {
@@ -95,9 +132,8 @@
 
   function applyLoft(p) {
     if (!p) return;
-    setText('section[style*="min-height"] h1', p.hero_title);
-    const heroP = document.querySelector('section[style*="min-height"] p');
-    if (heroP && p.hero_text) heroP.textContent = p.hero_text;
+    setText('#loft-hero-title', p.hero_title);
+    setText('#loft-hero-text', p.hero_text);
     const loftHeroImgs = (p.hero_images && p.hero_images.length ? p.hero_images : (p.hero_image ? [p.hero_image] : []));
     if (loftHeroImgs.length) {
       const heroImg = document.querySelector('#loft-hero');
@@ -161,7 +197,8 @@
 
   function applyPrices(p) {
     if (!p) return;
-    setText('section[style*="min-height"] h1', p.hero_title);
+    setText('#prices-hero-title', p.hero_title);
+    setText('#prices-hero-text', p.hero_text);
   }
 
   function applyCreate(p) {
