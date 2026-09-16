@@ -425,7 +425,8 @@ async function uploadArrayImage(arrayKey, index, fieldKey, file) {
       obj[index][fieldKey] = res.url;
       if (fieldKey === 'image') {
         if (!obj[index].images) obj[index].images = [];
-        if (!obj[index].images.includes(res.url)) obj[index].images.push(res.url);
+        if (obj[index].images.length > 0) obj[index].images[0] = res.url;
+        else obj[index].images.push(res.url);
       }
       renderPanel(currentTab);
     }
