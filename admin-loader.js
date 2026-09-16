@@ -189,6 +189,7 @@
     if (pageId) applyPage(pageId);
     applyGlobal(CMS.global);
     applyGalleryImages();
+    if (window.__galleryRescan) window.__galleryRescan();
   }
 
   window.__applyCMS = applyAll;

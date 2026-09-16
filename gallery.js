@@ -133,6 +133,8 @@
     });
   }
 
+  window.__galleryRescan = () => { try { processSlots(document); } catch (_) {} };
+
   async function init() {
     createZoom();
     try {
