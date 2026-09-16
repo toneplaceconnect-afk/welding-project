@@ -35,9 +35,9 @@
 
   <section style="background:#11131a">
     <div style="max-width:1240px;margin:0 auto;padding:56px 28px 48px">
-      <span style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8d92a3">Калькулятор материалов</span>
-      <h1 style="font-size:clamp(22px,3.4vw,38px);font-weight:700;color:#fff;margin:14px 0 14px;max-width:900px;line-height:1.25;text-wrap:balance">Считаю материал по всем услугам — в метрах, листах и штуках</h1>
-      <p style="font-size:13px;line-height:1.8;color:#b9bdcb;max-width:700px;margin:0">Выберите задачу: забор, ворота, навес, беседку, мангальную зону, лестницу, лофт-мебель, отопление, водоснабжение или электрику. Расчёт по строительным нормам, без цен — стоимость назову после уточнения деталей или бесплатного замера.</p>
+      <span id="calc-hero-eyebrow" style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8d92a3">Калькулятор материалов</span>
+      <h1 id="calc-hero-title" style="font-size:clamp(22px,3.4vw,38px);font-weight:700;color:#fff;margin:14px 0 14px;max-width:900px;line-height:1.25;text-wrap:balance">Считаю материал по всем услугам — в метрах, листах и штуках</h1>
+      <p id="calc-hero-text" style="font-size:13px;line-height:1.8;color:#b9bdcb;max-width:700px;margin:0">Выберите задачу: забор, ворота, навес, беседку, мангальную зону, лестницу, лофт-мебель, отопление, водоснабжение или электрику. Расчёт по строительным нормам, без цен — стоимость назову после уточнения деталей или бесплатного замера.</p>
     </div>
   </section>
 
@@ -45,10 +45,10 @@
     <div style="max-width:1240px;margin:0 auto;padding:44px 28px 64px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;align-items:start">
 
       <div style="background:#fff;padding:28px;box-shadow:0 10px 34px rgba(10,12,18,.1)">
-        <h2 style="font-size:14px;font-weight:700;margin:0 0 18px">Параметры</h2>
+        <h2 id="calc-params-title" style="font-size:14px;font-weight:700;margin:0 0 18px">Параметры</h2>
 
-        <label style="display:flex;flex-direction:column;gap:7px;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6a6f80;margin-bottom:16px">Задача
-          <select value="{{ cat }}" onChange="{{ onCat }}" style="background:#fff;color:#16181f;border:1px solid #d7dae2;padding:12px 13px;font-size:12px;font-family:inherit;text-transform:none;letter-spacing:0;font-weight:400">
+        <label id="calc-task-label" style="display:flex;flex-direction:column;gap:7px;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6a6f80;margin-bottom:16px">Задача
+          <select id="calc-cat-select" value="{{ cat }}" onChange="{{ onCat }}" style="background:#fff;color:#16181f;border:1px solid #d7dae2;padding:12px 13px;font-size:12px;font-family:inherit;text-transform:none;letter-spacing:0;font-weight:400">
             <option value="fence">Забор из профнастила</option>
             <option value="gate">Ворота и калитка</option>
             <option value="canopy">Навес или козырёк</option>
@@ -85,7 +85,7 @@
       <div style="display:flex;flex-direction:column;gap:24px">
         <div style="background:#11131a;box-shadow:0 10px 34px rgba(10,12,18,.18)">
           <div style="background:#cf2026;padding:16px 24px">
-            <h2 style="font-size:12px;font-weight:700;color:#fff;margin:0;text-transform:uppercase;letter-spacing:.06em">Ведомость материалов</h2>
+            <h2 id="calc-vedomost-title" style="font-size:12px;font-weight:700;color:#fff;margin:0;text-transform:uppercase;letter-spacing:.06em">Ведомость материалов</h2>
           </div>
           <div style="padding:22px 24px 26px">
             <p style="font-size:10px;color:#8d92a3;margin:0 0 14px;letter-spacing:.04em">{{ summary }}</p>
@@ -101,8 +101,8 @@
         </div>
 
         <div style="background:#fff;padding:24px;box-shadow:0 10px 34px rgba(10,12,18,.1)">
-          <h2 style="font-size:12px;font-weight:700;margin:0 0 6px;text-transform:uppercase;letter-spacing:.06em">Расходники</h2>
-          <p style="font-size:9.5px;color:#8d92a3;margin:0 0 14px">Досчитываются от длины швов и площади окраски.</p>
+          <h2 id="calc-extras-title" style="font-size:12px;font-weight:700;margin:0 0 6px;text-transform:uppercase;letter-spacing:.06em">Расходники</h2>
+          <p id="calc-extras-text" style="font-size:9.5px;color:#8d92a3;margin:0 0 14px">Досчитываются от длины швов и площади окраски.</p>
           <div style="display:flex;flex-direction:column">
             <sc-for list="{{ extras }}" as="e" hint-placeholder-count="4">
               <div style="display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid #e6e8ee">
@@ -114,8 +114,8 @@
         </div>
 
         <div style="background:#fff;padding:24px;box-shadow:0 10px 34px rgba(10,12,18,.1);display:flex;flex-direction:column;gap:14px">
-          <p style="font-size:11px;color:#5c6070;margin:0;line-height:1.8">Точную стоимость и итоговую смету назову после уточнения деталей или бесплатного замера — расчёт материалов здесь предварительный.</p>
-          <button onClick="{{ send }}" style="align-self:flex-start;background:#cf2026;color:#fff;border:0;padding:15px 26px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-family:inherit;transition:background .25s,box-shadow .25s" style-hover="background:#a8171c;box-shadow:0 0 26px rgba(207,32,38,.5)">Отправить расчёт в Telegram</button>
+          <p id="calc-bottom-text" style="font-size:11px;color:#5c6070;margin:0;line-height:1.8">Точную стоимость и итоговую смету назову после уточнения деталей или бесплатного замера — расчёт материалов здесь предварительный.</p>
+          <button id="calc-send-btn" onClick="{{ send }}" style="align-self:flex-start;background:#cf2026;color:#fff;border:0;padding:15px 26px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-family:inherit;transition:background .25s,box-shadow .25s" style-hover="background:#a8171c;box-shadow:0 0 26px rgba(207,32,38,.5)">Отправить расчёт в Telegram</button>
           <p style="font-size:9.5px;color:#8d92a3;margin:0">{{ hint }}</p>
         </div>
       </div>
@@ -125,9 +125,9 @@
   <section style="background:#ffffff">
     <div style="max-width:1240px;margin:0 auto;padding:64px 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:34px">
       <div data-reveal>
-        <span style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6a6f80">На чём стоят формулы</span>
-        <h2 style="font-size:clamp(18px,2.6vw,26px);font-weight:700;text-transform:uppercase;color:#cf2026;margin:12px 0 16px;line-height:1.35">Нормы, а не средние значения из интернета</h2>
-        <ul style="margin:0;padding-left:18px;color:#5c6070;font-size:11px;line-height:2">
+        <span id="calc-norms-eyebrow" style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6a6f80">На чём стоят формулы</span>
+        <h2 id="calc-norms-title" style="font-size:clamp(18px,2.6vw,26px);font-weight:700;text-transform:uppercase;color:#cf2026;margin:12px 0 16px;line-height:1.35">Нормы, а не средние значения из интернета</h2>
+        <ul id="calc-norms-list" style="margin:0;padding-left:18px;color:#5c6070;font-size:11px;line-height:2">
           <li>Шаг столбов 2,5–3 м; 2–2,5 м при высоте свыше 2,2 м или пучинистом грунте.</li>
           <li>Два ряда лаг до высоты 2,2 м, три — выше.</li>
           <li>Заглубление — правило «1/3» с запасом по типу грунта (СП 22.13330).</li>
@@ -137,7 +137,7 @@
           <li>Радиаторы — 100 Вт/м², секция биметалла ≈ 180 Вт.</li>
           <li>Снеговой и ветровой район — по вашему адресу, с запасом на суровую зиму региона.</li>
         </ul>
-        <p style="margin:18px 0 0;font-size:11px"><a href="Документация.dc.html">Все документы, по которым считаю →</a></p>
+        <p style="margin:18px 0 0;font-size:11px"><a id="calc-norms-link" href="Документация.dc.html">Все документы, по которым считаю →</a>
       </div>
       <div data-reveal>
         <svg viewBox="0 0 360 200" style="display:block;width:100%;height:auto">
@@ -311,15 +311,31 @@ class Component extends DCLogic {
     };
     window.addEventListener('scroll', this._onScroll, { passive: true });
     this._onScroll();
-    async function _cmsApply() {
+    const _cmsApply = async () => {
       try {
         const r = await fetch('/content.json?t=' + Date.now());
         if (!r.ok) return;
         const cms = await r.json();
         window.__CMS_DATA__ = cms;
         if (window.__applyCMS) window.__applyCMS();
+        const cc = cms.pages && cms.pages.calculator;
+        if (cc && Array.isArray(cc.cats)) {
+          cc.cats.forEach((c) => {
+            const t = (typeof CATS !== 'undefined') ? CATS[c.id] : null;
+            if (!t) return;
+            if (c.title) t.title = c.title;
+            if (c.note) t.note = c.note;
+            if (Array.isArray(c.fields)) c.fields.forEach((f) => {
+              const tf = t.fields.find((x) => x.id === f.id);
+              if (!tf) return;
+              if (f.label) tf.label = f.label;
+              if (Array.isArray(f.options) && f.options.length) tf.options = f.options.map((o) => Array.isArray(o) ? o : [o.v, o.l]);
+            });
+          });
+        }
+        try { this.setState({ hint: (cc && cc.hint) || this.state.hint }); } catch(e2) {}
       } catch(e) {}
-    }
+    };
     _cmsApply();
     setTimeout(_cmsApply, 600);
     setTimeout(_cmsApply, 1800);
@@ -671,7 +687,7 @@ class Component extends DCLogic {
 
 </script>
 <script src="gallery.js?v=20260917" defer></script>
-<script src="admin-loader.js?v=20260919" defer></script>
+<script src="admin-loader.js?v=20260920" defer></script>
 
 </body>
 </html>

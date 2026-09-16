@@ -45,8 +45,8 @@
       <table data-reveal style="width:100%;border-collapse:collapse;font-size:11px">
         <thead>
           <tr style="background:#cf2026">
-            <th style="text-align:left;padding:14px 16px;color:#fff;font-weight:700;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase">Вид работ</th>
-            <th style="text-align:right;padding:14px 16px;color:#fff;font-weight:700;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase">Стоимость</th>
+            <th id="prices-th1" style="text-align:left;padding:14px 16px;color:#fff;font-weight:700;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase">Вид работ</th>
+            <th id="prices-th2" style="text-align:right;padding:14px 16px;color:#fff;font-weight:700;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase">Стоимость</th>
           </tr>
         </thead>
         <tbody>
@@ -70,12 +70,12 @@
     <div style="max-width:1240px;margin:0 auto;padding:24px 28px 64px">
       <div data-reveal style="background:#11131a;padding:34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px;align-items:center">
         <div>
-          <h2 style="font-size:clamp(18px,2.6vw,26px);font-weight:700;text-transform:uppercase;color:#fff;margin:0 0 12px;line-height:1.35">Как узнать стоимость сейчас</h2>
-          <p style="font-size:11.5px;color:#b9bdcb;margin:0;line-height:1.9">Посчитайте материалы в калькуляторе и пришлите ведомость в Telegram — отвечу суммой работ и сроком. Либо просто опишите задачу: перезвоню и договоримся о замере.</p>
+          <h2 id="prices-cta-title" style="font-size:clamp(18px,2.6vw,26px);font-weight:700;text-transform:uppercase;color:#fff;margin:0 0 12px;line-height:1.35">Как узнать стоимость сейчас</h2>
+          <p id="prices-cta-text" style="font-size:11.5px;color:#b9bdcb;margin:0;line-height:1.9">Посчитайте материалы в калькуляторе и пришлите ведомость в Telegram — отвечу суммой работ и сроком. Либо просто опишите задачу: перезвоню и договоримся о замере.</p>
         </div>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <a href="Калькулятор.dc.html" style="background:#cf2026;color:#fff;padding:14px 26px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:background .25s,box-shadow .25s" style-hover="background:#a8171c;box-shadow:0 0 26px rgba(207,32,38,.5)">Калькулятор материалов</a>
-          <a href="Главная.dc.html#zayavka" style="border:1px solid rgba(255,255,255,.35);color:#fff;padding:14px 24px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:border-color .25s,background .25s" style-hover="border-color:#cf2026;background:rgba(207,32,38,.14)">Оставить заявку</a>
+          <a id="prices-cta1" href="Калькулятор.dc.html" style="background:#cf2026;color:#fff;padding:14px 26px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:background .25s,box-shadow .25s" style-hover="background:#a8171c;box-shadow:0 0 26px rgba(207,32,38,.5)">Калькулятор материалов</a>
+          <a id="prices-cta2" href="Главная.dc.html#zayavka" style="border:1px solid rgba(255,255,255,.35);color:#fff;padding:14px 24px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:border-color .25s,background .25s" style-hover="border-color:#cf2026;background:rgba(207,32,38,.14)">Оставить заявку</a>
         </div>
       </div>
     </div>
@@ -131,7 +131,7 @@ class Component extends DCLogic {
 
 </script>
 <script src="gallery.js?v=20260917" defer></script>
-<script src="admin-loader.js?v=20260919" defer></script>
+<script src="admin-loader.js?v=20260920" defer></script>
 
 </body>
 </html>

@@ -34,9 +34,9 @@
 
   <section style="background:#11131a">
     <div style="max-width:1240px;margin:0 auto;padding:56px 28px 48px">
-      <span style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8d92a3">Документация</span>
-      <h1 style="font-size:clamp(22px,3.4vw,38px);font-weight:700;color:#fff;margin:14px 0 14px;max-width:900px;line-height:1.25;text-wrap:balance">Работаю по СП и ГОСТ, а не на глаз</h1>
-      <p style="font-size:13px;line-height:1.8;color:#b9bdcb;max-width:740px;margin:0">Каждый проект — забор, навес, отопление или мебель — рассчитывается с опорой на действующие своды правил. Именно эти нормы определяют шаг столбов, глубину заглубления, сечение трубы и мощность отопления в вашем проекте.</p>
+      <span style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8d92a3">{{ docs_hero_eyebrow }}</span>
+      <h1 style="font-size:clamp(22px,3.4vw,38px);font-weight:700;color:#fff;margin:14px 0 14px;max-width:900px;line-height:1.25;text-wrap:balance">{{ docs_hero_title }}</h1>
+      <p style="font-size:13px;line-height:1.8;color:#b9bdcb;max-width:740px;margin:0">{{ docs_hero_text }}</p>
     </div>
   </section>
 
@@ -65,8 +65,8 @@
 
   <section style="background:#cf2026">
     <div style="max-width:1240px;margin:0 auto;padding:40px 28px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:space-between">
-      <p data-reveal style="margin:0;max-width:700px;color:#fff;font-size:11.5px;line-height:1.9">Расчёты на сайте дают предварительную оценку. Точное количество материалов и итоговый проект фиксируются после выезда на объект и уточнения грунта и нагрузок под ваш конкретный участок.</p>
-      <a href="Калькулятор.dc.html" style="background:#fff;color:#cf2026;padding:14px 26px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:background .25s" style-hover="background:#ffe3e4">Открыть калькулятор</a>
+      <p data-reveal style="margin:0;max-width:700px;color:#fff;font-size:11.5px;line-height:1.9">{{ docs_banner_text }}</p>
+      <a href="Калькулятор.dc.html" style="background:#fff;color:#cf2026;padding:14px 26px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:background .25s" style-hover="background:#ffe3e4">{{ docs_banner_cta }}</a>
     </div>
   </section>
 
@@ -97,15 +97,16 @@ class Component extends DCLogic {
     };
     window.addEventListener('scroll', this._onScroll, { passive: true });
     this._onScroll();
-    async function _cmsApply() {
+    const _cmsApply = async () => {
       try {
         const r = await fetch('/content.json?t=' + Date.now());
         if (!r.ok) return;
         const cms = await r.json();
         window.__CMS_DATA__ = cms;
         if (window.__applyCMS) window.__applyCMS();
+        try { this.setState({}); } catch(e2) {}
       } catch(e) {}
-    }
+    };
     _cmsApply();
     setTimeout(_cmsApply, 600);
     setTimeout(_cmsApply, 1800);
@@ -117,9 +118,15 @@ class Component extends DCLogic {
   }
 
   renderVals() {
+    const d = (window.__CMS_DATA__ && window.__CMS_DATA__.pages && window.__CMS_DATA__.pages.docs) || {};
     return {
       toTop: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
-      groups: [
+      docs_hero_eyebrow: d.hero_eyebrow || 'Документация',
+      docs_hero_title: d.hero_title || 'Работаю по СП и ГОСТ, а не на глаз',
+      docs_hero_text: d.hero_text || 'Каждый проект — забор, навес, отопление или мебель — рассчитывается с опорой на действующие своды правил. Именно эти нормы определяют шаг столбов, глубину заглубления, сечение трубы и мощность отопления в вашем проекте.',
+      docs_banner_text: d.banner_text || 'Расчёты на сайте дают предварительную оценку. Точное количество материалов и итоговый проект фиксируются после выезда на объект и уточнения грунта и нагрузок под ваш конкретный участок.',
+      docs_banner_cta: d.banner_cta || 'Открыть калькулятор',
+      groups: (Array.isArray(d.groups) ? d.groups : [
         {
           title: 'Металлоконструкции и сварка', sub: 'Проектирование каркасов, изготовление, типы швов',
           items: [
@@ -161,14 +168,14 @@ class Component extends DCLogic {
             { code: 'ПУЭ, 7-е изд.', name: 'Правила устройства электроустановок', desc: 'Сечения кабеля, защита групп, заземление — по ним считается щит и трассы.' }
           ]
         }
-      ]
+      ])
     };
   }
 }
 
 </script>
 <script src="gallery.js?v=20260917" defer></script>
-<script src="admin-loader.js?v=20260919" defer></script>
+<script src="admin-loader.js?v=20260920" defer></script>
 
 </body>
 </html>

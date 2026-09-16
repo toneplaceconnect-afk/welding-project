@@ -289,13 +289,9 @@
       <div data-reveal style="background:#11131a;padding:30px;display:flex;flex-direction:column;gap:14px">
         <label style="display:flex;flex-direction:column;gap:7px;font-size:12px;font-weight:600;letter-spacing:.04em;color:#b9bdcb;text-transform:uppercase">Что нужно сделать
           <select value="{{ zType }}" onChange="{{ onType }}" style="background:#1a1d26;color:#fff;border:1px solid #2c3040;padding:12px 13px;font-size:14px;font-family:inherit;text-transform:none;font-weight:400;letter-spacing:0">
-            <option>Забор, ворота, калитка</option>
-            <option>Навес или козырёк</option>
-            <option>Лестница, перила</option>
-            <option>Отопление</option>
-            <option>Водоснабжение</option>
-            <option>Каталог изделий</option>
-            <option>Другое</option>
+            <sc-for list="{{ formOptions }}" as="opt" hint-placeholder-count="9">
+              <option>{{ opt }}</option>
+            </sc-for>
           </select>
         </label>
         <label style="display:flex;flex-direction:column;gap:7px;font-size:12px;font-weight:600;letter-spacing:.04em;color:#b9bdcb;text-transform:uppercase">Имя
@@ -319,7 +315,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{}">
 class Component extends DCLogic {
-  state = { zType: 'Забор, ворота, калитка', zName: '', zContact: '', zText: '', hint: 'Текст заявки скопируется в буфер — вставьте его в чат.' };
+  state = { zType: 'Забор, ворота, калитка', zName: '', zContact: '', zText: '', hint: 'Текст заявки скопируется в буфер — вставьте его в чат.', formOptions: ['Забор, ворота, калитка', 'Навес или козырёк', 'Лестница, перила', 'Отопление', 'Водоснабжение', 'Каталог изделий', 'Мангалы, грили', 'Изделия из металла', 'Другое'] };
 
   placeArc = () => {
     const img = document.getElementById('hero-photo');
@@ -363,15 +359,22 @@ class Component extends DCLogic {
     this._scan = scan;
     window.addEventListener('scroll', scan, { passive: true });
     window.addEventListener('resize', scan);
-    async function _cmsApply() {
+    const _cmsApply = async () => {
       try {
         const r = await fetch('/content.json?t=' + Date.now());
         if (!r.ok) return;
         const cms = await r.json();
         window.__CMS_DATA__ = cms;
         if (window.__applyCMS) window.__applyCMS();
+        const hp = cms.pages && cms.pages.home;
+        if (hp) {
+          const patch = {};
+          if (hp.form_hint) patch.hint = hp.form_hint;
+          if (Array.isArray(hp.form_options) && hp.form_options.length) patch.formOptions = hp.form_options;
+          if (Object.keys(patch).length) { try { this.setState(patch); } catch(e2) {} }
+        }
       } catch(e) {}
-    }
+    };
     _cmsApply();
     setTimeout(_cmsApply, 600);
     setTimeout(_cmsApply, 1800);
@@ -388,7 +391,7 @@ class Component extends DCLogic {
     const set = (k) => (e) => this.setState({ [k]: e.target.value });
     return {
       zType: this.state.zType, zName: this.state.zName, zContact: this.state.zContact, zText: this.state.zText,
-      sendHint: this.state.hint,
+      sendHint: this.state.hint, formOptions: this.state.formOptions,
       toTop: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
       onType: set('zType'), onName: set('zName'), onContact: set('zContact'), onText: set('zText'),
       send: () => {
@@ -406,7 +409,7 @@ class Component extends DCLogic {
 
 </script>
 <script src="gallery.js?v=20260917" defer></script>
-<script src="admin-loader.js?v=20260919" defer></script>
+<script src="admin-loader.js?v=20260920" defer></script>
 
 </body>
 </html>

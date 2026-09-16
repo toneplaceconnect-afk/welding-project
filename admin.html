@@ -107,6 +107,8 @@ const PAGES = [
   { id: 'home', label: 'Главная' },
   { id: 'loft', label: 'Каталог' },
   { id: 'prices', label: 'Цены' },
+  { id: 'docs', label: 'Документация' },
+  { id: 'calculator', label: 'Калькулятор' },
   { id: 'create', label: 'Создай своё' }
 ];
 
@@ -177,7 +179,7 @@ function switchTab(id) {
 
 function renderPanel(id) {
   const el = document.getElementById('panels');
-  const pages = { global: renderGlobal, home: renderHome, loft: renderLoft, prices: renderPrices, create: renderCreate };
+  const pages = { global: renderGlobal, home: renderHome, loft: renderLoft, prices: renderPrices, docs: renderDocs, calculator: renderCalculator, create: renderCreate };
   el.innerHTML = `<div class="panel active" id="panel-${id}">${(pages[id] || (() => ''))()}</div>`;
   bindDropZones();
 }
@@ -234,7 +236,19 @@ function renderGlobal() {
     ${field('global.telegram', 'Telegram', g.telegram)}
     ${field('global.telegramUrl', 'Telegram URL', g.telegramUrl)}
     ${field('global.footerDescription', 'Описание в футере', g.footerDescription, 'textarea')}
-    ${field('global.footerBottom', 'Текст внизу футера', g.footerBottom)}`;
+    ${field('global.footerBottom', 'Текст внизу футера', g.footerBottom)}
+    ${field('global.callNow', 'Плашка телефона', g.callNow)}
+    ${field('global.footerSections', 'Заголовок «Разделы»', g.footerSections)}
+    ${field('global.footerContacts', 'Заголовок «Контакты»', g.footerContacts)}
+    ${field('global.footerRegion', 'Строка региона', g.footerRegion)}
+    ${arraySection('global.nav', g.nav, [
+      { key: 'href', label: 'Ссылка' },
+      { key: 'label', label: 'Подпись' }
+    ], 'Меню в шапке')}
+    ${arraySection('global.footerLinks', g.footerLinks, [
+      { key: 'href', label: 'Ссылка' },
+      { key: 'label', label: 'Подпись' }
+    ], 'Ссылки в футере')}`;
 }
 
 function renderHome() {
@@ -277,7 +291,11 @@ function renderHome() {
     ${field('pages.home.form_eyebrow', 'Eyebrow', p.form_eyebrow)}
     ${field('pages.home.form_title', 'Заголовок', p.form_title)}
     ${field('pages.home.form_text', 'Текст', p.form_text, 'textarea')}
-    ${field('pages.home.form_submit', 'Кнопка', p.form_submit)}`;
+    ${field('pages.home.form_submit', 'Кнопка', p.form_submit)}
+    ${arraySection('pages.home.form_fields', p.form_fields, [
+      { key: 'label', label: 'Подпись поля' },
+      { key: 'ph', label: 'Подсказка' }
+    ], 'Поля формы (4 шт, порядок не менять)')}`;
   return html;
 }
 
@@ -332,6 +350,83 @@ function renderPrices() {
     ${field('pages.prices.cta_text', 'Текст', p.cta_text, 'textarea')}
     ${field('pages.prices.cta1', 'Кнопка 1', p.cta1)}
     ${field('pages.prices.cta1_href', 'Кнопка 1 ссылка', p.cta1_href)}`;
+  return html;
+}
+
+function renderDocs() {
+  const p = content.pages?.docs || {};
+  let html = `<div class="section-title">Hero</div>
+    ${field('pages.docs.hero_eyebrow', 'Eyebrow', p.hero_eyebrow)}
+    ${field('pages.docs.hero_title', 'Заголовок', p.hero_title)}
+    ${field('pages.docs.hero_text', 'Текст', p.hero_text, 'textarea')}
+
+    <div class="section-title">Баннер</div>
+    ${field('pages.docs.banner_text', 'Текст', p.banner_text, 'textarea')}
+    ${field('pages.docs.banner_cta', 'Кнопка', p.banner_cta)}
+
+    <div class="section-title">Группы норм</div>`;
+  (p.groups || []).forEach((g, gi) => {
+    html += `<div class="array-item"><button class="remove-item" onclick="removeArrayItem('pages.docs.groups',${gi})">Удалить</button>`;
+    html += field(`pages.docs.groups.${gi}.title`, 'Название группы', g.title);
+    html += field(`pages.docs.groups.${gi}.sub`, 'Подзаголовок', g.sub, 'textarea');
+    html += arraySection(`pages.docs.groups.${gi}.items`, g.items, [
+      { key: 'code', label: 'Код' },
+      { key: 'name', label: 'Название' },
+      { key: 'desc', label: 'Описание', type: 'textarea' }
+    ], 'Документы');
+    html += `</div>`;
+  });
+  html += `<button class="add-item" onclick="addDocGroup()">+ Добавить группу</button>`;
+  return html;
+}
+
+function addDocGroup() {
+  if (!content.pages) content.pages = {};
+  if (!content.pages.docs) content.pages.docs = {};
+  if (!Array.isArray(content.pages.docs.groups)) content.pages.docs.groups = [];
+  content.pages.docs.groups.push({ title: '', sub: '', items: [] });
+  renderPanel(currentTab);
+}
+
+function renderCalculator() {
+  const p = content.pages?.calculator || {};
+  let html = `<div class="section-title">Hero</div>
+    ${field('pages.calculator.hero_eyebrow', 'Eyebrow', p.hero_eyebrow)}
+    ${field('pages.calculator.hero_title', 'Заголовок', p.hero_title)}
+    ${field('pages.calculator.hero_text', 'Текст', p.hero_text, 'textarea')}
+
+    <div class="section-title">Подписи интерфейса</div>
+    ${field('pages.calculator.params_title', 'Параметры', p.params_title)}
+    ${field('pages.calculator.task_label', 'Метка задачи', p.task_label)}
+    ${field('pages.calculator.vedomost_title', 'Ведомость', p.vedomost_title)}
+    ${field('pages.calculator.extras_title', 'Расходники', p.extras_title)}
+    ${field('pages.calculator.extras_text', 'Текст расходников', p.extras_text, 'textarea')}
+    ${field('pages.calculator.bottom_text', 'Текст под итогом', p.bottom_text, 'textarea')}
+    ${field('pages.calculator.send_text', 'Кнопка', p.send_text)}
+    ${field('pages.calculator.hint', 'Подсказка', p.hint, 'textarea')}
+    ${field('pages.calculator.norms_eyebrow', 'Нормы eyebrow', p.norms_eyebrow)}
+    ${field('pages.calculator.norms_title', 'Нормы заголовок', p.norms_title)}
+    ${field('pages.calculator.norms_link', 'Нормы ссылка', p.norms_link)}
+    ${arraySection('pages.calculator.norms', p.norms, [
+      { key: 'text', label: 'Пункт', type: 'textarea' }
+    ], 'Пункты норм')}
+
+    <div class="section-title">Категории и поля</div>`;
+  (p.cats || []).forEach((c, ci) => {
+    html += `<div class="array-item"><div style="font-size:10px;color:#8d92a3;margin-bottom:6px">id: ${esc(c.id || '')} — не переименовывать</div>`;
+    html += field(`pages.calculator.cats.${ci}.title`, 'Название категории', c.title);
+    html += field(`pages.calculator.cats.${ci}.note`, 'Заметка', c.note, 'textarea');
+    (c.fields || []).forEach((f, fi) => {
+      html += `<div class="array-item" style="margin:8px 0 8px 12px"><div style="font-size:10px;color:#8d92a3;margin-bottom:6px">id: ${esc(f.id || '')} — не переименовывать</div>`;
+      html += field(`pages.calculator.cats.${ci}.fields.${fi}.label`, 'Подпись поля', f.label);
+      html += arraySection(`pages.calculator.cats.${ci}.fields.${fi}.options`, f.options, [
+        { key: 'v', label: 'Значение (не менять)' },
+        { key: 'l', label: 'Подпись варианта' }
+      ], 'Варианты списка');
+      html += `</div>`;
+    });
+    html += `</div>`;
+  });
   return html;
 }
 

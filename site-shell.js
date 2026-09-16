@@ -4,14 +4,39 @@
   window.__PROJECT_SVARKA_SITE_SHELL__ = true;
 
   const PHONE = '+79831981588';
+  const PHONE_FMT = '+7 983 198 15 88';
   const BRAND = 'ПРОЕКТ-СВАРКА';
+  const DEF_NAV = [
+    { href: 'Главная.dc.html', label: 'Главная' },
+    { href: 'create.html', label: 'Создай своё' },
+    { href: 'Калькулятор.dc.html', label: 'Калькулятор' },
+    { href: 'katalog.dc.html', label: 'Каталог' },
+    { href: 'Документация.dc.html', label: 'Документация' },
+    { href: 'Прайс.dc.html', label: 'Цены' }
+  ];
+  const DEF_FOOTER_LINKS = [
+    { href: 'Калькулятор.dc.html', label: 'Калькулятор материалов' },
+    { href: 'katalog.dc.html', label: 'Каталог' },
+    { href: 'Документация.dc.html', label: 'Документация' },
+    { href: 'Прайс.dc.html', label: 'Цены' }
+  ];
   const FLASH = '<span class="site-header__flash" aria-hidden="true"></span>';
-  const BRAND_HTML = `<span class="site-header__brand-mark"><img src="assets/logo-mark.svg" alt="${BRAND}">${FLASH}</span><span class="site-brand-name">ПРОЕКТ<span class="site-brand-hyphen">-</span>СВАРКА</span>`;
-  const HEADER_HTML = `<header class="site-header"><nav class="site-header__nav"><a class="site-header__brand" href="Главная.dc.html" aria-label="${BRAND}">${BRAND_HTML}</a><button type="button" class="site-header__burger" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button><div class="site-header__links"><a href="Главная.dc.html">Главная</a><a href="create.html">Создай своё</a><a href="Калькулятор.dc.html">Калькулятор</a><a href="katalog.dc.html">Каталог</a><a href="Документация.dc.html">Документация</a><a href="Прайс.dc.html">Цены</a></div><a class="site-header__phone" href="tel:${PHONE}" aria-label="Позвонить"><span class="site-header__phone-dot">☎</span><span class="site-header__phone-copy"><small>ЗВОНИТЕ СЕЙЧАС</small><strong>+7 983 198 15 88</strong></span></a></nav></header>`;
-  const FOOTER_HTML = `<footer class="site-footer"><div class="site-footer__grid"><div><a class="site-footer__brand" href="Главная.dc.html" aria-label="${BRAND}">${BRAND_HTML}</a><p>Сварочные и инженерные работы в регионе. Расчёт по СП и ГОСТ, цена в договоре.</p></div><div><h3>Разделы</h3><div class="site-footer__links"><a href="Калькулятор.dc.html">Калькулятор материалов</a><a href="katalog.dc.html">Каталог</a><a href="Документация.dc.html">Документация</a><a href="Прайс.dc.html">Цены</a></div></div><div><h3>Контакты</h3><div class="site-footer__links"><a href="tel:${PHONE}">+7 983 198 15 88</a><a href="https://t.me/welding_project" target="_blank" rel="noopener">@welding_project</a><a href="mailto:ProektSvarka@yandex.ru">ProektSvarka@yandex.ru</a><span>Работаю по региону</span></div></div></div><div class="site-footer__bottom"><span>${BRAND}. Выезд и замер бесплатно.</span><a href="https://t.me/CompilePoint" target="_blank" rel="noopener"><img src="assets/logo-compilepoint-mark.png" alt="CompilePoint"><span>Разработано в «Точка Сборки»</span></a></div></footer>`;
+  const brandHTML = (brand) => `<span class="site-header__brand-mark"><img src="assets/logo-mark.svg" alt="${brand}">${FLASH}</span><span class="site-brand-name">ПРОЕКТ<span class="site-brand-hyphen">-</span>СВАРКА</span>`;
 
-  function renderShell() {
+  function renderShell(g) {
     if (!document.body) return;
+    g = g || {};
+    const brand = g.brand || BRAND;
+    const phone = g.phone || PHONE;
+    const phoneFmt = g.phoneFormatted || PHONE_FMT;
+    const email = g.email || 'ProektSvarka@yandex.ru';
+    const tg = g.telegram || '@welding_project';
+    const tgUrl = g.telegramUrl || 'https://t.me/welding_project';
+    const nav = (Array.isArray(g.nav) && g.nav.length ? g.nav : DEF_NAV).map(n => `<a href="${n.href}">${n.label}</a>`).join('');
+    const flinks = (Array.isArray(g.footerLinks) && g.footerLinks.length ? g.footerLinks : DEF_FOOTER_LINKS).map(n => `<a href="${n.href}">${n.label}</a>`).join('');
+    const bh = brandHTML(brand);
+    const HEADER_HTML = `<header class="site-header"><nav class="site-header__nav"><a class="site-header__brand" href="Главная.dc.html" aria-label="${brand}">${bh}</a><button type="button" class="site-header__burger" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button><div class="site-header__links">${nav}</div><a class="site-header__phone" href="tel:${phone}" aria-label="Позвонить"><span class="site-header__phone-dot">☎</span><span class="site-header__phone-copy"><small>${g.callNow || 'ЗВОНИТЕ СЕЙЧАС'}</small><strong>${phoneFmt}</strong></span></a></nav></header>`;
+    const FOOTER_HTML = `<footer class="site-footer"><div class="site-footer__grid"><div><a class="site-footer__brand" href="Главная.dc.html" aria-label="${brand}">${bh}</a><p>${g.footerDescription || 'Сварочные и инженерные работы в регионе. Расчёт по СП и ГОСТ, цена в договоре.'}</p></div><div><h3>${g.footerSections || 'Разделы'}</h3><div class="site-footer__links">${flinks}</div></div><div><h3>${g.footerContacts || 'Контакты'}</h3><div class="site-footer__links"><a href="tel:${phone}">${phoneFmt}</a><a href="${tgUrl}" target="_blank" rel="noopener">${tg}</a><a href="mailto:${email}">${email}</a><span>${g.footerRegion || 'Работаю по региону'}</span></div></div></div><div class="site-footer__bottom"><span>${g.footerBottom || (BRAND + '. Выезд и замер бесплатно.')}</span><a href="https://t.me/CompilePoint" target="_blank" rel="noopener"><img src="assets/logo-compilepoint-mark.png" alt="CompilePoint"><span>Разработано в «Точка Сборки»</span></a></div></footer>`;
     document.querySelectorAll('.site-header, footer, .site-top').forEach(node => node.remove());
     document.body.insertAdjacentHTML('afterbegin', HEADER_HTML);
     document.body.insertAdjacentHTML('beforeend', FOOTER_HTML);
@@ -62,8 +87,13 @@
     window.addEventListener('scroll', updateScrollState, { passive: true });
   }
 
-  function init() {
-    renderShell();
+  async function init() {
+    let g = null;
+    try {
+      const r = await fetch('/content.json?t=' + Date.now());
+      if (r.ok) { const j = await r.json(); g = j.global || null; }
+    } catch (e) {}
+    renderShell(g);
     setActive();
     bind();
     updateScrollState();

@@ -23,7 +23,7 @@
     document.querySelectorAll('body > footer, body > .site-top').forEach(node => node.remove());
   };
 
-  const loadShell = () => load('./site-shell.js?v=20260914-10').catch(err => console.error('[site-shell] failed to load:', err));
+  const loadShell = () => load('./site-shell.js?v=20260920').catch(err => console.error('[site-shell] failed to load:', err));
 
   const raw = () => {
     document.querySelectorAll('style').forEach(s => {

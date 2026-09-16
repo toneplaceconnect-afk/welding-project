@@ -112,6 +112,16 @@
     setText('#home-form-title', p.form_title);
     setText('#home-form-text', p.form_text);
     setText('#home-form-submit', p.form_submit);
+    if (p.form_fields) {
+      const labs = document.querySelectorAll('#zayavka label');
+      p.form_fields.forEach((f, i) => {
+        const lab = labs[i];
+        if (!lab) return;
+        if (f.label && lab.firstChild && lab.firstChild.nodeType === 3) lab.firstChild.textContent = f.label;
+        const ctl = lab.querySelector('select,input,textarea');
+        if (ctl && f.ph !== undefined && 'placeholder' in ctl) ctl.placeholder = f.ph;
+      });
+    }
 
     if (p.loft_items) {
       const caps = document.querySelectorAll('figure figcaption');
@@ -199,6 +209,49 @@
     if (!p) return;
     setText('#prices-hero-title', p.hero_title);
     setText('#prices-hero-text', p.hero_text);
+    setText('#prices-th1', p.table_header1);
+    setText('#prices-th2', p.table_header2);
+    const rows = document.querySelectorAll('table tbody tr');
+    const all = [...(p.rows || []), ...(p.special_rows || [])];
+    all.forEach((r, i) => {
+      const tr = rows[i];
+      if (!tr) return;
+      const tds = tr.querySelectorAll('td');
+      if (tds[0] && r.work) tds[0].textContent = r.work;
+      if (tds[1] && r.price) tds[1].textContent = r.price;
+    });
+    setText('#prices-cta-title', p.cta_title);
+    setText('#prices-cta-text', p.cta_text);
+    setText('#prices-cta1', p.cta1);
+    setText('#prices-cta2', p.cta2);
+  }
+
+  function applyCalculator(p) {
+    if (!p) return;
+    setText('#calc-hero-eyebrow', p.hero_eyebrow);
+    setText('#calc-hero-title', p.hero_title);
+    setText('#calc-hero-text', p.hero_text);
+    setText('#calc-params-title', p.params_title);
+    const tl = document.getElementById('calc-task-label');
+    if (tl && p.task_label && tl.firstChild && tl.firstChild.nodeType === 3) tl.firstChild.textContent = p.task_label;
+    setText('#calc-vedomost-title', p.vedomost_title);
+    setText('#calc-extras-title', p.extras_title);
+    setText('#calc-extras-text', p.extras_text);
+    setText('#calc-bottom-text', p.bottom_text);
+    setText('#calc-send-btn', p.send_text);
+    setText('#calc-norms-eyebrow', p.norms_eyebrow);
+    setText('#calc-norms-title', p.norms_title);
+    setText('#calc-norms-link', p.norms_link);
+    if (p.norms) {
+      const lis = document.querySelectorAll('#calc-norms-list li');
+      p.norms.forEach((n, i) => { if (lis[i] && n.text) lis[i].textContent = n.text; });
+    }
+    if (p.cats) {
+      p.cats.forEach((c) => {
+        const opt = document.querySelector(`#calc-cat-select option[value="${c.id}"]`);
+        if (opt && c.title) opt.textContent = c.title;
+      });
+    }
   }
 
   function applyCreate(p) {
@@ -223,6 +276,13 @@
         if (images.length > 1) slot.setAttribute('data-images', JSON.stringify(images));
       }
     });
+  }
+
+  function applyPage(pageId) {
+    if (!CMS || !CMS.pages) return;
+    const page = CMS.pages[pageId];
+    const applyFns = { home: applyHome, loft: applyLoft, prices: applyPrices, calculator: applyCalculator, create: applyCreate };
+    if (applyFns[pageId]) applyFns[pageId](page);
   }
 
   function applyAll() {
