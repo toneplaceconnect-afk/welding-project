@@ -95,7 +95,13 @@
     const track = document.getElementById(id);
     if (!track) return;
     const slide = track.children[index];
-    if (slide) slide.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    if (!slide) return;
+    const left = slide.offsetLeft - (track.offsetLeft || 0);
+    try {
+      track.scrollTo({ left, behavior: 'smooth' });
+    } catch (_) {
+      track.scrollLeft = left;
+    }
   }
 
   function updateDots(id, active) {
